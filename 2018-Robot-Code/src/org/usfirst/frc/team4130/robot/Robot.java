@@ -5,17 +5,11 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-// DIABLO VII 2018 1/29/2018 12:20 AM - West
+// DIABLO VII 2018 1/29/2018 9:21 AM - West
 // List of enhancements, bug fixes, and new features
 //
-//  - Drive Straight using equal power automatically (axis within 10%)
-//  - Drive Straight manually (press button A control with left axis)
-//  - driveSolenoid now a DoubleSolenoid
-//  - driveSolenoid automatically shuts off after 500ms
-//  - driveMode changes now printed to console
-//  - driveSolenoid changes now printed to console
+//  - Minor bug fixes
 //
-
 //                   _ooOoo_ 
 //                  o8888888o 
 //                  88" . "88 
@@ -27,17 +21,16 @@
 //           /  _||||| -:- |||||-  \ 
 //           |   | \\\  -  /// |   | 
 //           | \_|  ''\---/''  |   | 
-//           \  .-\__  `-`  ___/-. / 
+//           \  .-\__  `-`  ___/-. /
 //         ___`. .'  /--.--\  `. . __ 
 //      ."" '<  `.___\_<|>_/___.'  >'"". 
 //     | | :  `- \`.;`\ _ /`;.`/ - ` : | | 
 //     \  \ `-.   \_ __\ /__ _/   .-` /  / 
 //======`-.____`-.___\_____/___.-`____.-'====== 
 //                   `=---=' 
-// 
-//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 
 //          佛祖保佑                           永无BUG 
 //         God Bless         Never Crash 
+//
 
 package org.usfirst.frc.team4130.robot;
 
@@ -152,8 +145,10 @@ public class Robot extends IterativeRobot {
 		
 		case 0:
 			autoState = 1;
+			
 		case 1:
 			autoState = 0;
+			
 		}
 		
 	}
@@ -165,9 +160,9 @@ public class Robot extends IterativeRobot {
 		
 		if (primaryJoy.getRawButton(0)) {
 			
-			if (teleopDriveMode != "StrigntManual") { 
+			if (teleopDriveMode != "StrightManual") { 
 				
-				teleopDriveMode = "Strignt Manual";
+				teleopDriveMode = "StrightManual";
 				System.out.println("teleopDriveMode is now set to StrightManual");
 				
 			}
@@ -181,7 +176,7 @@ public class Robot extends IterativeRobot {
 			
 			if (teleopDriveMode != "StrightAuto") {
 				
-				teleopDriveMode = "Stright Auto";
+				teleopDriveMode = "StrightAuto";
 				System.out.println("teleopDrivemode is now set to StrightAuto");
 				
 			}
