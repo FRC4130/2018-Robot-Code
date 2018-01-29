@@ -5,18 +5,53 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
+// DIABLO VII 2018 1/29/2018 12:20 AM - West
+// List of enhancements, bug fixes, and new features
+//
+//  - Drive Straight using equal power automatically (axis within 10%)
+//  - Drive Straight manually (press button A control with left axis)
+//  - driveSolenoid now a DoubleSolenoid
+//  - driveSolenoid automatically shuts off after 500ms
+//  - driveMode changes now printed to console
+//  - driveSolenoid changes now printed to console
+//
+
+//                   _ooOoo_ 
+//                  o8888888o 
+//                  88" . "88 
+//                  (| -_- |) 
+//                  O\  =  /O 
+//               ____/`---'\____ 
+//             .'  \\|     |//  `. 
+//            /  \\|||  :  |||//  \ 
+//           /  _||||| -:- |||||-  \ 
+//           |   | \\\  -  /// |   | 
+//           | \_|  ''\---/''  |   | 
+//           \  .-\__  `-`  ___/-. / 
+//         ___`. .'  /--.--\  `. . __ 
+//      ."" '<  `.___\_<|>_/___.'  >'"". 
+//     | | :  `- \`.;`\ _ /`;.`/ - ` : | | 
+//     \  \ `-.   \_ __\ /__ _/   .-` /  / 
+//======`-.____`-.___\_____/___.-`____.-'====== 
+//                   `=---=' 
+// 
+//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 
+//          佛祖保佑                           永无BUG 
+//         God Bless         Never Crash 
+
 package org.usfirst.frc.team4130.robot;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
-import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+import com.ctre.phoenix.time.StopWatch;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -31,15 +66,23 @@ public class Robot extends IterativeRobot {
 	private String m_autoSelected;
 	private SendableChooser<String> m_chooser = new SendableChooser<>();
 	
-	int leftDrive1ID = 1;
-	int leftDrive2ID = 2;
-	int leftDrive3ID = 3;
+	private final int leftDrive1ID = 1;
+	private final int leftDrive2ID = 2;
+	private final int leftDrive3ID = 3;
 	
-	int rightDrive1ID = 4;
-	int rightDrive2ID = 5;
-	int rightDrive3ID = 6;
+	final int rightDrive1ID = 4;
+	final int rightDrive2ID = 5;
+	final int rightDrive3ID = 6;
 	
-	int driveSolenoidID = 0;
+	final int driveSolenoidID[] = {0, 1};
+	final double driveSolenoidSleepDelay = 500;
+	final DoubleSolenoid.Value driveSolenoidInitValue = DoubleSolenoid.Value.kForward;
+	
+	double driveSolenoidSleepTime = 0;
+	
+	String teleopDriveMode = "None";
+	
+	int autoState = 0;
 	
 	TalonSRX leftDrive1 = new TalonSRX(leftDrive1ID);
 	TalonSRX leftDrive2 = new TalonSRX(leftDrive2ID);
@@ -49,32 +92,32 @@ public class Robot extends IterativeRobot {
 	TalonSRX rightDrive2 = new TalonSRX(rightDrive2ID);
 	TalonSRX rightDrive3 = new TalonSRX(rightDrive3ID);
 	
-	Solenoid driveSolenoid = new Solenoid(driveSolenoidID);
-	Compressor mainComp = new Compressor();
+	DoubleSolenoid driveSolenoid = new DoubleSolenoid(driveSolenoidID[0],driveSolenoidID[1]);
 	
 	Joystick primaryJoy = new Joystick(0);
 	Joystick secondaryJoy = new Joystick(1);
 	
-	int autoState = 0;
-	
-		@Override
+	@Override
 	public void robotInit() {
 			
 		m_chooser.addDefault("Default Auto", kDefaultAuto);
 		m_chooser.addObject("My Auto", kCustomAuto);
 		SmartDashboard.putData("Auto choices", m_chooser);
 		
-		mainComp.setClosedLoopControl(true);
-		
 		leftDrive1.set(ControlMode.PercentOutput, 0);
 		leftDrive2.follow(leftDrive1);
 		leftDrive3.follow(leftDrive1);
+		
+		leftDrive1.setInverted(true);
+		leftDrive2.setInverted(true);
+		leftDrive3.setInverted(true);
 		
 		rightDrive1.set(ControlMode.PercentOutput, 0);
 		rightDrive2.follow(rightDrive1);
 		rightDrive3.follow(rightDrive1);
 		
-		driveSolenoid.set(false);
+		driveSolenoid.set(driveSolenoidInitValue);
+		driveSolenoidSleepTime = System.currentTimeMillis() + driveSolenoidSleepDelay;
 		
 	}
 	
@@ -103,7 +146,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousPeriodic() {
 		
-		//commonLoop();
+		commonLoop();
 		
 		switch (autoState) {
 		
@@ -118,30 +161,100 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		
-		//commonLoop();
+		commonLoop();
 		
-		leftDrive1.set(ControlMode.PercentOutput, primaryJoy.getRawAxis(1));
-		rightDrive1.set(ControlMode.PercentOutput, primaryJoy.getRawAxis(5));
+		if (primaryJoy.getRawButton(0)) {
+			
+			if (teleopDriveMode != "StrigntManual") { 
+				
+				teleopDriveMode = "Strignt Manual";
+				System.out.println("teleopDriveMode is now set to StrightManual");
+				
+			}
+			
+			leftDrive1.set(ControlMode.PercentOutput, primaryJoy.getRawAxis(1));
+			rightDrive1.set(ControlMode.PercentOutput, primaryJoy.getRawAxis(1));
+			
+		}
+		
+		else if (Math.abs(primaryJoy.getRawAxis(1)-primaryJoy.getRawAxis(5)) <= .1) {
+			
+			if (teleopDriveMode != "StrightAuto") {
+				
+				teleopDriveMode = "Stright Auto";
+				System.out.println("teleopDrivemode is now set to StrightAuto");
+				
+			}
+			
+			leftDrive1.set(ControlMode.PercentOutput, (primaryJoy.getRawAxis(1)+primaryJoy.getRawAxis(5))/2);
+			rightDrive1.set(ControlMode.PercentOutput, (primaryJoy.getRawAxis(1)+primaryJoy.getRawAxis(5))/2);
+			
+		}
+		
+		else {
+			
+			if (teleopDriveMode != "TankDefault") {
+				
+				teleopDriveMode = "TankDefault";
+				System.out.println("teleopDriveMode is now set to TankDefault");
+				
+			}
+			
+			leftDrive1.set(ControlMode.PercentOutput, primaryJoy.getRawAxis(1));
+			rightDrive1.set(ControlMode.PercentOutput, primaryJoy.getRawAxis(5));
+			
+		}
 		
 		if (primaryJoy.getRawButtonReleased(6)) {
 			
-			driveSolenoid.set(!driveSolenoid.get());
-			System.out.println(driveSolenoid.get());
+			driveSolenoid.set(driveSolenoid.get() == DoubleSolenoid.Value.kForward ? DoubleSolenoid.Value.kReverse : DoubleSolenoid.Value.kForward);
+			System.out.println(driveSolenoid.get() == DoubleSolenoid.Value.kForward ? "driveSolenoid is now set to kForward" : "driveSolenoid is now set to kReverse");
+			driveSolenoidSleepTime = System.currentTimeMillis() + driveSolenoidSleepDelay;
 			
 		}
 		
 	}
 	
 	@Override
+	public void testInit() {
+		
+		
+		
+	}
+	
+	@Override
 	public void testPeriodic() {
 		
-		//commonLoop();
+		commonLoop();
+		
+	}
+	
+	@Override
+	public void disabledInit() {
+		
+		
+		
+	}
+	
+	@Override
+	public void disabledPeriodic() {
+		
+		
 		
 	}
 	
 	public void commonLoop() {
 		
-		
+		if (driveSolenoid.get() != DoubleSolenoid.Value.kOff) {
+			
+			if (System.currentTimeMillis() >= driveSolenoidSleepTime) {
+				
+				driveSolenoid.set(DoubleSolenoid.Value.kOff);
+				System.out.println("driveSolenoid is now set to kOff");
+				
+			}
+			
+		}
 		
 	}
 	
