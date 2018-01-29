@@ -117,15 +117,15 @@ public class Robot extends IterativeRobot {
 		
 		switch (m_autoSelected) {
 		
-		case kCustomAuto:
-			autoState = 0;
-			break;
-		case kDefaultAuto:
-		default:
-			autoState = 0;
-			break;
+			case kCustomAuto:
+				autoState = 0;
+				break;
+			case kDefaultAuto:
+			default:
+				autoState = 0;
+				break;
 			
-	}
+		}
 		
 	}
 	
