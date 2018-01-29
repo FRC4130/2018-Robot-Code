@@ -46,13 +46,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.ctre.phoenix.time.StopWatch;
 
-/**
- * The VM is configured to automatically run this class, and to call the
- * functions corresponding to each mode, as described in the IterativeRobot
- * documentation. If you change the name of this class or the package after
- * creating this project, you must also update the build.properties file in the
- * project.
- */
 public class Robot extends IterativeRobot {
 	private static final String kDefaultAuto = "Default";
 	private static final String kCustomAuto = "My Auto";
@@ -160,10 +153,10 @@ public class Robot extends IterativeRobot {
 		
 		if (primaryJoy.getRawButton(0)) {
 			
-			if (teleopDriveMode != "StrightManual") { 
+			if (teleopDriveMode != "StraightManual") { 
 				
-				teleopDriveMode = "StrightManual";
-				System.out.println("teleopDriveMode is now set to StrightManual");
+				teleopDriveMode = "StraightManual";
+				System.out.println("teleopDriveMode is now set to StraightManual");
 				
 			}
 			
@@ -174,10 +167,10 @@ public class Robot extends IterativeRobot {
 		
 		else if (Math.abs(primaryJoy.getRawAxis(1)-primaryJoy.getRawAxis(5)) <= .1) {
 			
-			if (teleopDriveMode != "StrightAuto") {
+			if (teleopDriveMode != "StraightAuto") {
 				
-				teleopDriveMode = "StrightAuto";
-				System.out.println("teleopDrivemode is now set to StrightAuto");
+				teleopDriveMode = "StraightAuto";
+				System.out.println("teleopDrivemode is now set to StraightAuto");
 				
 			}
 			
