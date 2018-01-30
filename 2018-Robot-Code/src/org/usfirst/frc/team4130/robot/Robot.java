@@ -62,9 +62,10 @@ public class Robot extends IterativeRobot {
 	
 	final int driveSolenoidID[] = {0, 1};
 	final double driveSolenoidSleepDelay = 500;
-	final DoubleSolenoid.Value driveSolenoidInitValue = DoubleSolenoid.Value.kForward;
 	
-	double driveSolenoidSleepTime = 0;
+	DoubleSolenoid.Value driveGear = DoubleSolenoid.Value.kForward;
+	
+	double driveSolenoidSleepTime = 500;
 	
 	String teleopDriveMode = "None";
 	
@@ -102,7 +103,7 @@ public class Robot extends IterativeRobot {
 		rightDrive2.follow(rightDrive1);
 		rightDrive3.follow(rightDrive1);
 		
-		driveSolenoid.set(driveSolenoidInitValue);
+		driveSolenoid.set(driveGear);
 		driveSolenoidSleepTime = System.currentTimeMillis() + driveSolenoidSleepDelay;
 		
 	}
@@ -151,7 +152,7 @@ public class Robot extends IterativeRobot {
 		
 		commonLoop();
 		
-		if (primaryJoy.getRawButton(0)) {
+		if (primaryJoy.getRawButton(2)) {
 			
 			if (teleopDriveMode != "StraightManual") { 
 				
@@ -188,15 +189,16 @@ public class Robot extends IterativeRobot {
 				
 			}
 			
-			leftDrive1.set(ControlMode.PercentOutput, primaryJoy.getRawAxis(1));
-			rightDrive1.set(ControlMode.PercentOutput, primaryJoy.getRawAxis(5));
+			leftDrive1.set(ControlMode.PercentOutput, primaryJoy.getRawAxis(5));
+			rightDrive1.set(ControlMode.PercentOutput, primaryJoy.getRawAxis(1));
 			
 		}
 		
-		if (primaryJoy.getRawButtonReleased(6)) {
+		if (primaryJoy.getRawButtonPressed(6)) {
 			
-			driveSolenoid.set(driveSolenoid.get() == DoubleSolenoid.Value.kForward ? DoubleSolenoid.Value.kReverse : DoubleSolenoid.Value.kForward);
-			System.out.println(driveSolenoid.get() == DoubleSolenoid.Value.kForward ? "driveSolenoid is now set to kForward" : "driveSolenoid is now set to kReverse");
+			driveGear = driveGear == DoubleSolenoid.Value.kForward ? DoubleSolenoid.Value.kReverse : DoubleSolenoid.Value.kForward;
+			driveSolenoid.set(driveGear);
+			System.out.println(driveGear == DoubleSolenoid.Value.kForward ? "driveSolenoid is now set to kForward" : "driveSolenoid is now set to kReverse");
 			driveSolenoidSleepTime = System.currentTimeMillis() + driveSolenoidSleepDelay;
 			
 		}
@@ -216,6 +218,7 @@ public class Robot extends IterativeRobot {
 		commonLoop();
 		
 	}
+	
 	
 	@Override
 	public void disabledInit() {
