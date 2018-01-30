@@ -67,6 +67,8 @@ public class Robot extends IterativeRobot {
 	
 	double driveSolenoidSleepTime = 500;
 	
+	NeutralMode initialDriveMode = NeutralMode.Brake;
+	
 	String teleopDriveMode = "None";
 	
 	int autoState = 0;
@@ -102,6 +104,8 @@ public class Robot extends IterativeRobot {
 		rightDrive1.set(ControlMode.PercentOutput, 0);
 		rightDrive2.follow(rightDrive1);
 		rightDrive3.follow(rightDrive1);
+		
+		setDriveNeutral(initialDriveMode);
 		
 		driveSolenoid.set(driveGear);
 		driveSolenoidSleepTime = System.currentTimeMillis() + driveSolenoidSleepDelay;
