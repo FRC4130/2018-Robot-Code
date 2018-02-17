@@ -7,9 +7,10 @@
 
 package org.usfirst.frc.team4130.robot;
 
+import org.usfirst.frc.team4130.subsystem.Elevator;
+import org.usfirst.frc.team4130.subsystem.ElevatorPosition;
+
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -19,7 +20,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * project.
  */
 public class Robot extends IterativeRobot {
-	
+	public static Elevator elevator;
 
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -27,7 +28,8 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void robotInit() {
-		
+		RobotMap.init();
+		elevator = new Elevator();
 	}
 
 	/**
@@ -43,7 +45,8 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousInit() {
-		
+		//Home the elevator. TODO: Make sure this function works.
+		elevator.setHome();
 	}
 
 	/**
@@ -51,7 +54,8 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousPeriodic() {
-		
+		//Test the elevator height function. TODO: Remove this.
+		elevator.setHeightInches(ElevatorPosition.Switch);
 	}
 
 	/**
@@ -59,6 +63,9 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
+		//This is code to test the elevator.  Use the left Y-axis of the operator joystick to drive the elevator up and down.
+		//TODO: Use this to determine MM velocity/acceleration and confirm motor direction/sensor phase.
+		elevator.driveDirect(RobotMap.operatorJoystick.getRawAxis(1));
 	}
 
 	/**

@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.Joystick;
 
 public class RobotMap {
 	public static TalonSRX leftDriveMaster = new TalonSRX(1);
@@ -22,6 +23,8 @@ public class RobotMap {
 	public static DoubleSolenoid driveShift = new DoubleSolenoid(0,1);
 	public static DoubleSolenoid intakeClamp = new DoubleSolenoid(2,3);
 	
+	public static Joystick driverJoystick = new Joystick(0);
+	public static Joystick operatorJoystick = new Joystick(1);
 	
 	public static void init(){
 		
