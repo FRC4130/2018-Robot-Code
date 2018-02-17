@@ -25,5 +25,7 @@ public class RobotMap {
 	
 	public static void init(){
 		
+		
+		
 	}
 }

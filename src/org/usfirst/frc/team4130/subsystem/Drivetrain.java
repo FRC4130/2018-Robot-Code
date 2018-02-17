@@ -11,6 +11,14 @@ public class Drivetrain {
 	
 	public void init(){
 		
+		
+		
+	}
+	
+	public void tank() {
+		
+		leftDrive.set(ControlMode., arg1);
+		
 	}
 	
 }
