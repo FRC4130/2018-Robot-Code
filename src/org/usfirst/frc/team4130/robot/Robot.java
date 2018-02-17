@@ -7,8 +7,7 @@
 
 package org.usfirst.frc.team4130.robot;
 
-import org.usfirst.frc.team4130.subsystem.Elevator;
-import org.usfirst.frc.team4130.subsystem.ElevatorPosition;
+import com.ctre.phoenix.schedulers.ConcurrentScheduler;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 
@@ -20,7 +19,7 @@ import edu.wpi.first.wpilibj.IterativeRobot;
  * project.
  */
 public class Robot extends IterativeRobot {
-	public static Elevator elevator;
+	ConcurrentScheduler teleop;
 
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -29,7 +28,10 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void robotInit() {
 		RobotMap.init();
-		elevator = new Elevator();
+		Subsystems.init();
+		
+		teleop = new ConcurrentScheduler();
+		Loops.scheduleTeleop(teleop);
 	}
 
 	/**
@@ -45,8 +47,7 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousInit() {
-		//Home the elevator. TODO: Make sure this function works.
-		elevator.setHome();
+
 	}
 
 	/**
@@ -54,18 +55,18 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousPeriodic() {
-		//Test the elevator height function. TODO: Remove this.
-		elevator.setHeightInches(ElevatorPosition.Switch);
+
 	}
 
+	public void teleopInit(){
+		teleop.startAll();
+	}
 	/**
 	 * This function is called periodically during operator control.
 	 */
 	@Override
 	public void teleopPeriodic() {
-		//This is code to test the elevator.  Use the left Y-axis of the operator joystick to drive the elevator up and down.
-		//TODO: Use this to determine MM velocity/acceleration and confirm motor direction/sensor phase.
-		elevator.driveDirect(RobotMap.operatorJoystick.getRawAxis(1));
+		teleop.process();
 	}
 
 	/**
@@ -73,5 +74,14 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void testPeriodic() {
+	}
+	
+	@Override
+	public void disabledInit(){
+		teleop.stopAll();
+	}
+	@Override
+	public void disabledPeriodic(){
+		
 	}
 }
