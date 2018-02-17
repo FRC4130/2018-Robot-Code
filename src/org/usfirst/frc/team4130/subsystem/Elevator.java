@@ -55,6 +55,14 @@ public class Elevator {
 		elevator.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen, kTimeout);
 		//Zero the position on the bottom limit switch
 		elevator.configSetParameter(ParamEnum.eClearPositionOnLimitR, 1, 0, 0, kTimeout);
+		
+		//Current Limiting to protect the 775pro
+		//Current setup: no more than 3 seconds at stall before limiting.
+		//TODO: Test the current limit
+		elevator.configPeakCurrentLimit(30, kTimeout);
+		elevator.configPeakCurrentDuration(3000, kTimeout);
+		elevator.configContinuousCurrentLimit(5, kTimeout);
+		elevator.enableCurrentLimit(true);
 	}
 	/**
 	 * Set the height of the elevator (along the chain) 
