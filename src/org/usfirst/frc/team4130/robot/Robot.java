@@ -10,6 +10,7 @@ package org.usfirst.frc.team4130.robot;
 import com.ctre.phoenix.schedulers.ConcurrentScheduler;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -47,7 +48,7 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousInit() {
-
+		
 	}
 
 	/**
@@ -67,6 +68,10 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		teleop.process();
+		SmartDashboard.putNumber("Pos", RobotMap.elevatorMaster.getSelectedSensorPosition(0));
+		SmartDashboard.putNumber("TargetVelocity", RobotMap.elevatorMaster.getActiveTrajectoryPosition());
+		SmartDashboard.putNumber("Velocity", RobotMap.elevatorMaster.getSelectedSensorVelocity(0));
+		SmartDashboard.putNumber("TargetVelocity", RobotMap.elevatorMaster.getActiveTrajectoryVelocity());
 	}
 
 	/**

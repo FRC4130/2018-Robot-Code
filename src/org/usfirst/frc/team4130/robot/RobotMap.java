@@ -2,6 +2,7 @@ package org.usfirst.frc.team4130.robot;
 
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.ctre.phoenix.sensors.PigeonIMU;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Joystick;
@@ -10,6 +11,8 @@ public class RobotMap {
 	public static TalonSRX leftDriveMaster;
 	public static TalonSRX leftDriveFollower;
 	public static TalonSRX leftDriveFollower2;
+	
+	public static PigeonIMU pigeon;
 	
 	public static TalonSRX rightDriveMaster;
 	public static TalonSRX rightDriveFollower;
@@ -20,8 +23,8 @@ public class RobotMap {
 	public static VictorSPX leftIntake;
 	public static VictorSPX rightIntake;
 	
-	public static DoubleSolenoid driveShift;
-	public static DoubleSolenoid intakeClamp;
+	//public static DoubleSolenoid driveShift;
+	//public static DoubleSolenoid intakeClamp;
 	
 	public static Joystick driverJoystick;
 	public static Joystick operatorJoystick;
@@ -35,15 +38,17 @@ public class RobotMap {
 		rightDriveFollower = new TalonSRX(5);
 		rightDriveFollower2 = new TalonSRX(6);
 		
-		elevatorMaster = new TalonSRX(7);
+		elevatorMaster = new TalonSRX(9);
 		
 		leftIntake = new VictorSPX(1);
 		rightIntake = new VictorSPX(2);
 		
-		driveShift = new DoubleSolenoid(0,1);
-		intakeClamp = new DoubleSolenoid(2,3);
+		//driveShift = new DoubleSolenoid(0,1);
+		//intakeClamp = new DoubleSolenoid(2,3);
 		
 		driverJoystick = new Joystick(0);
 		operatorJoystick = new Joystick(1);
+		
+		pigeon = new PigeonIMU(0);
 	}
 }

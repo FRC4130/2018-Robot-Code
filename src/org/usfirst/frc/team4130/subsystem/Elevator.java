@@ -34,14 +34,12 @@ public class Elevator {
 		elevator.configNominalOutputReverse(0.0, kTimeout);
 		
 		//Closed-loop Constants
-//		TODO: Uncomment once gains are determined
-//		elevator.config_kF(0, 0, kTimeout);
-//		elevator.config_kP(0, 0, kTimeout);
-//		elevator.config_kI(0, 0, kTimeout);
-//		elevator.config_kD(0, 0, kTimeout);
-//		TODO: Measure Elevator Speed
-//		elevator.configMotionAcceleration(0, kTimeout);
-//		elevator.configMotionCruiseVelocity(0, kTimeout);
+		elevator.config_kF(0, 0.6959, kTimeout);
+		elevator.config_kP(0, 0.7, kTimeout);
+		elevator.config_kI(0, 0.007, kTimeout);
+		elevator.config_kD(0, 0, kTimeout);
+		elevator.configMotionAcceleration(1322, kTimeout);
+		elevator.configMotionCruiseVelocity(1322, kTimeout);
 		
 		//TODO: Test to see if these need to change
 		elevator.setInverted(false);

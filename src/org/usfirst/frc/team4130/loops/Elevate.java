@@ -27,9 +27,15 @@ public class Elevate implements ILoopable{
 	public void onLoop() {
 		//This is code to test the elevator.  Use the left Y-axis of the operator joystick to drive the elevator up and down.
 		//TODO: Use this to determine MM velocity/acceleration and confirm motor direction/sensor phase.
-		_elevator.driveDirect(_gamepad.getRawAxis(1));
+		
 		if(_gamepad.getRawButton(1)){
 			_elevator.setHome();
+		}
+		else if (_gamepad.getRawButton(2)) {
+			_elevator.setHeight(4096*6);
+		}
+		else {
+			_elevator.driveDirect(_gamepad.getRawAxis(1)*.9);
 		}
 	}
 
