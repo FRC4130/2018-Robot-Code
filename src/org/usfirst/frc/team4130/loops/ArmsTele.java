@@ -34,7 +34,7 @@ public class ArmsTele implements ILoopable {
 			clamped =!clamped;
 		}
 		
-		if (clamped) {
+		if (clamped && _gamepad.getRawButton(5)) {
 			_arms.intake();
 		}
 		else if (!clamped && _gamepad.getRawButton(5)) {

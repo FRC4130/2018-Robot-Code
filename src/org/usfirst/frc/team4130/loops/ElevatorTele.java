@@ -69,7 +69,7 @@ public class ElevatorTele implements ILoopable{
 					pos = _elevator.chainHeightToNative(ElevatorPosition.Switch.value);
 				}
 				else {
-					pos = _elevator.chainHeightToNative(ElevatorPosition.Travel.value);
+					pos = _elevator.chainHeightToNative(ElevatorPosition.Home.value);
 				}
 				
 				_elevator.setHeight(pos);

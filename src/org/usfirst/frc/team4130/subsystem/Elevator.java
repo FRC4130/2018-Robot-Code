@@ -24,7 +24,7 @@ public class Elevator {
 	/**
 	 * Constructor.  Sets all of the configuration parameters for the elevator.
 	 */
-	public void Elevator(){
+	public Elevator(){
 		elevator.configAllowableClosedloopError(0, 0, kTimeout);
 		
 		//Make sure we have full range of motion
