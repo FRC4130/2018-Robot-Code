@@ -2,11 +2,10 @@ package org.usfirst.frc.team4130.subsystem;
 
 /**
  * Enum for the Elevator positions.
- * @author JCapp
+ * @authors JCapp, West
  *
  */
 public enum ElevatorPosition {
-	//TODO: Determine these positions
 	/**
 	 * Height of the "home" position.
 	 * This should always be zero (since it's at the limit switch)
@@ -15,31 +14,31 @@ public enum ElevatorPosition {
 	/**
 	 * Height to put a power cube into the exchange.
 	 */
-	Exchange(0),
+	Exchange(20),
 	/**
 	 * Height we want to drive around at.
 	 */
-	Travel(0),
+	Travel(3),
 	/**
 	 * Height to place a cube on the switch.
 	 */
-	Switch(0),
+	Switch(19),
 	/**
 	 * Height to receive a cube from the portal.
 	 * This may not be practical, need to test.
 	 */
-	Portal(0),
+	Portal(14),
 	/**
 	 * Height to place a cube on a balanced/owned scale.
 	 */
-	Scale(0),
+	Scale(60),
 	/**
 	 * Height to place a cube on a scale that's not owned (so we need to go higher).
 	 */
-	ScaleMax(0);
+	ScaleMax(72);
 	
-	public final int value;
-	ElevatorPosition(int initValue)
+	public final double value;
+	ElevatorPosition(double initValue)
 	{
 		this.value = initValue;
 	}

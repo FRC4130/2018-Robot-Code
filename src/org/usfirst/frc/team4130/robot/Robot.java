@@ -68,10 +68,12 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		teleop.process();
+		
 		SmartDashboard.putNumber("Pos", RobotMap.elevatorMaster.getSelectedSensorPosition(0));
 		SmartDashboard.putNumber("TargetVelocity", RobotMap.elevatorMaster.getActiveTrajectoryPosition());
 		SmartDashboard.putNumber("Velocity", RobotMap.elevatorMaster.getSelectedSensorVelocity(0));
 		SmartDashboard.putNumber("TargetVelocity", RobotMap.elevatorMaster.getActiveTrajectoryVelocity());
+		
 	}
 
 	/**
@@ -79,6 +81,8 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void testPeriodic() {
+		
+		
 	}
 	
 	@Override

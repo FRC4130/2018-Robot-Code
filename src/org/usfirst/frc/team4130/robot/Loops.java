@@ -1,6 +1,6 @@
 package org.usfirst.frc.team4130.robot;
 
-import org.usfirst.frc.team4130.loops.Elevate;
+import org.usfirst.frc.team4130.loops.*;
 
 import com.ctre.phoenix.schedulers.ConcurrentScheduler;
 
@@ -10,6 +10,11 @@ public class Loops {
 	
 	//Teleop Loops
 	public static void scheduleTeleop(ConcurrentScheduler teleop){
-		teleop.add(new Elevate(Subsystems.elevator, RobotMap.operatorJoystick));
+		
+		//Schedule all tasks for teleop
+		teleop.add(new ElevatorTele(Subsystems.elevator, RobotMap.operatorJoystick));
+		teleop.add(new DriveTele(Subsystems.driveTrain, RobotMap.driverJoystick));
+		teleop.add(new ArmsTele(Subsystems.arms, RobotMap.driverJoystick));
+		
 	}
 }

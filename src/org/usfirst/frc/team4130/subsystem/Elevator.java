@@ -52,7 +52,7 @@ public class Elevator {
 		elevator.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen, kTimeout);
 		elevator.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen, kTimeout);
 		//Zero the position on the bottom limit switch
-		elevator.configSetParameter(ParamEnum.eClearPositionOnLimitR, 1, 0, 0, kTimeout);
+		elevator.configSetParameter(ParamEnum.eClearPosOnLimitR, 1, 0, 0, kTimeout);
 		
 		//Current Limiting to protect the 775pro
 		//Current setup: no more than 3 seconds at stall before limiting.
@@ -61,6 +61,10 @@ public class Elevator {
 		elevator.configPeakCurrentDuration(3000, kTimeout);
 		elevator.configContinuousCurrentLimit(5, kTimeout);
 		elevator.enableCurrentLimit(true);
+		
+		//soft limits
+		elevator.configReverseSoftLimitThreshold((int)Math.round(ElevatorPosition.Travel.value), kTimeout);
+		elevator.configReverseSoftLimitEnable(true, 10);
 	}
 	/**
 	 * Set the height of the elevator (along the chain) 
@@ -82,12 +86,12 @@ public class Elevator {
 	}
 	/**
 	 * Set the height of the elevator in encoder counts.
-	 * @param encoderCounts Height in raw sensor units.
+	 * @param value Height in raw sensor units.
 	 * @return True if at position
 	 */
-	public boolean setHeight(int encoderCounts){
+	public boolean setHeight(double valueNativeUnits){
 		
-		elevator.set(ControlMode.MotionMagic, encoderCounts);
+		elevator.set(ControlMode.MotionMagic, valueNativeUnits);
 		
 		//TODO: Debounce this
 		if(elevator.getClosedLoopError(0) < kPosBandwidth)
@@ -103,33 +107,12 @@ public class Elevator {
 		elevator.set(ControlMode.PercentOutput, percentOutput);
 	}
 	/**
-	 * Converts rotations to native units for the elevator encoder (CTRE Mag Encoder).
-	 * @param rotations
-	 * @return native sensor units
+	 * Converts Inches to Native units
+	 * @param Height in inches.
+	 * @return Rotations in NativeUnits required to reach height.
 	 */
-	private int rotationsToNative(double rotations)
-	{
-		int kCountsPerRotation = 4096;
-		return (int)(rotations * kCountsPerRotation);
-	}
-	/**
-	 * Converts chain height in inches to number of rotations.
-	 * @param inches
-	 * @return rotations of gearbox output
-	 */
-	private double chainHeightToRotations(double inches)
-	{
-		double kInchesPerRotation = 1;
-		return inches * kInchesPerRotation;
-	}
-	/**
-	 * Converts chain height to native sensor units of the elevator encoder.
-	 * @param inches Height of the Chain
-	 * @return native encoder units
-	 */
-	private int chainHeightToNative(double inches)
-	{
-		return rotationsToNative(chainHeightToRotations(inches));
+	public double chainHeightToNative(double inches) {
+		return (inches/79)*36764;
 	}
 	/**
 	 * Home the elevator back to zero (all the way down).
@@ -137,8 +120,11 @@ public class Elevator {
 	 */
 	public boolean setHome(){
 		//TODO: Adjust output for homing
-		elevator.set(ControlMode.PercentOutput, -0.1);
-		if(elevator.getSensorCollection().isRevLimitSwitchClosed()) return true;
+		elevator.set(ControlMode.PercentOutput, -0.05);
+		if(elevator.getSensorCollection().isRevLimitSwitchClosed()) {
+			elevator.setSelectedSensorPosition(0, 0, kTimeout);
+			return true;
+		}
 		return false;
 	}
 }
