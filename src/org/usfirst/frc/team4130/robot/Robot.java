@@ -10,12 +10,15 @@ package org.usfirst.frc.team4130.robot;
 import com.ctre.phoenix.schedulers.ConcurrentScheduler;
 import com.ctre.phoenix.schedulers.SequentialScheduler;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends IterativeRobot {
 	ConcurrentScheduler teleop;
-	SequentialScheduler auton;
+	SequentialScheduler auton1;
+	SequentialScheduler auton2;
+	String gameData;
 
 	@Override
 	public void robotInit() {
@@ -25,19 +28,23 @@ public class Robot extends IterativeRobot {
 		teleop = new ConcurrentScheduler();
 		Loops.scheduleTeleop(teleop);
 		
-		auton = new SequentialScheduler(0);
-		Loops.scheduleAuton1(auton);
+		auton1 = new SequentialScheduler(0);
+		Loops.scheduleAuton1(auton1);
 		
 	}
 
 	@Override
 	public void autonomousInit() {
-		auton.start();
+		auton1.start();
 	}
 
 	@Override
 	public void autonomousPeriodic() {
-		auton.process();
+		
+		
+		gameData = DriverStation.getInstance().getGameSpecificMessage();
+		
+		auton1.process();
 		
 		//SmartDashboard.putNumber("TargetVelocity", RobotMap.leftDriveMaster.getActiveTrajectoryVelocity());
 		//SmartDashboard.putNumber("Velocity", RobotMap.leftDriveMaster.getSelectedSensorVelocity(0));

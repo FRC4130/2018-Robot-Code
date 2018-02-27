@@ -30,7 +30,7 @@ public class DriveRotateNew implements ILoopable {
 	
 	double startMS = 0;
 	
-	Value lastGear;
+	Value originalGear;
 	
 	public DriveRotateNew(DriveTrain drv, double dif) {
 		
@@ -46,14 +46,17 @@ public class DriveRotateNew implements ILoopable {
 		
 		debounced = 0;
 		target = drive.getHeading() + diff;
-		lastGear = drive.getShifter();
+		originalGear = drive.getShifter();
 		
-		drive.setShifter(Value.kReverse);
+		drive.setShifter(drive.lowGear);
 		
 		System.out.print("Turning ");
 		System.out.print(diff);
 		System.out.println(" degrees.");
-		//Turning *diff degrees.
+		System.out.print("Current Heading: ");
+		System.out.println(drive.getHeading());
+		System.out.print("Target Heading: ");
+		System.out.println(target);
 		
 	}
 
@@ -97,7 +100,9 @@ public class DriveRotateNew implements ILoopable {
 			System.out.print(" milliseconds with an error of ");
 			System.out.print(error);
 			System.out.println(" degrees.");
-			drive.setShifter(lastGear);
+			System.out.print("Stopped at position: ");
+			System.out.print(drive.getHeading());
+			drive.setShifter(originalGear);
 			drive.driveDirect(0, 0);
 			
 		}
@@ -113,7 +118,7 @@ public class DriveRotateNew implements ILoopable {
 		// TODO Auto-generated method stub
 		
 		System.out.println("TURNING STOPPED");
-		drive.setShifter(lastGear);
+		drive.setShifter(originalGear);
 		
 	}
 

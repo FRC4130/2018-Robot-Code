@@ -26,8 +26,8 @@ public class DriveTrain {
 	private final int kTimeoutMs = 10;
 	private final int highGainsIdx = 0;
 	private final int lowGains = 1;
-	private final Value highGear = Value.kForward;
-	private final Value lowGear = Value.kReverse;
+	public final Value highGear = Value.kForward;
+	public final Value lowGear = Value.kReverse;
 	public double kPosError = 15;
 	
 	public double turnAcceptableError = 0.75;

@@ -14,7 +14,7 @@ public class Loops {
 	//Teleop Loops
 	public static void scheduleTeleop(ConcurrentScheduler teleop){
 		
-		System.out.println("Scheduling Teleop");
+		System.out.println("Scheduling Teleop.");
 		
 		//Schedule all tasks for teleop
 		//teleop.add(new ElevatorTele(Subsystems.elevator, RobotMap.operatorJoystick));
@@ -31,10 +31,14 @@ public class Loops {
 		System.out.println("Scheduling auton 1.");
 		
 //		auton.add(new DriveDistance(Subsystems.driveTrain, 4096*10));
-	
+		
+		auton.add(new Print("Auton Started. Now turning!"));
 		auton.add(new DriveRotateNew(Subsystems.driveTrain, 180));
+		auton.add(new Print("Finished turning! now starting delay."));
 		auton.add(new Delay(500));
+		auton.add(new Print("Finished delay! now starting turning."));
 		auton.add(new DriveRotateNew(Subsystems.driveTrain, -180));
+		auton.add(new Print("I'm Done!"));
 	
 //		ConcurrentScheduler elevatorInit = new ConcurrentScheduler();
 //		
@@ -77,7 +81,7 @@ public class Loops {
 //		auton.add(new DriveDistance(Subsystems.driveTrain, 4096*-10));
 //		driveToCube.add(new Elevate(Subsystems.elevator, ElevatorPosition.Home.value));
 		
-		System.out.println("Scheduled auton.");
+		System.out.println("Scheduled auton 1.");
 		
 	}
 	
