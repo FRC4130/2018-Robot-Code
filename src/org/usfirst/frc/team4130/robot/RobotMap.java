@@ -9,6 +9,10 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Servo;
 
+/**
+ * Class to store the most basic objects for the robot's subsystems.
+ * @author West, JCapp
+ */
 public class RobotMap {
 	public static TalonSRX leftDriveMaster;
 	public static TalonSRX leftDriveFollower;

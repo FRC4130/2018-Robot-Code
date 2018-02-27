@@ -13,6 +13,10 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+/**
+ * Class to control the drive train subsystem.
+ * @author West
+ */
 public class DriveTrain {
 	
 	private TalonSRX left = RobotMap.leftDriveMaster;
@@ -34,6 +38,9 @@ public class DriveTrain {
 	private double turnLowPGain = 0.021;//0.011;
 	private double turnHighPGain = 0.00;
 	
+	/**
+	 * Constructor
+	 */
 	public DriveTrain () {
 		
 		System.out.println("Drive Init has run.");
@@ -132,6 +139,10 @@ public class DriveTrain {
 		
 	}
 	
+	/**
+	 * Sets the neutral mode of the drive train to a NeutralMode
+	 * @param nm a NeutralMode
+	 */
 	public void setNeutralMode(NeutralMode nm) {
 		
 		left.setNeutralMode(nm);
@@ -139,22 +150,34 @@ public class DriveTrain {
 		
 	}
 	
-	public void setShifter(Value vl) {
+	/**
+	 * Sets the state of the solenoid to a specified Value
+	 * @param value a Value Enum
+	 */
+	public void setShifter(Value value) {
 		
-		shifter.set(vl);
-		shifter.set(vl);
+		shifter.set(value);
+		shifter.set(value);
 		
 		//left.setSelectedSensorPosition(0, vl == highGear ? highGainsIdx : lowGainsIdx, kTimeoutMs);
 		//right.setSelectedSensorPosition(0, vl == highGear ? highGainsIdx : lowGainsIdx, kTimeoutMs);
 		
 	}
 	
+	/**
+	 * Shifts gears by setting the shifter solenoid to what it is not.
+	 */
 	public void toggleShifter() {
 		
 		shifter.set(shifter.get() == highGear ? lowGear : highGear);
 		
 	}
 	
+	/**
+	 * Controls the voltage of the drive directly
+	 * @param percentOutputLeft
+	 * @param percentOutputRight
+	 */
 	public void driveDirect(double percentOutputLeft, double percentOutputRight) {
 		
 		left.set(ControlMode.PercentOutput, percentOutputLeft);
@@ -165,6 +188,10 @@ public class DriveTrain {
 		
 	}
 	
+	/**
+	 * Set the drive to motion magic with the same target
+	 * @param nativeUnits target position
+	 */
 	public void setPosBoth(double encoderCounts) {
 		
 		left.set(ControlMode.MotionMagic, encoderCounts);
@@ -172,18 +199,31 @@ public class DriveTrain {
 		
 	}
 	
+	/**
+	 * Sets left drive to motion magic
+	 * @param nativeUnits target position
+	 */
 	public void setPosLeft(double nativeUnits) {
 		
 		left.set(ControlMode.MotionMagic, nativeUnits);
 		
 	}
 	
+	/**
+	 * Sets right drive to motion magic
+	 * @param nativeUnits target position
+	 */
 	public void setPosRight(double nativeUnits) {
 		
 		right.set(ControlMode.MotionMagic, nativeUnits);
 		
 	}
 	
+	/**
+	 * Converts inches to rotations of the encoder
+	 * @param inches a distance to be converted
+	 * @return the distance in rotations of the encoder
+	 */
 	public double distanceToRotations(double inches) {
 		
 		double kInchesPerRotation = 1;
@@ -203,69 +243,58 @@ public class DriveTrain {
 		
 	}
 	
+	/**
+	 * @return the position of the left drive in encoder counts
+	 */
 	public double getLeftPos() {
 		
-		return left.getSelectedSensorPosition(highGainsIdx);
+		return left.getSelectedSensorPosition(0);
 		
 	}
 	
+	/**
+	 * @return the position of the right drive in encoder counts
+	 */
 	public double getRightPos() {
 		
-		return right.getSelectedSensorPosition(highGainsIdx);
+		return right.getSelectedSensorPosition(0);
 		
 	}
-
+	
+	/**
+	 * @return the heading of the robot compared to where it started in degrees
+	 */
 	public double getHeading() {
-		// TODO Auto-generated method stub
 		return pigeon.getFusedHeading();
 	}
 	
+	/**
+	 * Sets the heading of the pigeon to zero.
+	 */
 	public void resetHeading() {
 		
 		pigeon.setFusedHeading(0, kTimeoutMs);
 		
 	}
 	
+	/**
+	 * Separates the turning throttle and drive throttle
+	 * @param throttle The forward (1) and reverse (-1) throttle
+	 * @param turn the right (1) and left (-1) throttle
+	 */
 	public void arcade(double throttle, double turn) {
 		
 		driveDirect(throttle+turn, throttle-turn);
 		
 	}
 	
-	public boolean straight(double throttle, double targetDegree) {
-		
-		double turnError = targetDegree-pigeon.getFusedHeading();
-		System.out.print("Error: ");
-		System.out.println(turnError);
-		
-		if (getShifter() == highGear) {
-			arcade(throttle, (turnError * turnHighPGain)*-1);
-		}
-		
-		else {
-			arcade(throttle, (turnError * turnLowPGain)*-1);
-		}
-		
-		return Math.abs(turnError) <= turnAcceptableError;
-		
-	}
-	
-	public double turnLow(double targetDegree) {
-		
-		double turnError = pigeon.getFusedHeading()-targetDegree;
-		SmartDashboard.putNumber("Turn Error",turnError);
-		
-		if (getShifter() != lowGear) setShifter(lowGear);
-		
-		arcade(0, (turnError * turnLowPGain));
-		
-		return turnError;
-		
-	}
-
+	/**
+	 * @return the value of the shifter
+	 */
 	public Value getShifter() {
 		
 		return shifter.get();
 		
 	}
+	
 }

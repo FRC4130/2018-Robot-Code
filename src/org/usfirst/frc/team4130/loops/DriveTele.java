@@ -9,6 +9,10 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import org.usfirst.frc.team4130.robot.Subsystems;
 import org.usfirst.frc.team4130.subsystem.DriveTrain;
 
+/**
+ * Loopable class for driving in Teleoporated.
+ * @author West
+ */
 public class DriveTele implements ILoopable {
 	
 	DriveTrain _drive;

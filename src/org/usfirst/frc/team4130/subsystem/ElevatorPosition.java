@@ -1,7 +1,7 @@
 package org.usfirst.frc.team4130.subsystem;
 
 /**
- * Enum for the Elevator positions.
+ * Enum to store the Elevator positions in inches.
  * @authors JCapp, West
  *
  */

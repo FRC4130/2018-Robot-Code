@@ -12,16 +12,14 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.Servo;
 
 /**
- * Class for the robot Elevator.
- * @author JCapp
+ * Class for to control the elevator subsystem.
+ * @author JCapp, west, Luke
  *
  */
 public class Elevator {
-	//TODO: Should the elevator contain the object for the intake?  Or should they be completely separate?
 	private TalonSRX elevator = RobotMap.elevatorMaster;
 	private Servo servo = RobotMap.elevatorReleaseServo;
 	private final int kTimeout = 5;
-	//TODO: Determine acceptable position range for elevator set point.
 	private final int kPosBandwidth = 10;
 	
 	double targetHeight = 0;

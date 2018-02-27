@@ -4,6 +4,10 @@ import org.usfirst.frc.team4130.subsystem.DriveTrain;
 
 import com.ctre.phoenix.ILoopable;
 
+/**
+ * A Loopable class for motion magic driving
+ * @author West
+ */
 public class DriveDistance implements ILoopable {
 	
 	private double distanceNative;
@@ -24,18 +28,20 @@ public class DriveDistance implements ILoopable {
 	@Override
 	public void onStart() {
 		
-		System.out.println("Drive Distance task has started.");
+		System.out.print("Driving ");
+		System.out.print(distanceNative);
+		System.out.println(" Native Units...");
 		
 		targetNativeLeft = _drive.getLeftPos()+distanceNative;
 		targetNativeRight = _drive.getRightPos()+distanceNative;
 		
+		System.out.print("Target position left: ");
+		System.out.println(targetNativeLeft);
+		System.out.print("Target position right: ");
 	}
 
 	@Override
 	public void onLoop() {
-		// TODO Auto-generated method stub
-		
-		System.out.println("Driving...");
 		
 		_drive.setPosLeft(targetNativeLeft);
 		_drive.setPosRight(targetNativeRight);
@@ -48,16 +54,20 @@ public class DriveDistance implements ILoopable {
 		boolean leftAtPos = Math.abs(_drive.getLeftPos()) <= targetNativeLeft+acceptableError;
 		boolean rightAtPos = Math.abs(_drive.getRightPos()) <= targetNativeRight+acceptableError;
 		
-		if (leftAtPos && rightAtPos) onStop();
+		if (leftAtPos && rightAtPos) {
+			System.out.println("Drive Distance has finished.");
+			System.out.println("WARNING! the drive train will continue to hold position until it is used for something else or disabled.");
+			return true;
+		}
 		
-		return false;//leftAtPos && rightAtPos;
+		return false;
 	}
 
 	@Override
 	public void onStop() {
 		
 		_drive.driveDirect(0,0);
-		System.out.println("Finished Driving");
+		System.out.println("Drive Distance Has been stopped!");
 		
 	}
 

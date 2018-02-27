@@ -41,7 +41,6 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousPeriodic() {
 		
-		
 		gameData = DriverStation.getInstance().getGameSpecificMessage();
 		
 		auton1.process();

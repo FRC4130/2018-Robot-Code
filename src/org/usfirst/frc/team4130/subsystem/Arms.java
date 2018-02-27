@@ -10,6 +10,10 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 
+/**
+ * Class to control the arms subsystem.
+ * @author West, Christopher
+ */
 public class Arms {
 	
 	VictorSPX left = RobotMap.leftIntake;
