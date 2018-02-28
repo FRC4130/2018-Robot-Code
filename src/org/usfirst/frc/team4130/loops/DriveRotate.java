@@ -5,7 +5,6 @@ import org.usfirst.frc.team4130.subsystem.DriveTrain;
 import com.ctre.phoenix.ILoopable;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * Loopable Class to make the robot rotate on a fixed point by controlling the drive train.
@@ -56,10 +55,9 @@ public class DriveRotate implements ILoopable {
 		
 		System.out.print("Turning ");
 		System.out.print(diff);
-		System.out.println(" degrees.");
-		System.out.print("Current Heading: ");
-		System.out.println(drive.getHeading());
-		System.out.print("Target Heading: ");
+		System.out.print(" degrees. Current Heading: ");
+		System.out.print(drive.getHeading());
+		System.out.print(". Target Heading: ");
 		System.out.println(target);
 		
 	}
@@ -67,9 +65,7 @@ public class DriveRotate implements ILoopable {
 	@Override
 	public void onLoop() {
 		
-		error = target-(-1*drive.getHeading());
-		
-		SmartDashboard.putNumber("Turn Error", error);
+		error = drive.getHeading() - target;
 		
 		if (Math.abs(error) < iZone) {
 			
@@ -99,19 +95,17 @@ public class DriveRotate implements ILoopable {
 		
 		if (debounced > debouncedTarget) {
 			
+			drive.setShifter(originalGear);
+			drive.driveDirect(0, 0);
 			System.out.print("Finished Turning in ");
 			System.out.print(System.currentTimeMillis()-startMS);
 			System.out.print(" milliseconds with an error of ");
 			System.out.print(error);
-			System.out.println(" degrees.");
-			System.out.print("Stopped at position: ");
-			System.out.print(drive.getHeading());
-			drive.setShifter(originalGear);
-			drive.driveDirect(0, 0);
+			System.out.print(" degrees. Stopped at position: ");
+			System.out.println(drive.getHeading());
+			
 			
 		}
-		
-		SmartDashboard.putNumber("Debounced", debounced);
 		
 		return debounced > debouncedTarget;
 		

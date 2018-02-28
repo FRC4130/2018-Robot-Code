@@ -69,6 +69,7 @@ public class Elevator {
 		elevator.configReverseSoftLimitThreshold((int)Math.round(ElevatorPosition.Travel.value), kTimeout);
 		elevator.configReverseSoftLimitEnable(true, 10);
 	}
+	
 	/**
 	 * Set the height of the elevator (along the chain) 
 	 * in inches using the position enum.
@@ -78,6 +79,7 @@ public class Elevator {
 	public boolean setHeightInches(ElevatorPosition pos){
 		return setHeightInches(pos.value);
 	}
+	
 	/**
 	 * Set the height of the elevator in inches.
 	 * @param pos Height along the chain in inches.
@@ -87,6 +89,7 @@ public class Elevator {
 	{
 		return setHeight(chainHeightToNative(inches));
 	}
+	
 	/**
 	 * Set the height of the elevator in encoder counts.
 	 * @param value Height in raw sensor units.
@@ -104,6 +107,7 @@ public class Elevator {
 		
 		return false;
 	}
+	
 	/**
 	 * Set the speed of the elevator.
 	 * @param percentOutput Speed of the elevator from [-1,1].  Positive is up.
@@ -111,6 +115,7 @@ public class Elevator {
 	public void driveDirect(double percentOutput) {
 		elevator.set(ControlMode.PercentOutput, percentOutput);
 	}
+	
 	/**
 	 * Converts Inches to Native units
 	 * @param Height in inches.
@@ -119,6 +124,7 @@ public class Elevator {
 	public double chainHeightToNative(double inches) {
 		return (inches/79)*36764;
 	}
+	
 	/**
 	 * Home the elevator back to zero (all the way down).
 	 * @return True if homed.

@@ -99,18 +99,25 @@ public class DriveTrain {
 		right.configNominalOutputReverse(0, kTimeoutMs);
 		right.configPeakOutputForward(1, kTimeoutMs);
 		right.configPeakOutputReverse(-1, kTimeoutMs);
+		
+		left.setSelectedSensorPosition(0, 0, kTimeoutMs);
+		right.setSelectedSensorPosition(0, 0, kTimeoutMs);
 
 		/**HighGains***/
 //		left.selectProfileSlot(0, 0);
+//		left.config_kF(highGainsIdx, 0.030356, kTimeoutMs);
+//		left.config_kP(highGainsIdx, 0.087976, kTimeoutMs);
 		left.config_kF(highGainsIdx, 0.030356, kTimeoutMs);
-		left.config_kP(highGainsIdx, 0.087976, kTimeoutMs);
+		left.config_kP(highGainsIdx, 0.08, kTimeoutMs);
 //		left.config_kI(highGains, 0, kTimeoutMs);
 //		left.config_kD(HighGains, 0, kTimeoutMs);
 //		left.config_IntegralZone(0, 0, kTimeoutMs);
 		
 //		right.selectProfileSlot(0, 0);
+//		right.config_kF(highGainsIdx, 0.030356, kTimeoutMs);
+//		right.config_kP(highGainsIdx, 0.087976, kTimeoutMs);
 		right.config_kF(highGainsIdx, 0.030356, kTimeoutMs);
-		right.config_kP(highGainsIdx, 0.087976, kTimeoutMs);
+		right.config_kP(highGainsIdx, 0.08, kTimeoutMs);
 //		right.config_kI(highGains, 0, kTimeoutMs);
 //		right.config_kD(highGains, 0, kTimeoutMs);
 //		right.config_IntegralZone(highGains, 0, kTimeoutMs);
@@ -131,10 +138,16 @@ public class DriveTrain {
 //		right.config_IntegralZone(lowGains, 0, kTimeoutMs);
 		
 		/***Magic Settings***/
-		left.configMotionCruiseVelocity(30330, kTimeoutMs);
+//		left.configMotionCruiseVelocity(30330, kTimeoutMs);
+//		left.configMotionAcceleration(15000, kTimeoutMs);
+//		
+//		right.configMotionCruiseVelocity(30330, kTimeoutMs);
+//		right.configMotionAcceleration(15000, kTimeoutMs);
+		
+		left.configMotionCruiseVelocity(10000, kTimeoutMs);
 		left.configMotionAcceleration(15000, kTimeoutMs);
 		
-		right.configMotionCruiseVelocity(30330, kTimeoutMs);
+		right.configMotionCruiseVelocity(10000, kTimeoutMs);
 		right.configMotionAcceleration(15000, kTimeoutMs);
 		
 	}
@@ -183,19 +196,16 @@ public class DriveTrain {
 		left.set(ControlMode.PercentOutput, percentOutputLeft);
 		right.set(ControlMode.PercentOutput, percentOutputRight);
 		
-		SmartDashboard.putNumber("Velocity Left",left.getSelectedSensorVelocity(0));
-		SmartDashboard.putNumber("Velocity Right",right.getSelectedSensorVelocity(0));
-		
 	}
 	
 	/**
 	 * Set the drive to motion magic with the same target
 	 * @param nativeUnits target position
 	 */
-	public void setPosBoth(double encoderCounts) {
+	public void setPosBoth(double in) {
 		
-		left.set(ControlMode.MotionMagic, encoderCounts);
-		right.set(ControlMode.MotionMagic, encoderCounts);
+		left.set(ControlMode.MotionMagic, inchesToNative(in));
+		right.set(ControlMode.MotionMagic, inchesToNative(in));
 		
 	}
 	
@@ -203,9 +213,9 @@ public class DriveTrain {
 	 * Sets left drive to motion magic
 	 * @param nativeUnits target position
 	 */
-	public void setPosLeft(double nativeUnits) {
+	public void setPosLeft(double in) {
 		
-		left.set(ControlMode.MotionMagic, nativeUnits);
+		left.set(ControlMode.MotionMagic, inchesToNative(in));
 		
 	}
 	
@@ -213,9 +223,9 @@ public class DriveTrain {
 	 * Sets right drive to motion magic
 	 * @param nativeUnits target position
 	 */
-	public void setPosRight(double nativeUnits) {
+	public void setPosRight(double in) {
 		
-		right.set(ControlMode.MotionMagic, nativeUnits);
+		right.set(ControlMode.MotionMagic, inchesToNative(in));
 		
 	}
 	
@@ -236,10 +246,9 @@ public class DriveTrain {
 	 * @param rotations the number of rotations
 	 * @return native units/encoder counts
 	 */
-	public double rotationsToNative(double rotations) {
+	public double inchesToNative(double inches) {
 		
-		double countsPerRotation = 4096;
-		return rotations * countsPerRotation;
+		return ( ( 286899 * inches ) / 169.5 );
 		
 	}
 	
@@ -265,7 +274,9 @@ public class DriveTrain {
 	 * @return the heading of the robot compared to where it started in degrees
 	 */
 	public double getHeading() {
+		
 		return pigeon.getFusedHeading();
+		
 	}
 	
 	/**
@@ -294,6 +305,16 @@ public class DriveTrain {
 	public Value getShifter() {
 		
 		return shifter.get();
+		
+	}
+	
+	/**
+	 * Resets the encoder count to zero
+	 */
+	public void resetEncoder() {
+		
+		left.setSelectedSensorPosition(0, 0, kTimeoutMs);
+		right.setSelectedSensorPosition(0, 0, kTimeoutMs);
 		
 	}
 	
