@@ -4,31 +4,19 @@ import org.usfirst.frc.team4130.subsystem.DriveTrain;
 
 import com.ctre.phoenix.ILoopable;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
-/**
- * A Loopable class for motion magic driving
- * @author West
- */
 public class DriveDistance implements ILoopable {
 	
-	private double distanceNative;
+	private double distanceNative = 0;
 	private DriveTrain _drive;
 	private double targetNativeLeft;
 	private double targetNativeRight;
+	private double acceptableError = 4096/2;
 	
-	private double errorLeft;
-	private double errorRight;
-	
-	private int debounced = 0;
-	private int debouncedTarget = 25;
-	private double acceptableError = 4096*2;
-	
-	public DriveDistance(DriveTrain driveTrain, double _native) {
+	public DriveDistance(DriveTrain driveTrain, double inches) {
 		
 		System.out.println("Drive Distance task has been created.");
 		
-		distanceNative = _native;
+		distanceNative = ( ( 286899 * inches ) / 169.5 );
 		_drive = driveTrain;
 		
 	}
@@ -36,53 +24,43 @@ public class DriveDistance implements ILoopable {
 	@Override
 	public void onStart() {
 		
-		System.out.print("Driving ");
-		System.out.print(distanceNative);
-		System.out.println(" Native Units...");
+		System.out.println("Drive Distance task has started.");
 		
-		targetNativeLeft  = _drive.getLeftPos() + distanceNative;
-		targetNativeRight = _drive.getRightPos()+ distanceNative;
+		targetNativeLeft = _drive.getLeftPos()+distanceNative;
+		targetNativeRight = _drive.getRightPos()+distanceNative;
+		
+		_drive.setShifter(_drive.highGear);
 		
 	}
 
 	@Override
 	public void onLoop() {
-		
-		errorLeft  = targetNativeLeft  - _drive.getLeftPos();
-		errorRight = targetNativeRight - _drive.getRightPos();
+		// TODO Auto-generated method stub
 		
 		_drive.setPosLeft(targetNativeLeft);
 		_drive.setPosRight(targetNativeRight);
-		
-		SmartDashboard.putNumber("ErrorL" , errorLeft );
-		SmartDashboard.putNumber("ErrorR", errorRight);
 		
 	}
 
 	@Override
 	public boolean isDone() {
 		
-		boolean leftAtPos = Math.abs( errorLeft ) <= acceptableError;
-		boolean rightAtPos = Math.abs( errorRight ) <= acceptableError;
+		boolean leftAtPos = Math.abs(targetNativeLeft - _drive.getLeftPos()) <= acceptableError;
+		boolean rightAtPos = Math.abs(targetNativeRight - _drive.getRightPos()) <= acceptableError;
 		
-		debounced+= leftAtPos && rightAtPos ? 1 : -1;
-		
-		debounced = debounced > debouncedTarget*2  ? debouncedTarget*2 : debounced < 0 ? 0 : debounced;
-		
-		if (debounced >= debouncedTarget) {
-			System.out.println("Drive Distance has finished.(");
-			System.out.println("WARNING! The drive train will continue to hold position until it is used for something else or disabled.");
+		if (leftAtPos && rightAtPos) {
+			System.out.println("Finished Driving");
+			return true;
 		}
 		
-		return debounced >= debouncedTarget;
+		return false;
 	}
 
 	@Override
 	public void onStop() {
 		
-		_drive.driveDirect(0,0);
-		System.out.println("Drive Distance Has been stopped!");
-		System.out.println("WARNING! The drive train has been disabled.");
+		//_drive.driveDirect(0,0);
+		System.out.println("Finished Driving");
 		
 	}
 

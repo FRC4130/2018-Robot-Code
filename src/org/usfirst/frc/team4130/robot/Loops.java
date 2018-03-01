@@ -7,15 +7,11 @@ import org.usfirst.frc.team4130.subsystem.ElevatorPosition;
 
 import com.ctre.phoenix.schedulers.*;
 
-/**
- * Class with methods to schedule each auton.
- */
 public class Loops {
+	//Autonomous Loops
+	//TODO: Figure out how to dynamically determine the auton loops
 	
-	/**
-	 * Schedules the operations for the Teleoporated period.
-	 * @param teleop a ConcurrentSheduler
-	 */
+	//Teleop Loops
 	public static void scheduleTeleop(ConcurrentScheduler teleop){
 		
 		System.out.println("Scheduling Teleop.");
@@ -29,44 +25,25 @@ public class Loops {
 		
 	}
 	
-	public static void scheduleTurnTestAuton(SequentialScheduler auton) {
-		
-		System.out.println("Scheduling Turn Test Auton...");
-		
-		auton.add(new Print("Turn Test Auton started."));
-		auton.add(new DriveRotate(Subsystems.driveTrain, 180));
-		auton.add(new Delay(500));
-		auton.add(new DriveRotate(Subsystems.driveTrain, -180));
-		auton.add(new Print("Turn Test Auton finished!"));
-		
-		System.out.println("Scheduled Turn Test Auton.");
-		
-	}
+	//Auton Loops
+	public static void scheduleAuton1(SequentialScheduler auton) {
 	
-	public static void scheduleDriveTestAuton(SequentialScheduler auton) {
+		System.out.println("Scheduling auton 1.");
 		
-		System.out.println("Scheduling Drive Distance Auton...");
+//		auton.add(new DriveDistance(Subsystems.driveTrain, 4096*10));
 		
-		//auton.add(new Print("Drive Test Auton started."));
-		//auton.add(new DriveRotate(Subsystems.driveTrain, 180));
-		//auton.add(new Print("Done turning... Now driving..."));
-		auton.add(new DriveDistance(Subsystems.driveTrain, 24));
-		//auton.add(new DriveRotate(Subsystems.driveTrain, 45));
-		auton.add(new DriveRotate(Subsystems.driveTrain, 180));
-		//auton.add(new Print("Drive Test Auton finished."));
-		
-		System.out.println("Scheduled Drive Distance Auton");
-		
-	}
+		//auton.add(new Print("Auton Started. Now turning!"));
+		auton.add(new DriveDistance(Subsystems.driveTrain, 2*12));
+		auton.add(new DriveDistance(Subsystems.driveTrain, -2*12));
+		auton.add(new DriveRotateNew(Subsystems.driveTrain, 90));
+		auton.add(auton);
+		//auton.add(new Print("Finished turning! now starting delay."));
+		//auton.add(new Delay(500));
+		//auton.add(new Print("Finished delay! now starting turning."));
+		//auton.add(new DriveRotateNew(Subsystems.driveTrain, -180));
+		//auton.add(new Print("I'm Done!"));
 	
-//	/**
-//	 * Schedules the first autonomous. RR from R
-//	 * @param auton a SequentialScheduler
-//	 */
-//	public static void scheduleAuton1(SequentialScheduler auton) {
-//	
-//		System.out.println("Scheduling auton 1.");
-//	
+		
 //		ConcurrentScheduler elevatorInit = new ConcurrentScheduler();
 //		
 //		elevatorInit.add(new ElevatorRelease(Subsystems.elevator));
@@ -107,9 +84,9 @@ public class Loops {
 //		auton.add(new Outtake(Subsystems.arms));
 //		auton.add(new DriveDistance(Subsystems.driveTrain, 4096*-10));
 //		driveToCube.add(new Elevate(Subsystems.elevator, ElevatorPosition.Home.value));
-//		
-//		System.out.println("Scheduled auton 1.");
-//		
-//	}
+		
+		System.out.println("Scheduled auton 1.");
+		
+	}
 	
 }

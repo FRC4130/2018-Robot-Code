@@ -6,10 +6,6 @@ import com.ctre.phoenix.ILoopable;
 
 import edu.wpi.first.wpilibj.Joystick;
 
-/**
- * Class to control the Arms in teleoporated
- * @author West
- */
 public class ArmsTele implements ILoopable {
 	private Arms _arms;
 	private Joystick _driver;

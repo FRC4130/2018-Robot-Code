@@ -4,11 +4,6 @@ import org.usfirst.frc.team4130.subsystem.Elevator;
 
 import com.ctre.phoenix.ILoopable;
 
-/**
- * Used at the start of the match to release
- * the intake from it's starting position.
- * @author West
- */
 public class ElevatorRelease implements ILoopable {
 	
 	Elevator _elevator;
@@ -26,7 +21,7 @@ public class ElevatorRelease implements ILoopable {
 		// TODO Auto-generated method stub
 		_elevator.setServo(0);
 		endTime = System.currentTimeMillis() + durrationMS;
-		System.out.println("Releasing Elevator.");
+		System.out.println("Releasing Elevator");
 	}
 
 	@Override
@@ -36,17 +31,18 @@ public class ElevatorRelease implements ILoopable {
 
 	@Override
 	public boolean isDone() {
-		if (System.currentTimeMillis() >= endTime) {
-			_elevator.setServo(1);
-			System.out.println("Finished Releasing.");
-			return true;
+		// TODO Auto-generated method stub
+		boolean bool = System.currentTimeMillis() >= endTime;
+		if (bool) {
+			onStop();
 		}
-		return false;
+		return bool;
 	}
 
 	@Override
 	public void onStop() {
-		System.out.println("Elevator release has been stopped!");
+		_elevator.setServo(1);
+		System.out.println("Finished Releasing.");
 	}
 
 }

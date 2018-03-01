@@ -29,7 +29,7 @@ public class Robot extends IterativeRobot {
 		Loops.scheduleTeleop(teleop);
 		
 		auton1 = new SequentialScheduler(0);
-		Loops.scheduleDriveTestAuton(auton1);
+		Loops.scheduleAuton1(auton1);
 		
 	}
 
@@ -41,19 +41,19 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousPeriodic() {
 		
-		gameData = DriverStation.getInstance().getGameSpecificMessage();
+		//gameData = DriverStation.getInstance().getGameSpecificMessage();
 		
 		auton1.process();
 		
-		SmartDashboard.putNumber("TargetVelocityL", RobotMap.leftDriveMaster.getActiveTrajectoryVelocity());
-		SmartDashboard.putNumber("VelocityL", RobotMap.leftDriveMaster.getSelectedSensorVelocity(0));
-		SmartDashboard.putNumber("TargetPositionL", RobotMap.leftDriveMaster.getActiveTrajectoryPosition());
-		SmartDashboard.putNumber("PositionL", RobotMap.leftDriveMaster.getSelectedSensorPosition(0));
+		//SmartDashboard.putNumber("TargetVelocity", RobotMap.leftDriveMaster.getActiveTrajectoryVelocity());
+		//SmartDashboard.putNumber("Velocity", RobotMap.leftDriveMaster.getSelectedSensorVelocity(0));
+		//SmartDashboard.putNumber("TargetPosition", RobotMap.leftDriveMaster.getActiveTrajectoryPosition());
+		//SmartDashboard.putNumber("Position", RobotMap.leftDriveMaster.getSelectedSensorPosition(0));
 		
-		SmartDashboard.putNumber("TargetVelocityR", RobotMap.rightDriveMaster.getActiveTrajectoryVelocity());
-		SmartDashboard.putNumber("VelocityR", RobotMap.rightDriveMaster.getSelectedSensorVelocity(0));
-		SmartDashboard.putNumber("TargetPositionR", RobotMap.rightDriveMaster.getActiveTrajectoryPosition());
-		SmartDashboard.putNumber("PositionR", RobotMap.rightDriveMaster.getSelectedSensorPosition(0));
+		//SmartDashboard.putNumber("TargetVelocityR", RobotMap.rightDriveMaster.getActiveTrajectoryVelocity());
+		//SmartDashboard.putNumber("VelocityR", RobotMap.rightDriveMaster.getSelectedSensorVelocity(0));
+		//SmartDashboard.putNumber("TargetPositionR", RobotMap.rightDriveMaster.getActiveTrajectoryPosition());
+		//SmartDashboard.putNumber("PositionR", RobotMap.rightDriveMaster.getSelectedSensorPosition(0));
 		
 	}
 
@@ -77,8 +77,6 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void disabledInit(){
 		teleop.stopAll();
-		//auton1.stop();
-		Subsystems.driveTrain.resetEncoder();
 	}
 	
 	@Override

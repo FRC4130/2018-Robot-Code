@@ -25,7 +25,9 @@ public class ElevatorTele implements ILoopable{
 	
 	@Override
 	public void onStart() {
-		System.out.println("ElevatorTele has been started!");
+		//Home the elevator. TODO: Make sure this function works.
+		//Do we want to do home at the start of Teleop?
+		//_elevator.setHome();
 	}
 
 	@Override
@@ -81,7 +83,6 @@ public class ElevatorTele implements ILoopable{
 
 	@Override
 	public void onStop() {
-		System.out.println("ElevatorTele has been stopped!");
 		_elevator.driveDirect(0);
 	}
 

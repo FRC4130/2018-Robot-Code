@@ -2,11 +2,6 @@ package org.usfirst.frc.team4130.loops;
 
 import com.ctre.phoenix.ILoopable;
 
-/**
- *   This Class provides a way to schedule
- * prints and debug autonomous.
- * @author West
- */
 public class Print implements ILoopable {
 	
 	private String x = "";
@@ -17,22 +12,26 @@ public class Print implements ILoopable {
 	
 	@Override
 	public void onStart() {
+		// TODO Auto-generated method stub
 		System.out.println(x);
 	}
 
 	@Override
 	public void onLoop() {
+		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public boolean isDone() {
+		// TODO Auto-generated method stub
 		return true;
 	}
 
 	@Override
 	public void onStop() {
-		System.out.println(x);
+		// TODO Auto-generated method stub
+
 	}
 
 }

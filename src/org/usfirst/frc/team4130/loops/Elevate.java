@@ -4,10 +4,6 @@ import org.usfirst.frc.team4130.subsystem.Elevator;
 
 import com.ctre.phoenix.ILoopable;
 
-/**
- * Loopable class to set the height of the elevator.
- * @author West
- */
 public class Elevate implements ILoopable {
 	Elevator _elevator;
 	double _height;

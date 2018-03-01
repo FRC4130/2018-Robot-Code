@@ -23,7 +23,7 @@ public class DriveRotateNew implements ILoopable {
 	double iZone = 10;
 	double iAccum = 0;
 	
-	double acceptableErr = 0.33;
+	double acceptableErr = 0.75;
 	
 	int debounced = 0;
 	int debouncedTarget = 25;
@@ -63,7 +63,7 @@ public class DriveRotateNew implements ILoopable {
 	@Override
 	public void onLoop() {
 		
-		error = target-(-1*drive.getHeading());
+		error = drive.getHeading()-target;
 		
 		SmartDashboard.putNumber("Turn Error", error);
 		

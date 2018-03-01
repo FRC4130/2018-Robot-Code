@@ -2,19 +2,11 @@ package org.usfirst.frc.team4130.loops;
 
 import com.ctre.phoenix.ILoopable;
 
-/**
- * Waits a particular amount of time before finishing.
- * @author West
- */
 public class Delay implements ILoopable {
 	
 	double delay = 0;
 	double stopTime = 0;
 	
-	/**
-	 * Constructor
-	 * @param delayMs time to delay in Milliseconds
-	 */
 	public Delay(double delayMs) {
 		
 		delay = delayMs;
