@@ -30,10 +30,6 @@ public class DriveTrain {
 	public final Value lowGear = Value.kReverse;
 	public double kPosError = 15;
 	
-	public double turnAcceptableError = 0.75;
-	private double turnLowPGain = 0.021;//0.011;
-	private double turnHighPGain = 0.00;
-	
 	public DriveTrain () {
 		
 		System.out.println("Drive Init has run.");
@@ -124,11 +120,11 @@ public class DriveTrain {
 //		right.config_IntegralZone(lowGains, 0, kTimeoutMs);
 		
 		/***Magic Settings***/
-		left.configMotionCruiseVelocity(30330, kTimeoutMs);
-		left.configMotionAcceleration(15000, kTimeoutMs);
+		left.configMotionCruiseVelocity(30330/2, kTimeoutMs);
+		left.configMotionAcceleration(15000/2, kTimeoutMs);
 		
-		right.configMotionCruiseVelocity(30330, kTimeoutMs);
-		right.configMotionAcceleration(15000, kTimeoutMs);
+		right.configMotionCruiseVelocity(30330/2, kTimeoutMs);
+		right.configMotionAcceleration(15000/2, kTimeoutMs);
 		
 	}
 	
@@ -165,9 +161,6 @@ public class DriveTrain {
 		
 		left.set(ControlMode.PercentOutput, percentOutputLeft);
 		right.set(ControlMode.PercentOutput, percentOutputRight);
-		
-		SmartDashboard.putNumber("Velocity Left",left.getSelectedSensorVelocity(0));
-		SmartDashboard.putNumber("Velocity Right",right.getSelectedSensorVelocity(0));
 		
 	}
 	
@@ -222,8 +215,9 @@ public class DriveTrain {
 	}
 
 	public double getHeading() {
-		// TODO Auto-generated method stub
+		
 		return pigeon.getFusedHeading();
+		
 	}
 	
 	public void resetHeading() {
@@ -235,37 +229,6 @@ public class DriveTrain {
 	public void arcade(double throttle, double turn) {
 		
 		driveDirect(throttle+turn, throttle-turn);
-		
-	}
-	
-	public boolean straight(double throttle, double targetDegree) {
-		
-		double turnError = targetDegree-pigeon.getFusedHeading();
-		System.out.print("Error: ");
-		System.out.println(turnError);
-		
-		if (getShifter() == highGear) {
-			arcade(throttle, (turnError * turnHighPGain)*-1);
-		}
-		
-		else {
-			arcade(throttle, (turnError * turnLowPGain)*-1);
-		}
-		
-		return Math.abs(turnError) <= turnAcceptableError;
-		
-	}
-	
-	public double turnLow(double targetDegree) {
-		
-		double turnError = pigeon.getFusedHeading()-targetDegree;
-		SmartDashboard.putNumber("Turn Error",turnError);
-		
-		if (getShifter() != lowGear) setShifter(lowGear);
-		
-		arcade(0, (turnError * turnLowPGain));
-		
-		return turnError;
 		
 	}
 

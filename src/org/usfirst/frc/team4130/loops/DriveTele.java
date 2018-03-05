@@ -37,6 +37,7 @@ public class DriveTele implements ILoopable {
 		//Tank Drive (leftY, rightY) with brake button (B)
 		if (_gamepad.getRawButtonPressed(2)) {
 			_drive.setNeutralMode(NeutralMode.Brake);
+			_drive.setShifter(_drive.lowGear);
 		}
 		else if (_gamepad.getRawButtonReleased(2)) {
 			_drive.setNeutralMode(NeutralMode.Coast);

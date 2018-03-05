@@ -8,8 +8,8 @@ import org.usfirst.frc.team4130.subsystem.ElevatorPosition;
 import com.ctre.phoenix.schedulers.*;
 
 public class Loops {
-	//Autonomous Loops
-	//TODO: Figure out how to dynamically determine the auton loops
+	
+	private static double m = 0.5;
 	
 	//Teleop Loops
 	public static void scheduleTeleop(ConcurrentScheduler teleop){
@@ -21,71 +21,174 @@ public class Loops {
 		teleop.add(new DriveTele(Subsystems.driveTrain, RobotMap.driverJoystick));
 		//teleop.add(new ArmsTele(Subsystems.arms, RobotMap.driverJoystick, RobotMap.operatorJoystick));
 		
-		System.out.println("Scheduled Teleop.");
+		System.out.println("Scheduled.");
+		
+	}
+	
+	//Testing Loops
+	public static void hokeyPokey(SequentialScheduler auton) {
+		
+		System.out.println("Preparing to get down...");
+		
+		auton.add(new DriveDistance(Subsystems.driveTrain, 2*12, Subsystems.driveTrain.highGear));
+		auton.add(new DriveDistance(Subsystems.driveTrain, -2*12, Subsystems.driveTrain.highGear));
+		auton.add(new DriveRotate(Subsystems.driveTrain, 90));
+		auton.add(auton);
+		
+		System.out.println("Prepared.");
+	}
+
+	public static void scheduleTest(SequentialScheduler test) {
+		
+		System.out.println("Scheduling Test");
+		
+		test.add(new DriveDistance(Subsystems.driveTrain, 72, Subsystems.driveTrain.highGear));
+		
+		System.out.println("Scheduled Test");
 		
 	}
 	
 	//Auton Loops
-	public static void scheduleAuton1(SequentialScheduler auton) {
-	
-		System.out.println("Scheduling auton 1.");
+	public static void scheduleEleRelease(SequentialScheduler auton) {
 		
-//		auton.add(new DriveDistance(Subsystems.driveTrain, 4096*10));
-		
-		//auton.add(new Print("Auton Started. Now turning!"));
-		auton.add(new DriveDistance(Subsystems.driveTrain, 2*12));
-		auton.add(new DriveDistance(Subsystems.driveTrain, -2*12));
-		auton.add(new DriveRotateNew(Subsystems.driveTrain, 90));
-		auton.add(auton);
-		//auton.add(new Print("Finished turning! now starting delay."));
-		//auton.add(new Delay(500));
-		//auton.add(new Print("Finished delay! now starting turning."));
-		//auton.add(new DriveRotateNew(Subsystems.driveTrain, -180));
-		//auton.add(new Print("I'm Done!"));
-	
+		System.out.println("Scheduling Elevator Init.");
 		
 //		ConcurrentScheduler elevatorInit = new ConcurrentScheduler();
 //		
 //		elevatorInit.add(new ElevatorRelease(Subsystems.elevator));
-//		elevatorInit.add(new Elevate(Subsystems.elevator, ElevatorPosition.ScaleMax.value));
+//		elevatorInit.add(new Elevate(Subsystems.elevator, ElevatorPosition.home.value));
 //		
-//		SequentialScheduler driveToScale = new SequentialScheduler(0);
-//		
-//		driveToScale.add(new DriveDistance(Subsystems.driveTrain, 4096*10));
-//		driveToScale.add(new DriveRotate(Subsystems.driveTrain, 45));
-//		driveToScale.add(new DriveDistance(Subsystems.driveTrain, 4096*10));
-//		
-//		ConcurrentScheduler ScaleGroup = new ConcurrentScheduler();
-//		
-//		ScaleGroup.add(elevatorInit);
-//		ScaleGroup.add(driveToScale);
-//		
-//		SequentialScheduler driveToCube = new SequentialScheduler(0);
-//		
-//		ConcurrentScheduler driveToCube1 = new ConcurrentScheduler();
-//		
-//		driveToCube1.add(new DriveDistance(Subsystems.driveTrain, 4096*10));
-//		driveToCube1.add(new Elevate(Subsystems.elevator, ElevatorPosition.Home.value));
-//		
-//		driveToCube.add(new DriveRotate(Subsystems.driveTrain, 90));
-//		driveToCube.add(driveToCube);
-//		
-//		//Final Scheduling
-//		auton.add(ScaleGroup);
-//		//Eject Cube and Back up
-//		auton.add(new Outtake(Subsystems.arms));
-//		auton.add(new DriveDistance(Subsystems.driveTrain, 4096*-10));
-//		auton.add(driveToCube);
-//		//Grab Cube
-//		auton.add(new Intake(Subsystems.arms));
-//		auton.add(new Elevate(Subsystems.elevator, ElevatorPosition.Switch.value));
-//		//approach
-//		auton.add(new DriveDistance(Subsystems.driveTrain, 4096*10));
-//		auton.add(new Outtake(Subsystems.arms));
-//		auton.add(new DriveDistance(Subsystems.driveTrain, 4096*-10));
-//		driveToCube.add(new Elevate(Subsystems.elevator, ElevatorPosition.Home.value));
+//		auton.add(elevatorInit);
 		
-		System.out.println("Scheduled auton 1.");
+		System.out.println("Scheduled.");
+		
+	}
+	
+	public static void schedule1RR(SequentialScheduler auton) {
+		
+		System.out.println("Scheduling Right Right from Left.");
+		
+		scheduleEleRelease(auton);
+		
+		auton.add(new DriveDistance(Subsystems.driveTrain, m*283.621, Subsystems.driveTrain.highGear));
+		auton.add(new DriveRotate(Subsystems.driveTrain, 75));
+		auton.add(new DriveDistance(Subsystems.driveTrain, m*23.604, Subsystems.driveTrain.highGear));
+		auton.add(new DriveDistance(Subsystems.driveTrain, m*-23.604, Subsystems.driveTrain.highGear));
+		auton.add(new DriveRotate(Subsystems.driveTrain, 80));
+		auton.add(new DriveDistance(Subsystems.driveTrain, m*91.502, Subsystems.driveTrain.highGear));
+		
+		System.out.print("Scheduled.");
+		
+	}
+	
+	public static void schedule1RL(SequentialScheduler auton) {
+		
+		System.out.println("Scheduling Right Left from Left.");
+		
+		scheduleEleRelease(auton);
+		
+		System.out.print("Scheduled.");
+		
+		
+	}
+	
+	public static void schedule1LL(SequentialScheduler auton) {
+		
+		System.out.println("Scheduling Left Left from Left.");
+		
+		scheduleEleRelease(auton);
+		
+		System.out.print("Scheduled.");
+		
+	}
+
+	public static void schedule1LR(SequentialScheduler auton) {
+		
+		System.out.println("Scheduling Right Left from Left.");
+		
+		scheduleEleRelease(auton);
+		
+		System.out.print("Scheduled.");
+		
+	}
+
+	public static void schedule2RR(SequentialScheduler auton) {
+		
+		System.out.println("Scheduling Right Right from Center.");
+		
+		scheduleEleRelease(auton);
+		
+		System.out.print("Scheduled.");
+		
+	}
+
+	public static void schedule2RL(SequentialScheduler auton) {
+		
+		System.out.println("Scheduling Right Left from Center.");
+		
+		scheduleEleRelease(auton);
+		
+		System.out.print("Scheduled.");
+		
+	}
+
+	public static void schedule2LR(SequentialScheduler auton) {
+		
+		System.out.println("Scheduling Left Right from Center.");
+		
+		scheduleEleRelease(auton);
+		
+		System.out.print("Scheduled.");
+		
+	}
+
+	public static void schedule2LL(SequentialScheduler auton) {
+		
+		System.out.println("Scheduling Left Left from Center.");
+		
+		scheduleEleRelease(auton);
+		
+		System.out.print("Scheduled Left Left from Center.");
+		
+	}
+
+	public static void schedule3RR(SequentialScheduler auton) {
+
+		System.out.println("Scheduling Right Right from Right.");
+		
+		scheduleEleRelease(auton);
+		
+		System.out.print("Scheduled.");
+		
+	}
+
+	public static void schedule3RL(SequentialScheduler auton) {
+
+		System.out.println("Scheduling Right Left from Right.");
+		
+		scheduleEleRelease(auton);
+		
+		System.out.print("Scheduled Right Right from Right.");
+		
+	}
+
+	public static void schedule3LR(SequentialScheduler auton) {
+
+		System.out.println("Scheduling Left Right from Right.");
+		
+		scheduleEleRelease(auton);
+		
+		System.out.print("Scheduled Left Right from Right.");
+		
+	}
+
+	public static void schedule3LL(SequentialScheduler auton) {
+
+		System.out.println("Scheduling Left Left from Right");
+		
+		scheduleEleRelease(auton);
+		
+		System.out.print("Scheduled Left Left from Right.");
 		
 	}
 	
