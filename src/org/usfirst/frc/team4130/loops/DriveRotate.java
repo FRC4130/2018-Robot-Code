@@ -17,17 +17,19 @@ public class DriveRotate implements ILoopable {
 	double error;
 	double lastErr;
 	
-	double pGain = 0.022;
-	double iGain = 0.00235;
-	double dGain = 0;
+	double pGain = 0.045;
+	double iGain = 0.00225;
+	double dGain = 0.13;
 	
 	double iZone = 7.5;
 	double iAccum = 0;
 	
-	double acceptableErr = 0.75;
+	double acceptableErr = 0.50;
 	
 	int debounced = 0;
-	int debouncedTarget = 25;
+	int debouncedTarget = 10;
+	
+	double maxThrottle = 1;
 	
 	double startMS = 0;
 	
@@ -65,7 +67,9 @@ public class DriveRotate implements ILoopable {
 		
 		error = drive.getHeading()-target;
 		
-		SmartDashboard.putNumber("Turn Error", error);
+		//SmartDashboard.putNumber("Turn Error", error);
+		
+		System.out.println(error);
 		
 		if (Math.abs(error) < iZone) {
 			
@@ -78,9 +82,13 @@ public class DriveRotate implements ILoopable {
 			
 		}
 		
-		drive.arcade(0, ( pGain   *   error ) +
-					    ( iAccum  *   iGain ) +
-					    ( dGain   * ( error - lastErr ) ) );
+		double turnThrottle =	( pGain   *   error ) +
+			    				( iAccum  *   iGain ) +
+			    				( dGain   * ( error - lastErr ) );
+		
+		turnThrottle = turnThrottle > maxThrottle ? maxThrottle : turnThrottle < maxThrottle*-1 ? maxThrottle*-1 : turnThrottle;
+		
+		drive.arcade(0, turnThrottle );
 		
 		lastErr = error;
 		

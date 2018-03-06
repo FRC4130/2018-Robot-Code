@@ -9,7 +9,7 @@ import com.ctre.phoenix.schedulers.*;
 
 public class Loops {
 	
-	private static double m = 0.5;
+	private static double m = 1;
 	
 	//Teleop Loops
 	public static void scheduleTeleop(ConcurrentScheduler teleop){
@@ -22,6 +22,7 @@ public class Loops {
 		//teleop.add(new ArmsTele(Subsystems.arms, RobotMap.driverJoystick, RobotMap.operatorJoystick));
 		
 		System.out.println("Scheduled.");
+		
 		
 	}
 	
@@ -42,7 +43,8 @@ public class Loops {
 		
 		System.out.println("Scheduling Test");
 		
-		test.add(new DriveDistance(Subsystems.driveTrain, 72, Subsystems.driveTrain.highGear));
+		//hokeyPokey(test);
+		test.add(new DriveDistance(Subsystems.driveTrain, m*250, Subsystems.driveTrain.highGear));
 		
 		System.out.println("Scheduled Test");
 		
@@ -118,6 +120,12 @@ public class Loops {
 		
 		scheduleEleRelease(auton);
 		
+		auton.add(new DriveDistance(Subsystems.driveTrain, m*47.9, Subsystems.driveTrain.highGear));
+		auton.add(new DriveRotate(Subsystems.driveTrain, -40));
+		auton.add(new DriveDistance(Subsystems.driveTrain, m*59, Subsystems.driveTrain.highGear));
+		auton.add(new DriveRotate(Subsystems.driveTrain, 40));
+		auton.add(new DriveDistance(Subsystems.driveTrain, m*7.5, Subsystems.driveTrain.highGear));
+		
 		System.out.print("Scheduled.");
 		
 	}
@@ -126,7 +134,7 @@ public class Loops {
 		
 		System.out.println("Scheduling Right Left from Center.");
 		
-		scheduleEleRelease(auton);
+		schedule2RR(auton);
 		
 		System.out.print("Scheduled.");
 		
@@ -136,7 +144,7 @@ public class Loops {
 		
 		System.out.println("Scheduling Left Right from Center.");
 		
-		scheduleEleRelease(auton);
+		schedule2LL(auton);
 		
 		System.out.print("Scheduled.");
 		
@@ -148,6 +156,12 @@ public class Loops {
 		
 		scheduleEleRelease(auton);
 		
+		auton.add(new DriveDistance(Subsystems.driveTrain, m*29.3, Subsystems.driveTrain.highGear));
+		auton.add(new DriveRotate(Subsystems.driveTrain, 40));
+		auton.add(new DriveDistance(Subsystems.driveTrain, m*83.4, Subsystems.driveTrain.highGear));
+		auton.add(new DriveRotate(Subsystems.driveTrain, -40));
+		auton.add(new DriveDistance(Subsystems.driveTrain, m*7.5, Subsystems.driveTrain.highGear));
+		
 		System.out.print("Scheduled Left Left from Center.");
 		
 	}
@@ -156,7 +170,7 @@ public class Loops {
 
 		System.out.println("Scheduling Right Right from Right.");
 		
-		scheduleEleRelease(auton);
+		
 		
 		System.out.print("Scheduled.");
 		

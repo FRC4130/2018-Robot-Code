@@ -24,8 +24,6 @@ public class DriveTrain {
 	private PigeonIMU pigeon = RobotMap.pigeon;
 	private DoubleSolenoid shifter = RobotMap.driveShift;
 	private final int kTimeoutMs = 10;
-	private final int highGainsIdx = 0;
-	private final int lowGains = 1;
 	public final Value highGear = Value.kForward;
 	public final Value lowGear = Value.kReverse;
 	public double kPosError = 15;
@@ -61,17 +59,11 @@ public class DriveTrain {
 		pigeon.setFusedHeading(0, 10);
 		
 		/***Motion Magic/speed control***/
-		left.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, highGainsIdx, kTimeoutMs);
+		left.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, kTimeoutMs);
 		left.setSensorPhase(false);
 		
-		right.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, highGainsIdx, kTimeoutMs);
+		right.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, kTimeoutMs);
 		right.setSensorPhase(false);
-		
-		//left.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, lowGains, kTimeoutMs);
-		//left.setSensorPhase(true);
-		
-		//right.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, lowGains, kTimeoutMs);
-		//right.setSensorPhase(true);
 		
 		left.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, kTimeoutMs);
 		left.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, kTimeoutMs);
@@ -88,43 +80,129 @@ public class DriveTrain {
 		right.configNominalOutputReverse(0, kTimeoutMs);
 		right.configPeakOutputForward(1, kTimeoutMs);
 		right.configPeakOutputReverse(-1, kTimeoutMs);
-
-		/**HighGains***/
-//		left.selectProfileSlot(0, 0);
-		left.config_kF(highGainsIdx, 0.030356, kTimeoutMs);
-		left.config_kP(highGainsIdx, 0.087976, kTimeoutMs);
-//		left.config_kI(highGains, 0, kTimeoutMs);
-//		left.config_kD(HighGains, 0, kTimeoutMs);
-//		left.config_IntegralZone(0, 0, kTimeoutMs);
 		
-//		right.selectProfileSlot(0, 0);
-		right.config_kF(highGainsIdx, 0.030356, kTimeoutMs);
-		right.config_kP(highGainsIdx, 0.087976, kTimeoutMs);
-//		right.config_kI(highGains, 0, kTimeoutMs);
-//		right.config_kD(highGains, 0, kTimeoutMs);
-//		right.config_IntegralZone(highGains, 0, kTimeoutMs);
+	}
+	
+	public void setHighForward() {
+		left.selectProfileSlot(0, 0);
+		left.config_kF(0, 0.030356, kTimeoutMs);
+		left.config_kP(0, 0.087976, kTimeoutMs);
+		left.config_kI(0, 0, kTimeoutMs);
+		left.config_kD(0, 0, kTimeoutMs);
+		left.config_IntegralZone(0, 0, kTimeoutMs);
 		
-		/***LowGains***/
-//		left.selectProfileSlot(0, 0);
-//		left.config_kF(lowGains, 0.2, kTimeoutMs);
-//		left.config_kP(lowGains, 0.2, kTimeoutMs);
-//		left.config_kI(0, 0, kTimeoutMs);
-//		left.config_kD(0, 0, kTimeoutMs);
-//		left.config_IntegralZone(0, 0, kTimeoutMs);
+		right.selectProfileSlot(0, 0);
+		right.config_kF(0, 0.030356, kTimeoutMs);
+		right.config_kP(0, 0.087976, kTimeoutMs);
+		right.config_kI(0, 0, kTimeoutMs);
+		right.config_kD(0, 0, kTimeoutMs);
+		right.config_IntegralZone(0, 0, kTimeoutMs);
 		
-//		right.selectProfileSlot(0, 0);
-//		right.config_kF(lowGains, 0.2, kTimeoutMs);
-//		right.config_kP(lowGains, 0.2, kTimeoutMs);
-//		right.config_kI(lowGains, 0, kTimeoutMs);
-//		right.config_kD(lowGains, 0, kTimeoutMs);
-//		right.config_IntegralZone(lowGains, 0, kTimeoutMs);
-		
-		/***Magic Settings***/
 		left.configMotionCruiseVelocity(30330/2, kTimeoutMs);
 		left.configMotionAcceleration(15000/2, kTimeoutMs);
 		
 		right.configMotionCruiseVelocity(30330/2, kTimeoutMs);
 		right.configMotionAcceleration(15000/2, kTimeoutMs);
+	}
+	
+	public void setLowForward() {
+		left.selectProfileSlot(0, 0);
+		left.config_kF(0, 0.030356, kTimeoutMs);
+		left.config_kP(0, 0.087976, kTimeoutMs);
+		left.config_kI(0, 0, kTimeoutMs);
+		left.config_kD(0, 0, kTimeoutMs);
+		left.config_IntegralZone(0, 0, kTimeoutMs);
+		
+		right.selectProfileSlot(0, 0);
+		right.config_kF(0, 0.030356, kTimeoutMs);
+		right.config_kP(0, 0.087976, kTimeoutMs);
+		right.config_kI(0, 0, kTimeoutMs);
+		right.config_kD(0, 0, kTimeoutMs);
+		right.config_IntegralZone(0, 0, kTimeoutMs);
+		
+		left.configMotionCruiseVelocity(30330/2, kTimeoutMs);
+		left.configMotionAcceleration(15000/2, kTimeoutMs);
+		
+		right.configMotionCruiseVelocity(30330/2, kTimeoutMs);
+		right.configMotionAcceleration(15000/2, kTimeoutMs);
+	}
+	
+	public void setHighReverse() {
+		left.selectProfileSlot(0, 0);
+		left.config_kF(0, 0.030356, kTimeoutMs);
+		left.config_kP(0, 0.087976, kTimeoutMs);
+		left.config_kI(0, 0, kTimeoutMs);
+		left.config_kD(0, 0, kTimeoutMs);
+		left.config_IntegralZone(0, 0, kTimeoutMs);
+		
+		right.selectProfileSlot(0, 0);
+		right.config_kF(0, 0.030356, kTimeoutMs);
+		right.config_kP(0, 0.087976, kTimeoutMs);
+		right.config_kI(0, 0, kTimeoutMs);
+		right.config_kD(0, 0, kTimeoutMs);
+		right.config_IntegralZone(0, 0, kTimeoutMs);
+		
+		left.configMotionCruiseVelocity(30330/2, kTimeoutMs);
+		left.configMotionAcceleration(15000/2, kTimeoutMs);
+		
+		right.configMotionCruiseVelocity(30330/2, kTimeoutMs);
+		right.configMotionAcceleration(15000/2, kTimeoutMs);
+	}
+	
+	public void setLowReverse() {
+		left.selectProfileSlot(0, 0);
+		left.config_kF(0, 0.030356, kTimeoutMs);
+		left.config_kP(0, 0.087976, kTimeoutMs);
+		left.config_kI(0, 0, kTimeoutMs);
+		left.config_kD(0, 0, kTimeoutMs);
+		left.config_IntegralZone(0, 0, kTimeoutMs);
+		
+		right.selectProfileSlot(0, 0);
+		right.config_kF(0, 0.030356, kTimeoutMs);
+		right.config_kP(0, 0.087976, kTimeoutMs);
+		right.config_kI(0, 0, kTimeoutMs);
+		right.config_kD(0, 0, kTimeoutMs);
+		right.config_IntegralZone(0, 0, kTimeoutMs);
+		
+		left.configMotionCruiseVelocity(30330/2, kTimeoutMs);
+		left.configMotionAcceleration(15000/2, kTimeoutMs);
+		
+		right.configMotionCruiseVelocity(30330/2, kTimeoutMs);
+		right.configMotionAcceleration(15000/2, kTimeoutMs);
+	}
+	
+	public void setGains() {
+		
+		SmartDashboard.putNumber("Left Vel", left.getSelectedSensorVelocity(0));
+		SmartDashboard.putNumber("Left Tarjectory Vel", left.getActiveTrajectoryVelocity());
+		SmartDashboard.putNumber("Left Tarjectory Pos",left.getActiveTrajectoryPosition());
+		SmartDashboard.putNumber("Left Target Pos", left.getClosedLoopTarget(0));
+		SmartDashboard.putNumber("Left Pos", left.getSelectedSensorPosition(0));
+		
+		SmartDashboard.putNumber("Right Vel", right.getSelectedSensorVelocity(0));
+		SmartDashboard.putNumber("Right Tarjectory Vel", right.getActiveTrajectoryVelocity());
+		SmartDashboard.putNumber("Right Tarjectory Pos",right.getActiveTrajectoryPosition());
+		SmartDashboard.putNumber("Right Target Pos", right.getClosedLoopTarget(0));
+		SmartDashboard.putNumber("Left Pos", left.getSelectedSensorPosition(0));
+		
+		if (left.getClosedLoopError(0) > 0 && right.getClosedLoopError(0) > 0) {
+			if (getShifter() == highGear) {
+				//setHighForward();
+			}
+			else {
+				//setLowForward();
+			}
+			
+		}
+		else {
+			if (getShifter() == highGear) {
+				//setHighReverse();
+			}
+			else {
+				//setLowReverse();
+			}
+			
+		}
 		
 	}
 	
@@ -146,9 +224,6 @@ public class DriveTrain {
 		shifter.set(vl);
 		shifter.set(vl);
 		
-		//left.setSelectedSensorPosition(0, vl == highGear ? highGainsIdx : lowGainsIdx, kTimeoutMs);
-		//right.setSelectedSensorPosition(0, vl == highGear ? highGainsIdx : lowGainsIdx, kTimeoutMs);
-		
 	}
 	
 	public void toggleShifter() {
@@ -169,17 +244,23 @@ public class DriveTrain {
 		left.set(ControlMode.MotionMagic, encoderCounts);
 		right.set(ControlMode.MotionMagic, encoderCounts);
 		
+		setGains();
+		
 	}
 	
 	public void setPosLeft(double nativeUnits) {
 		
 		left.set(ControlMode.MotionMagic, nativeUnits);
 		
+		setGains();
+		
 	}
 	
 	public void setPosRight(double nativeUnits) {
 		
 		right.set(ControlMode.MotionMagic, nativeUnits);
+		
+		setGains();
 		
 	}
 	
@@ -190,27 +271,15 @@ public class DriveTrain {
 		
 	}
 	
-	/**
-	 * Converts rotations to native units
-	 * @param rotations the number of rotations
-	 * @return native units/encoder counts
-	 */
-	public double rotationsToNative(double rotations) {
-		
-		double countsPerRotation = 4096;
-		return rotations * countsPerRotation;
-		
-	}
-	
 	public double getLeftPos() {
 		
-		return left.getSelectedSensorPosition(highGainsIdx);
+		return left.getSelectedSensorPosition(0);
 		
 	}
 	
 	public double getRightPos() {
 		
-		return right.getSelectedSensorPosition(highGainsIdx);
+		return right.getSelectedSensorPosition(0);
 		
 	}
 
