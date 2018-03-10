@@ -7,6 +7,7 @@ import com.ctre.phoenix.ILoopable;
 public class Elevate implements ILoopable {
 	Elevator _elevator;
 	double _height;
+	double acceptableErr = 20;
 	
 	public Elevate(Elevator ele, double heightInches) {
 		_elevator = ele;
@@ -15,9 +16,9 @@ public class Elevate implements ILoopable {
 	
 	@Override
 	public void onStart() {		
-		System.out.print("Elevating to ");
+		System.out.print("[Info] Elevating to ");
 		System.out.print(_height);
-		System.out.println("...");
+		System.out.println("\"");
 	}
 
 	@Override
@@ -27,16 +28,18 @@ public class Elevate implements ILoopable {
 
 	@Override
 	public boolean isDone() {
-		boolean bool = Math.abs(_elevator.getError()) < 10;
-		if (bool) onStop();
-		return bool;
+		if (Math.abs(_elevator.getError()) < acceptableErr) {
+			System.out.print("[Info] Finished elevating to ");
+			System.out.print(_height);
+			System.out.println("\"");
+			return true;
+		}
+		return false;
 	}
 
 	@Override
 	public void onStop() {
-		System.out.print("Finished elevating to ");
-		System.out.print(_height);
-		System.out.println(".");
+		System.out.print("[WARNING] Elevate was stopped");
 	}
 
 }

@@ -5,7 +5,7 @@ import org.usfirst.frc.team4130.subsystem.DriveTrain;
 import com.ctre.phoenix.ILoopable;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DriveDistance implements ILoopable {
 	
@@ -13,35 +13,32 @@ public class DriveDistance implements ILoopable {
 	private DriveTrain _drive;
 	private double targetNativeLeft;
 	private double targetNativeRight;
-	private double acceptableError = 4096/2;
-	private Value gear;
+	private double acceptableError = 1000;
 	
-	public DriveDistance(DriveTrain driveTrain, double inches, Value _gear) {
+	public DriveDistance(DriveTrain driveTrain, double inches) {
 		
 		System.out.println("Drive Distance task has been created.");
 		
-		distanceNative = ( ( 286899 * inches ) / 169.5 );
+		distanceNative = ( ( (2048*75) * inches ) / 92 );
 		_drive = driveTrain;
-		
-		_drive.setNeutralMode(NeutralMode.Brake);
-		
-		gear = _gear;
 		
 	}
 	
 	@Override
 	public void onStart() {
 		
-		System.out.println("Drive Distance task has started.");
+		_drive.resetSensors();
 		
-		targetNativeLeft = _drive.getLeftPos()+distanceNative;
-		targetNativeRight = _drive.getRightPos()+distanceNative;
+		System.out.println("[Info] Started Driving for Distance");
+		
+		targetNativeLeft = distanceNative;
+		targetNativeRight = distanceNative;
 		
 		System.out.println(_drive.getRightPos());
 		System.out.println(distanceNative);
-		System.out.println(targetNativeRight);
 		
-		_drive.setShifter(gear);
+		_drive.setShifter(_drive.lowGear);
+		_drive.setNeutralMode(NeutralMode.Brake);
 		
 	}
 
@@ -59,8 +56,11 @@ public class DriveDistance implements ILoopable {
 		boolean leftAtPos = Math.abs(targetNativeLeft - _drive.getLeftPos()) <= acceptableError;
 		boolean rightAtPos = Math.abs(targetNativeRight - _drive.getRightPos()) <= acceptableError;
 		
+		SmartDashboard.putNumber("Left Error", targetNativeLeft - _drive.getLeftPos());
+		SmartDashboard.putNumber("Right Error", targetNativeRight - _drive.getRightPos());
+		
 		if (leftAtPos && rightAtPos) {
-			System.out.println("Finished Driving");
+			System.out.println("[Info] Finished Driving for Distance");
 			return true;
 		}
 		
@@ -71,8 +71,8 @@ public class DriveDistance implements ILoopable {
 	@Override
 	public void onStop() {
 		
-		//_drive.driveDirect(0,0);
-		System.out.println("Finished Driving");
+		System.out.println("[WARNING] Driving for distance was stopped");
+		System.out.println("[WARNING] The DriveTrain is still in the Motion Magic Control Mode");
 		
 	}
 

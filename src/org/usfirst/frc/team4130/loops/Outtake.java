@@ -15,9 +15,8 @@ public class Outtake implements ILoopable {
 	
 	@Override
 	public void onStart() {
-		System.out.print("Outaking for ");
-		System.out.print(durriationMs);
-		System.out.println(".");
+		System.out.print("[Info] Outaking for ");
+		System.out.println(durriationMs);
 		endTimeMs = System.currentTimeMillis() + durriationMs;
 	}
 
@@ -29,16 +28,19 @@ public class Outtake implements ILoopable {
 
 	@Override
 	public boolean isDone() {
-		boolean bool = System.currentTimeMillis() >= endTimeMs;
-		if (bool) onStop();
-		return bool;
+		if (System.currentTimeMillis() >= endTimeMs) {
+			_arms.disableMotors();
+			_arms.setSolenoid(_arms.opened);
+			System.out.println("[Info] Finished Outtaking");
+			return true;
+		}
+		return false;
 	}
 
 	@Override
 	public void onStop() {
 		_arms.disableMotors();
-		_arms.setSolenoid(_arms.opened);
-		System.out.println("Finished Outtaking.");
+		System.out.println("[WARNING] Stopped Outaking");
 	}
 
 }

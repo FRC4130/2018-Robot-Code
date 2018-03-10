@@ -6,6 +6,7 @@ public class Delay implements ILoopable {
 	
 	double delay = 0;
 	double stopTime = 0;
+	boolean done = false;
 	
 	public Delay(double delayMs) {
 		
@@ -17,26 +18,29 @@ public class Delay implements ILoopable {
 	public void onStart() {
 		
 		stopTime = System.currentTimeMillis() + delay;
-		System.out.println("Starting Delay");
+		System.out.println("[Info] Starting Delay");
 		
 	}
 
 	@Override
 	public void onLoop() {
-		// TODO Auto-generated method stub
-
+		done = System.currentTimeMillis() >= stopTime;
+		
 	}
 
 	@Override
 	public boolean isDone() {
-		boolean finished = System.currentTimeMillis() >= stopTime;
-		if (finished) System.out.println("Finished Delay.");
-		return finished;
+		if (done) {
+			System.out.println("[Info] Finished Delaying");
+			return true;
+		}
+		return false;
 	}
 
 	@Override
 	public void onStop() {
-		// TODO Auto-generated method stub
+		
+		System.out.println("[WARNING] Delay was stopped");
 
 	}
 

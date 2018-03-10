@@ -5,6 +5,7 @@ import org.usfirst.frc.team4130.subsystem.ElevatorPosition;
 import com.ctre.phoenix.ILoopable;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class ElevatorTele implements ILoopable{
 	private Elevator _elevator;
@@ -13,7 +14,7 @@ public class ElevatorTele implements ILoopable{
 	private final double updateSpeedMilliseconds = 25;
 	private final double updateMultiplier = 340;
 	private double pos = 0;
-	private boolean manual = true;
+	private boolean manual = false;
 	
 	/**
 	 * Controls the elevator motor in teleoporated.
@@ -25,17 +26,21 @@ public class ElevatorTele implements ILoopable{
 	
 	@Override
 	public void onStart() {
-		//Home the elevator. TODO: Make sure this function works.
-		//Do we want to do home at the start of Teleop?
+		
+		System.out.println("[Info] Started Elevator Teleop Control");
+		
 		//_elevator.setHome();
 	}
 
 	@Override
 	public void onLoop() {
 		
+		SmartDashboard.putNumber("Elevator Current", _elevator.getCurrent());
+		
 		if (_gamepad.getRawButtonPressed(3)) {
 			
 			manual = !manual;
+			
 			
 		}
 		
@@ -83,7 +88,8 @@ public class ElevatorTele implements ILoopable{
 
 	@Override
 	public void onStop() {
-		_elevator.driveDirect(0);
+		System.out.println("[WARNING] Stopped Elevator Teleop Control has been stopped");
 	}
 
 }
+

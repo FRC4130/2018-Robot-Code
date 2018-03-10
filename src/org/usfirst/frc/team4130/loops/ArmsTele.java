@@ -5,22 +5,23 @@ import org.usfirst.frc.team4130.subsystem.Arms;
 import com.ctre.phoenix.ILoopable;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 
 public class ArmsTele implements ILoopable {
 	private Arms _arms;
-	private Joystick _driver;
 	private Joystick _operator;
 	
 	private boolean clamped = true;
 	
-	public ArmsTele (Arms arms, Joystick driver, Joystick operator) {
+	public ArmsTele (Arms arms, Joystick operator) {
 		_arms = arms;
-		_driver = driver;
 		_operator = operator;
 	}
 	
 	@Override
 	public void onStart() {
+		
+		System.out.println("[Info] Arms Teleoporated Control started");
 		
 		clamped = _arms.getClamped();
 		
@@ -29,33 +30,25 @@ public class ArmsTele implements ILoopable {
 	@Override
 	public void onLoop() {
 		
-		if (_driver.getRawButtonPressed(5)) {
-			clamped = !clamped;
+		//clamp toggling logic
+		if (_operator.getRawButton(5)) {
+			_arms.setSolenoid(Value.kReverse);
+			
 		}
 		
-		if (_operator.getRawAxis(2)*-1+_operator.getRawAxis(3) != 0) {
+		else if (_operator.getRawButton(6)) {
+			_arms.setSolenoid(Value.kForward);
+		}
+		
+		//Motor control
+		//Manual control
+		if (Math.abs(_operator.getRawAxis(2)*-1+_operator.getRawAxis(3)) > 0.1) {
 			_arms.driveDirect(_operator.getRawAxis(2)*-1+_operator.getRawAxis(3),
 							  _operator.getRawAxis(2)*-1+_operator.getRawAxis(3));
 		}
 		
-		else if (clamped && _driver.getRawButton(5)) {
-			_arms.suck();
-		}
-		
-		else if (!clamped && _driver.getRawButton(5)) {
-			_arms.spit();
-		}
-		
 		else {
 			_arms.disableMotors();
-		}
-		
-		if (clamped) {
-			_arms.setSolenoid(_arms.closed);
-		}
-		
-		else if (!clamped && _driver.getRawButtonReleased(5)) {
-			_arms.setSolenoid(_arms.opened);
 		}
 		
 	}
@@ -67,9 +60,10 @@ public class ArmsTele implements ILoopable {
 
 	@Override
 	public void onStop() {
-		// TODO Auto-generated method stub
 		
 		_arms.disableMotors();
+		
+		System.out.println("[WARNING] Arms Teleoprated has been stopped");
 		
 	}
 

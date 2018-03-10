@@ -16,9 +16,8 @@ public class Intake implements ILoopable {
 
 	@Override
 	public void onStart() {
-		System.out.print("Intaking for ");
+		System.out.print("[Info] Started Intaking for ");
 		System.out.print(durriationMs);
-		System.out.println(".");
 		endTimeMs = System.currentTimeMillis() + durriationMs;
 	}
 
@@ -29,15 +28,16 @@ public class Intake implements ILoopable {
 
 	@Override
 	public boolean isDone() {
-		boolean bool = System.currentTimeMillis() >= endTimeMs;
-		if (bool) onStop();
-		return bool;
+		if ( System.currentTimeMillis() >= endTimeMs) {
+			_arms.disableMotors();
+			return true;
+		}
+		return false;
 	}
 
 	@Override
 	public void onStop() {
-		_arms.disableMotors();
-		System.out.println("Finished Intaking.");
+		System.out.println("[WARNING] Stopped Intaking");
 	}
 
 }

@@ -17,21 +17,23 @@ public class DriveRotate implements ILoopable {
 	double error;
 	double lastErr;
 	
-	double pGain = 0.045;
-	double iGain = 0.00225;
-	double dGain = 0.13;
+	double pGain = 0.012;   //.015;
+	double iGain = 0.001;		//0.005;    //.001;
+	double dGain = 0.001;		//.03;    //.025;
 	
-	double iZone = 7.5;
+	double iZone = 10;
 	double iAccum = 0;
 	
-	double acceptableErr = 0.50;
+	double acceptableErr = 2;
 	
 	int debounced = 0;
-	int debouncedTarget = 10;
+	int debouncedTarget = 15;
 	
 	double maxThrottle = 1;
 	
 	double startMS = 0;
+	
+	boolean started = false;
 	
 	public DriveRotate(DriveTrain drv, double dif) {
 		
@@ -43,23 +45,30 @@ public class DriveRotate implements ILoopable {
 	@Override
 	public void onStart() {
 		
-		startMS = System.currentTimeMillis();
-		
-		debounced = 0;
-		target = drive.getHeading() + diff;
-		
-		drive.setShifter(drive.lowGear);
-		
-		System.out.print("Turning ");
-		System.out.print(diff);
-		System.out.println(" degrees.");
-		System.out.print("Current Heading: ");
-		System.out.println(drive.getHeading());
-		System.out.print("Target Heading: ");
-		System.out.println(target);
-		
-		drive.setNeutralMode(NeutralMode.Brake);
-		
+		if (!started) {
+			System.out.println("[Info] Started Drive Rotate");
+			
+			startMS = System.currentTimeMillis();
+			
+			debounced = 0;
+			target = drive.getHeading() + diff;
+			
+			drive.setShifter(drive.lowGear);
+			
+			System.out.print("Turning ");
+			System.out.print(diff);
+			System.out.println(" degrees.");
+			System.out.print("Current Heading: ");
+			System.out.println(drive.getHeading());
+			System.out.print("Target Heading: ");
+			System.out.println(target);
+			
+			drive.setNeutralMode(NeutralMode.Brake);
+			//started = true;
+		}
+		else {
+			System.out.println("[WARNING] DriveRotate was restarted");
+		}
 	}
 
 	@Override
@@ -67,9 +76,7 @@ public class DriveRotate implements ILoopable {
 		
 		error = drive.getHeading()-target;
 		
-		//SmartDashboard.putNumber("Turn Error", error);
-		
-		System.out.println(error);
+		SmartDashboard.putNumber("Turn Error", error);
 		
 		if (Math.abs(error) < iZone) {
 			
@@ -103,18 +110,14 @@ public class DriveRotate implements ILoopable {
 		
 		if (debounced > debouncedTarget) {
 			
-			System.out.print("Finished Turning in ");
+			System.out.print("[Info] Finished Turning in ");
 			System.out.print(System.currentTimeMillis()-startMS);
 			System.out.print(" milliseconds with an error of ");
 			System.out.print(error);
 			System.out.println(" degrees.");
-			System.out.print("Stopped at position: ");
-			System.out.print(drive.getHeading());
 			drive.driveDirect(0, 0);
 			
 		}
-		
-		SmartDashboard.putNumber("Debounced", debounced);
 		
 		return debounced > debouncedTarget;
 		
@@ -122,9 +125,8 @@ public class DriveRotate implements ILoopable {
 
 	@Override
 	public void onStop() {
-		// TODO Auto-generated method stub
 		
-		System.out.println("TURNING STOPPED");
+		System.out.println("[WARNING] Drive Rotate has been stopped");
 		drive.driveDirect(0, 0);
 		
 	}

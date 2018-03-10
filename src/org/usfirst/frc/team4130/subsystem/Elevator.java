@@ -13,15 +13,13 @@ import edu.wpi.first.wpilibj.Servo;
 
 /**
  * Class for the robot Elevator.
- * @author JCapp
+ * @author JCapp, West
  *
  */
 public class Elevator {
-	//TODO: Should the elevator contain the object for the intake?  Or should they be completely separate?
 	private TalonSRX elevator = RobotMap.elevatorMaster;
 	private Servo servo = RobotMap.elevatorReleaseServo;
 	private final int kTimeout = 5;
-	//TODO: Determine acceptable position range for elevator set point.
 	private final int kPosBandwidth = 10;
 	
 	double targetHeight = 0;
@@ -126,7 +124,6 @@ public class Elevator {
 	 * @return True if homed.
 	 */
 	public boolean setHome() {
-		//TODO: Adjust output for homing
 		elevator.set(ControlMode.PercentOutput, -0.05);
 		if(elevator.getSensorCollection().isRevLimitSwitchClosed()) {
 			elevator.setSelectedSensorPosition(0, 0, kTimeout);
@@ -144,7 +141,12 @@ public class Elevator {
 		return elevator.getSelectedSensorPosition(0)-targetHeight;
 	}
 	
-	public void setServo(double percent) {
-		servo.set(percent);
+	public void setServo(boolean a) {
+		servo.set(a ? 1 : 0);
+		System.out.print("SET SERVO TO ");
+		System.out.println(a ? 1 : 0);
+	}
+	public double getCurrent() {
+		return elevator.getOutputCurrent();
 	}
 }

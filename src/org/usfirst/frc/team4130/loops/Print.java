@@ -12,26 +12,20 @@ public class Print implements ILoopable {
 	
 	@Override
 	public void onStart() {
-		// TODO Auto-generated method stub
-		System.out.println(x);
+		System.out.println("[Info] (Print) "+x);
 	}
 
 	@Override
 	public void onLoop() {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public boolean isDone() {
-		// TODO Auto-generated method stub
 		return true;
 	}
 
 	@Override
 	public void onStop() {
-		// TODO Auto-generated method stub
-
 	}
 
 }

@@ -7,6 +7,12 @@
 
 package org.usfirst.frc.team4130.robot;
 
+import org.usfirst.frc.team4130.loops.Delay;
+import org.usfirst.frc.team4130.loops.DriveDistance;
+import org.usfirst.frc.team4130.loops.DriveRotate;
+import org.usfirst.frc.team4130.loops.Elevate;
+import org.usfirst.frc.team4130.loops.ElevatorRelease;
+
 import com.ctre.phoenix.schedulers.ConcurrentScheduler;
 import com.ctre.phoenix.schedulers.SequentialScheduler;
 
@@ -25,7 +31,7 @@ public class Robot extends IterativeRobot {
 	SequentialScheduler autonLR;
 	SequentialScheduler autonLL;
 	
-	SequentialScheduler test;
+	SequentialScheduler test = new SequentialScheduler(0);
 	
 	String gameData;
 	
@@ -80,7 +86,7 @@ public class Robot extends IterativeRobot {
 		autonLL.start();
 		
 	}
-
+	
 	@Override
 	public void autonomousPeriodic() {
 		
@@ -106,18 +112,8 @@ public class Robot extends IterativeRobot {
 			}
         }
 		else {
-			System.out.print("Waiting for game data...");
+			System.out.println("Waiting for game data...");
 		}
-		
-		//SmartDashboard.putNumber("TargetVelocity", RobotMap.leftDriveMaster.getActiveTrajectoryVelocity());
-		//SmartDashboard.putNumber("Velocity", RobotMap.leftDriveMaster.getSelectedSensorVelocity(0));
-		//SmartDashboard.putNumber("TargetPosition", RobotMap.leftDriveMaster.getActiveTrajectoryPosition());
-		//SmartDashboard.putNumber("Position", RobotMap.leftDriveMaster.getSelectedSensorPosition(0));
-		
-		//SmartDashboard.putNumber("TargetVelocityR", RobotMap.rightDriveMaster.getActiveTrajectoryVelocity());
-		//SmartDashboard.putNumber("VelocityR", RobotMap.rightDriveMaster.getSelectedSensorVelocity(0));
-		//SmartDashboard.putNumber("TargetPositionR", RobotMap.rightDriveMaster.getActiveTrajectoryPosition());
-		//SmartDashboard.putNumber("PositionR", RobotMap.rightDriveMaster.getSelectedSensorPosition(0));
 		
 	}
 
@@ -136,21 +132,6 @@ public class Robot extends IterativeRobot {
 	}
 	
 	@Override
-	public void testInit() {
-		
-		test = new SequentialScheduler(0);
-		Loops.scheduleTest(test);
-		test.start();
-		
-	}
-
-	@Override
-	public void testPeriodic() {
-		test.process();
-		
-	}
-	
-	@Override
 	public void disabledInit(){
 		pos = DriverStation.getInstance().getLocation();
 	}
@@ -158,7 +139,16 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void disabledPeriodic(){
 		if (RobotMap.driverJoystick.getRawButtonPressed(1)) {
-			pos += 1;
+			pos = 2;
+		}
+		if (RobotMap.driverJoystick.getRawButton(3)) {
+			pos = 1;
+		}
+		if (RobotMap.driverJoystick.getRawButton(2)) {
+			pos = 3;
+		}
+		if (RobotMap.driverJoystick.getRawButton(4)) {
+			pos = 0;
 		}
 		pos = pos > 3 ? 0 : pos;
 	}

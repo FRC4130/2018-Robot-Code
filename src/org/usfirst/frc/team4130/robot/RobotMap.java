@@ -51,18 +51,18 @@ public class RobotMap {
 		rightDriveFollower = new TalonSRX(5);
 		rightDriveFollower2 = new TalonSRX(6);
 		
-//		elevatorMaster = new TalonSRX(9);
-//		
-//		leftIntake = new VictorSPX(1);
-//		rightIntake = new VictorSPX(2);
-//		
+		elevatorMaster = new TalonSRX(9);
+		
+		leftIntake = new VictorSPX(1);
+		rightIntake = new VictorSPX(2);
+		
 		driveShift = new DoubleSolenoid(0,1);
-//		armsClamp = new DoubleSolenoid(2,3);
+		armsClamp = new DoubleSolenoid(2,3);
 		
 		driverJoystick = new Joystick(0);
 		operatorJoystick = new Joystick(1);
 		
-		pigeon = new PigeonIMU(0);//rightDriveFollower2);
+		pigeon = new PigeonIMU(rightDriveFollower2);
 		
 	}
 }

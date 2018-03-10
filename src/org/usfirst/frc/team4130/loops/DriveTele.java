@@ -14,6 +14,9 @@ public class DriveTele implements ILoopable {
 	DriveTrain _drive;
 	Joystick _gamepad;
 	
+	double targetNativeLeft = 0;
+	double targetNativeRight = 0;
+	
 	public DriveTele (DriveTrain driveTrain, Joystick gamepad) {
 		
 		_drive = driveTrain;
@@ -24,15 +27,15 @@ public class DriveTele implements ILoopable {
 	@Override
 	public void onStart() {
 		
-		//initialize the driveTrain
-		_drive.setShifter(Value.kForward);
+		System.out.println("[Info] Starting Driving Teleop Controls");
+
+		_drive.setShifter(_drive.highGear);
 		_drive.setNeutralMode(NeutralMode.Coast);
 		
 	}
 
 	@Override
 	public void onLoop() {
-		// TODO Auto-generated method stub
 		
 		//Tank Drive (leftY, rightY) with brake button (B)
 		if (_gamepad.getRawButtonPressed(2)) {
@@ -54,7 +57,10 @@ public class DriveTele implements ILoopable {
 		
 		//Shift with right button
 		if (_gamepad.getRawButtonPressed(6)) {
-			_drive.toggleShifter();
+			_drive.setShifter(_drive.lowGear);
+		}
+		if (_gamepad.getRawButtonPressed(5)) {
+			_drive.setShifter(_drive.highGear);
 		}
 		
 		//_drive.driveDirect(_gamepad.getRawAxis(1)*01, _gamepad.getRawAxis(5));
@@ -67,7 +73,9 @@ public class DriveTele implements ILoopable {
 
 	@Override
 	public void onStop() {
-		//Kill throttle and set NeutralMode to brake
+		
+		System.out.println("[Warning] Driving Teleoporated Control was Stopped");
+		
 		_drive.setNeutralMode(NeutralMode.Brake);
 		_drive.driveDirect(0, 0);
 	}

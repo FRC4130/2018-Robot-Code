@@ -8,7 +8,7 @@ public class ElevatorRelease implements ILoopable {
 	
 	Elevator _elevator;
 	double durrationMS = 500;
-	double endTime = 0;
+	double stopTime = 0;
 	
 	public ElevatorRelease(Elevator ele) {
 		
@@ -18,31 +18,41 @@ public class ElevatorRelease implements ILoopable {
 	
 	@Override
 	public void onStart() {
-		// TODO Auto-generated method stub
-		_elevator.setServo(0);
-		endTime = System.currentTimeMillis() + durrationMS;
-		System.out.println("Releasing Elevator");
+		
+		System.out.println("[Info] Relasing Elevator");
+		
+		_elevator.setServo(false);
+		stopTime = durrationMS + System.currentTimeMillis();
+		
 	}
 
 	@Override
 	public void onLoop() {
 		
+		_elevator.setServo(false);
+		
 	}
 
 	@Override
 	public boolean isDone() {
-		// TODO Auto-generated method stub
-		boolean bool = System.currentTimeMillis() >= endTime;
-		if (bool) {
-			onStop();
+		
+		if (System.currentTimeMillis() > stopTime) {
+			
+			_elevator.setServo(true);
+			
+			return true;
+			
 		}
-		return bool;
+		
+		return false;
+		
 	}
 
 	@Override
 	public void onStop() {
-		_elevator.setServo(1);
-		System.out.println("Finished Releasing.");
+		
+		System.out.println("[WARNING] Release has been stopped");
+		
 	}
 
 }
