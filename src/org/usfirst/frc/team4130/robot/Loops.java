@@ -111,13 +111,12 @@ public class Loops {
 		auton.add(new DriveDistance(Subsystems.driveTrain, m*283.621));
 		auton.add(new DriveRotate(Subsystems.driveTrain, -75));
 		auton.add(new DriveDistance(Subsystems.driveTrain, m*-17));
-		auton.add(new Elevate(Subsystems.elevator, ElevatorPosition.ScaleMax.value));
-		auton.add(new DriveDistance(Subsystems.driveTrain, m*17));
-		auton.add(new Outtake(Subsystems.arms));
-		auton.add(new DriveDistance(Subsystems.driveTrain, m*-17));
-		auton.add(new Elevate(Subsystems.elevator, ElevatorPosition.Home.value));
-		auton.add(new DriveDistance(Subsystems.driveTrain, m*10));
-		auton.add(new DriveRotate(Subsystems.driveTrain, -105));		
+//		auton.add(new DriveDistance(Subsystems.driveTrain, m*17));
+//		auton.add(new Outtake(Subsystems.arms));
+//		auton.add(new DriveDistance(Subsystems.driveTrain, m*-17));
+//		auton.add(new Elevate(Subsystems.elevator, ElevatorPosition.Home.value));
+//		auton.add(new DriveDistance(Subsystems.driveTrain, m*10));
+//		auton.add(new DriveRotate(Subsystems.driveTrain, -105));		
 		
 		System.out.print("Scheduled.");
 		
@@ -159,7 +158,7 @@ public class Loops {
 		auton.add(new DriveDistance(Subsystems.driveTrain, m*152.338));
 		auton.add(new DriveRotate(Subsystems.driveTrain, -90));
 		auton.add(new Elevate(Subsystems.elevator, ElevatorPosition.Switch.value));
-		auton.add(new DriveDistance(Subsystems.driveTrain, m*16.5));
+		auton.add(new DriveForTime(Subsystems.driveTrain, 2000, 0.5, 0));
 		auton.add(new Outtake(Subsystems.arms));
 		auton.add(new DriveDistance(Subsystems.driveTrain, m*-16.5));
 		auton.add(new Elevate(Subsystems.elevator, ElevatorPosition.Home.value));
@@ -181,7 +180,7 @@ public class Loops {
 		auton.add(new DriveDistance(Subsystems.driveTrain, m*59));
 		auton.add(new DriveRotate(Subsystems.driveTrain, 40));
 		auton.add(new Elevate(Subsystems.elevator, ElevatorPosition.Switch.value));
-		auton.add(new DriveDistance(Subsystems.driveTrain, m*7.5));
+		auton.add(new DriveForTime(Subsystems.driveTrain, 1000, 0.5, 0));
 		auton.add(new Outtake(Subsystems.arms));
 		auton.add(new DriveDistance(Subsystems.driveTrain, m*-50));
 		auton.add(new Elevate(Subsystems.elevator, ElevatorPosition.Home.value));
@@ -222,7 +221,7 @@ public class Loops {
 		auton.add(new DriveDistance(Subsystems.driveTrain, m*83.4));
 		auton.add(new DriveRotate(Subsystems.driveTrain, -40));
 		auton.add(new Elevate(Subsystems.elevator, ElevatorPosition.Switch.value));
-		auton.add(new DriveDistance(Subsystems.driveTrain, m*7.5));
+		auton.add(new DriveForTime(Subsystems.driveTrain, 1000, 0.5, 0));
 		auton.add(new Outtake(Subsystems.arms));
 		auton.add(new DriveDistance(Subsystems.driveTrain, m*-50));
 		auton.add(new Elevate(Subsystems.elevator, ElevatorPosition.Home.value));
@@ -271,7 +270,7 @@ public class Loops {
 		auton.add(new DriveDistance(Subsystems.driveTrain, m*152.338));
 		auton.add(new DriveRotate(Subsystems.driveTrain, 90));
 		auton.add(new Elevate(Subsystems.elevator, ElevatorPosition.Switch.value));
-		auton.add(new DriveDistance(Subsystems.driveTrain, m*16.5));
+		auton.add(new DriveForTime(Subsystems.driveTrain, 2000, 0.5, 0));
 		auton.add(new Outtake(Subsystems.arms));
 		auton.add(new DriveDistance(Subsystems.driveTrain, m*-16.5));
 		auton.add(new Elevate(Subsystems.elevator, ElevatorPosition.Home.value));
@@ -298,13 +297,12 @@ public class Loops {
 		auton.add(new DriveDistance(Subsystems.driveTrain, m*283.621));
 		auton.add(new DriveRotate(Subsystems.driveTrain, 75));
 		auton.add(new DriveDistance(Subsystems.driveTrain, m*-17));
-		auton.add(new Elevate(Subsystems.elevator, ElevatorPosition.ScaleMax.value));
-		auton.add(new DriveDistance(Subsystems.driveTrain, m*17));
-		auton.add(new Outtake(Subsystems.arms));
-		auton.add(new DriveDistance(Subsystems.driveTrain, m*-17));
-		auton.add(new Elevate(Subsystems.elevator, ElevatorPosition.Home.value));
-		auton.add(new DriveDistance(Subsystems.driveTrain, m*10));
-		auton.add(new DriveRotate(Subsystems.driveTrain, 105));
+//		auton.add(new DriveDistance(Subsystems.driveTrain, m*17));
+//		auton.add(new Outtake(Subsystems.arms));
+//		auton.add(new DriveDistance(Subsystems.driveTrain, m*-17));
+//		auton.add(new Elevate(Subsystems.elevator, ElevatorPosition.Home.value));
+//		auton.add(new DriveDistance(Subsystems.driveTrain, m*10));
+//		auton.add(new DriveRotate(Subsystems.driveTrain, 105));
 		
 		System.out.print("Scheduled Left Right from Right.");
 		

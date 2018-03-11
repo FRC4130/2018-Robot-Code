@@ -17,16 +17,17 @@ public class DriveRotate implements ILoopable {
 	double error;
 	double lastErr;
 	
-	double pGain = 0.012;   //.015;
-	double iGain = 0.001;		//0.005;    //.001;
-	double dGain = 0.001;		//.03;    //.025;
+	double pGain = 0.0125;   //.015;
+	double iGain = 0.0011;       //0.001;		//0.005;    //.001;
+	double dGain = 0.01;       //.001;		//.03;    //.025;
 	
 	double iZone = 10;
 	double iAccum = 0;
 	
-	double acceptableErr = 2;
+	double acceptableErr = 3.5;
 	
 	int debounced = 0;
+	
 	int debouncedTarget = 15;
 	
 	double maxThrottle = 1;

@@ -149,4 +149,7 @@ public class Elevator {
 	public double getCurrent() {
 		return elevator.getOutputCurrent();
 	}
+	public double getPos() {
+		return elevator.getSelectedSensorPosition(0);
+	}
 }

@@ -12,12 +12,11 @@ public class ElevatorTele implements ILoopable{
 	private Joystick _gamepad;
 	private double lastUpdate = 0;
 	private final double updateSpeedMilliseconds = 25;
-	private final double updateMultiplier = 340;
+	private final double updateMultiplier = 400;
 	private double pos = 0;
-	private boolean manual = false;
 	
 	/**
-	 * Controls the elevator motor in teleoporated.
+	 * Controls the elevator motor in teleoperated.
 	 */
 	public ElevatorTele(Elevator elevator, Joystick gamepad){
 		_elevator = elevator;
@@ -29,6 +28,8 @@ public class ElevatorTele implements ILoopable{
 		
 		System.out.println("[Info] Started Elevator Teleop Control");
 		
+		pos = _elevator.getPos();
+		
 		//_elevator.setHome();
 	}
 
@@ -37,45 +38,34 @@ public class ElevatorTele implements ILoopable{
 		
 		SmartDashboard.putNumber("Elevator Current", _elevator.getCurrent());
 		
-		if (_gamepad.getRawButtonPressed(3)) {
+		if (_gamepad.getRawButton(3)) {
 			
-			manual = !manual;
-			
+			pos = _elevator.getPos();
 			
 		}
 		
-		if (!manual) {
-		
-			if (System.currentTimeMillis() > lastUpdate + updateSpeedMilliseconds) {
-				if (Math.abs(_gamepad.getRawAxis(1)) >= .075 ) {
-					pos-=_gamepad.getRawAxis(1)*updateMultiplier;
-					pos = pos > 36759 ? 36759 : pos < 300 ? 300 : pos;
-				}
-				lastUpdate = System.currentTimeMillis();
+		if (System.currentTimeMillis() > lastUpdate + updateSpeedMilliseconds) {
+			if (Math.abs(_gamepad.getRawAxis(1)) >= .075 ) {
+				pos-=_gamepad.getRawAxis(1)*updateMultiplier;
+				pos = pos > 36759 ? 36759 : pos < 300 ? 300 : pos;
 			}
+			lastUpdate = System.currentTimeMillis();
+		}
 					
-			if (_gamepad.getRawButton(2)) {
-				pos = _elevator.chainHeightToNative(ElevatorPosition.Switch.value);
-			}
-			
-			else if (_gamepad.getRawButton(4)){
-				pos = _elevator.chainHeightToNative(ElevatorPosition.ScaleMax.value);
-			}
-			
-			if(_gamepad.getRawButton(1)) {
-				_elevator.setHome();
-				pos = 0;
-			}
-			
-			_elevator.setHeight(pos);
-		
+		if (_gamepad.getRawButton(2)) {
+			pos = _elevator.chainHeightToNative(ElevatorPosition.Switch.value);
 		}
-		
-		else {
 			
-			_elevator.driveDirect(_gamepad.getRawAxis(1)*-1);
-			
+		else if (_gamepad.getRawButton(4)){
+			pos = _elevator.chainHeightToNative(ElevatorPosition.ScaleMax.value);
 		}
+			
+		if(_gamepad.getRawButton(1)) {
+			_elevator.setHome();
+			pos = 0;
+		}
+			
+		_elevator.setHeight(pos);
 		
 	}
 	

@@ -83,10 +83,10 @@ public class DriveTrain {
 		
 		//magic shit
 		left.configMotionCruiseVelocity(8000, kTimeoutMs);
-		left.configMotionAcceleration(8000/2, kTimeoutMs);
+		left.configMotionAcceleration(8000, kTimeoutMs);
 		
 		right.configMotionCruiseVelocity(8000, kTimeoutMs);
-		right.configMotionAcceleration(8000/2, kTimeoutMs);
+		right.configMotionAcceleration(8000, kTimeoutMs);
 		
 		//Slot 1 High Forward
 		left.selectProfileSlot(0, 0);

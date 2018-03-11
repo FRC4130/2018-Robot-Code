@@ -9,9 +9,11 @@ package org.usfirst.frc.team4130.robot;
 
 import org.usfirst.frc.team4130.loops.Delay;
 import org.usfirst.frc.team4130.loops.DriveDistance;
+import org.usfirst.frc.team4130.loops.DriveForTime;
 import org.usfirst.frc.team4130.loops.DriveRotate;
 import org.usfirst.frc.team4130.loops.Elevate;
 import org.usfirst.frc.team4130.loops.ElevatorRelease;
+import org.usfirst.frc.team4130.loops.Outtake;
 
 import com.ctre.phoenix.schedulers.ConcurrentScheduler;
 import com.ctre.phoenix.schedulers.SequentialScheduler;

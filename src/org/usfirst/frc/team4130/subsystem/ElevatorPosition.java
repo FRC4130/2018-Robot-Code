@@ -22,7 +22,7 @@ public enum ElevatorPosition {
 	/**
 	 * Height to place a cube on the switch.
 	 */
-	Switch(21),
+	Switch(22),
 	/**
 	 * Height to receive a cube from the portal.
 	 * This may not be practical, need to test.
