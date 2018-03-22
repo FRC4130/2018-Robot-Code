@@ -1,5 +1,6 @@
 package org.usfirst.frc.team4130.loops;
 
+import org.usfirst.frc.team4130.robot.Subsystems;
 import org.usfirst.frc.team4130.subsystem.DriveTrain;
 
 import com.ctre.phoenix.ILoopable;
@@ -34,42 +35,52 @@ public class DriveRotate implements ILoopable {
 	
 	double startMS = 0;
 	
-	boolean started = false;
-	
+	@Deprecated
 	public DriveRotate(DriveTrain drv, double dif) {
 		
 		diff = dif;
 		drive = drv;
 		
 	}
+	
+	public DriveRotate(double dif) {
+		
+		diff = dif;
+		drive = Subsystems.driveTrain;
+		
+	}
+	
+	public DriveRotate(double dif, double acceptableError, int debouncedtarget) {
+		
+		diff = dif;
+		drive = Subsystems.driveTrain;
+		debouncedTarget = debouncedtarget;
+		acceptableErr = acceptableError;
+		
+	}
 
 	@Override
 	public void onStart() {
 		
-		if (!started) {
-			System.out.println("[Info] Started Drive Rotate");
+		System.out.println("[Info] Started Drive Rotate");
 			
-			startMS = System.currentTimeMillis();
-			
-			debounced = 0;
-			target = drive.getHeading() + diff;
-			
-			drive.setShifter(drive.lowGear);
-			
-			System.out.print("Turning ");
-			System.out.print(diff);
-			System.out.println(" degrees.");
-			System.out.print("Current Heading: ");
-			System.out.println(drive.getHeading());
-			System.out.print("Target Heading: ");
-			System.out.println(target);
-			
-			drive.setNeutralMode(NeutralMode.Brake);
-			//started = true;
-		}
-		else {
-			System.out.println("[WARNING] DriveRotate was restarted");
-		}
+		startMS = System.currentTimeMillis();
+		
+		debounced = 0;
+		target = drive.getHeading() + diff;
+		
+		drive.setShifter(drive.lowGear);
+		
+		System.out.print("Turning ");
+		System.out.print(diff);
+		System.out.println(" degrees.");
+		System.out.print("Current Heading: ");
+		System.out.println(drive.getHeading());
+		System.out.print("Target Heading: ");
+		System.out.println(target);
+		
+		drive.setNeutralMode(NeutralMode.Brake);
+		
 	}
 
 	@Override
@@ -107,7 +118,7 @@ public class DriveRotate implements ILoopable {
 		
 		debounced+= Math.abs(error) < acceptableErr ? 1 : -1;
 		
-		debounced = debounced > debouncedTarget*2  ? debouncedTarget*2 : debounced < 0 ? 0 : debounced;
+		debounced = debounced > debouncedTarget  ? debouncedTarget : debounced < 0 ? 0 : debounced;
 		
 		if (debounced > debouncedTarget) {
 			
@@ -120,7 +131,7 @@ public class DriveRotate implements ILoopable {
 			
 		}
 		
-		return debounced > debouncedTarget;
+		return debounced >= debouncedTarget;
 		
 	}
 

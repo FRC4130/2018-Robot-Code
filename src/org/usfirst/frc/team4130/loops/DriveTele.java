@@ -17,6 +17,7 @@ public class DriveTele implements ILoopable {
 	double targetNativeLeft = 0;
 	double targetNativeRight = 0;
 	
+	@Deprecated
 	public DriveTele (DriveTrain driveTrain, Joystick gamepad) {
 		
 		_drive = driveTrain;
@@ -24,6 +25,13 @@ public class DriveTele implements ILoopable {
 		
 	}
 
+	public DriveTele (Joystick gamepad) {
+		
+		_drive = Subsystems.driveTrain;
+		_gamepad = gamepad;
+		
+	}
+	
 	@Override
 	public void onStart() {
 		

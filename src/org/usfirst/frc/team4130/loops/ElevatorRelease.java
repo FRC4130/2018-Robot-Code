@@ -1,5 +1,6 @@
 package org.usfirst.frc.team4130.loops;
 
+import org.usfirst.frc.team4130.robot.Subsystems;
 import org.usfirst.frc.team4130.subsystem.Elevator;
 
 import com.ctre.phoenix.ILoopable;
@@ -10,9 +11,16 @@ public class ElevatorRelease implements ILoopable {
 	double durrationMS = 500;
 	double stopTime = 0;
 	
+	@Deprecated
 	public ElevatorRelease(Elevator ele) {
 		
 		_elevator = ele;
+		
+	}
+	
+	public ElevatorRelease() {
+		
+		_elevator = Subsystems.elevator;
 		
 	}
 	

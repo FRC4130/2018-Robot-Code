@@ -89,19 +89,19 @@ public class DriveTrain {
 		right.configMotionAcceleration(8000, kTimeoutMs);
 		
 		//Slot 1 High Forward
-		left.selectProfileSlot(0, 0);
+		left.selectProfileSlot(1, 0);
 		left.config_kF(1, 0.096121, kTimeoutMs);
 		left.config_kP(1, 0.12, kTimeoutMs);
 		left.config_kI(1, 0, kTimeoutMs);
 		left.config_kD(1, 0, kTimeoutMs);
 		left.config_IntegralZone(1, 0, kTimeoutMs);
 		
-		right.selectProfileSlot(0, 0);
+		right.selectProfileSlot(1, 0);
 		right.config_kF(1, 0.087976, kTimeoutMs);
 		right.config_kP(1, 0.075, kTimeoutMs);
 		right.config_kI(1, 0, kTimeoutMs);
 		right.config_kD(1, 0, kTimeoutMs);
-		right.config_IntegralZone(0, 0, kTimeoutMs);
+		right.config_IntegralZone(1, 0, kTimeoutMs);
 		
 //		//Slot 2 High Reverse
 //		left.selectProfileSlot(0, 0);
@@ -151,6 +151,34 @@ public class DriveTrain {
 
 		left.selectProfileSlot(1, 0);
 		right.selectProfileSlot(1, 0);
+		
+	}
+	
+	public void setMagicLowDefault() {
+		
+		left.configMotionCruiseVelocity(8000, kTimeoutMs);
+		left.configMotionAcceleration(8000, kTimeoutMs);
+		
+		right.configMotionCruiseVelocity(8000, kTimeoutMs);
+		right.configMotionAcceleration(8000, kTimeoutMs);
+	}
+	
+	public void setMagicHighDefault() {
+		
+		left.configMotionCruiseVelocity(8000, kTimeoutMs);
+		left.configMotionAcceleration(8000, kTimeoutMs);
+		
+		right.configMotionCruiseVelocity(8000, kTimeoutMs);
+		right.configMotionAcceleration(8000, kTimeoutMs);
+	}
+	
+	public void setMagic(int cruiseVelocity, int acceleration) {
+		
+		left.configMotionCruiseVelocity(cruiseVelocity, kTimeoutMs);
+		left.configMotionAcceleration(acceleration, kTimeoutMs);
+		
+		right.configMotionCruiseVelocity(cruiseVelocity, kTimeoutMs);
+		right.configMotionAcceleration(acceleration, kTimeoutMs);
 		
 	}
 	

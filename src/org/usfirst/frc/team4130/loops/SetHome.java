@@ -1,5 +1,6 @@
 package org.usfirst.frc.team4130.loops;
 
+import org.usfirst.frc.team4130.robot.Subsystems;
 import org.usfirst.frc.team4130.subsystem.Elevator;
 
 import com.ctre.phoenix.ILoopable;
@@ -8,8 +9,13 @@ public class SetHome implements ILoopable {
 	
 	Elevator ele;
 	
+	@Deprecated
 	public SetHome(Elevator _ele) {
 		ele = _ele;
+	}
+	
+	public SetHome() {
+		ele = Subsystems.elevator;
 	}
 	
 	@Override

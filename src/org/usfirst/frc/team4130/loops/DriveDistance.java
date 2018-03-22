@@ -1,5 +1,6 @@
 package org.usfirst.frc.team4130.loops;
 
+import org.usfirst.frc.team4130.robot.Subsystems;
 import org.usfirst.frc.team4130.subsystem.DriveTrain;
 
 import com.ctre.phoenix.ILoopable;
@@ -15,12 +16,22 @@ public class DriveDistance implements ILoopable {
 	private double targetNativeRight;
 	private double acceptableError = 1000;
 	
+	@Deprecated
 	public DriveDistance(DriveTrain driveTrain, double inches) {
 		
 		System.out.println("Drive Distance task has been created.");
 		
 		distanceNative = ( ( (2048*75) * inches ) / 92 );
 		_drive = driveTrain;
+		
+	}
+	
+	public DriveDistance(double inches) {
+		
+		System.out.println("Drive Distance task has been created.");
+		
+		distanceNative = ( ( (2048*75) * inches ) / 92 );
+		_drive = Subsystems.driveTrain;
 		
 	}
 	

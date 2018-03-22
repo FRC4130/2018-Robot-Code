@@ -15,8 +15,8 @@ public class Arms {
 	VictorSPX left = RobotMap.leftIntake;
 	VictorSPX right = RobotMap.rightIntake;
 	
-	DigitalInput leftLimit = RobotMap.leftCube;
-	DigitalInput rightLimit = RobotMap.rightCube;
+	//DigitalInput leftLimit = RobotMap.leftCube;
+	//DigitalInput rightLimit = RobotMap.rightCube;
 	
 	DoubleSolenoid clamp = RobotMap.armsClamp;
 	
@@ -56,59 +56,53 @@ public class Arms {
 		
 	}
 	
-	public boolean intakeHold() {
-		
-		setSolenoid(closed);
-		
-		if (leftLimit.get()) {
-			left.set(ControlMode.PercentOutput, intakeSpeed);
-		}
-		else {
-			left.set(ControlMode.PercentOutput, 0);
-		}
-		
-		if (rightLimit.get()) {
-			right.set(ControlMode.PercentOutput, intakeSpeed);
-		}
-		else {
-			right.set(ControlMode.PercentOutput, 0);
-		}
-		
-		return leftLimit.get() && rightLimit.get();
-		
-	}
+//	public boolean intakeHold() {
+//		
+//		setSolenoid(closed);
+//		
+//		if (leftLimit.get()) {
+//			left.set(ControlMode.PercentOutput, intakeSpeed);
+//		}
+//		else {
+//			left.set(ControlMode.PercentOutput, 0);
+//		}
+//		
+//		if (rightLimit.get()) {
+//			right.set(ControlMode.PercentOutput, intakeSpeed);
+//		}
+//		else {
+//			right.set(ControlMode.PercentOutput, 0);
+//		}
+//		
+//		return leftLimit.get() && rightLimit.get();
+//		
+//	}
 	
-	public boolean suck() {
+	public void suck() {
 		
 		setSolenoid(closed);
 		
 		left.set(ControlMode.PercentOutput, intakeSpeed);
 		right.set(ControlMode.PercentOutput, intakeSpeed);
 		
-		return leftLimit.get() || rightLimit.get();
+		//return leftLimit.get() || rightLimit.get();
 		
 	}
 	
-	public boolean spit() {
+	public void spit() {
 		
 		setSolenoid(closed);
 		
 		left.set(ControlMode.PercentOutput, outtakeSpeed);
 		right.set(ControlMode.PercentOutput, outtakeSpeed);
 		
-		return leftLimit.get() || rightLimit.get();
+		//return leftLimit.get() || rightLimit.get();
 		
 	}
 	
 	public void disableMotors() {
 		
 		driveDirect(0,0);
-		
-	}
-	
-	public boolean getClamped() {
-		
-		return clamp.get() == closed;
 		
 	}
 	

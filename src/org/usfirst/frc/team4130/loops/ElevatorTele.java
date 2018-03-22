@@ -1,4 +1,6 @@
 package org.usfirst.frc.team4130.loops;
+import org.usfirst.frc.team4130.robot.RobotMap;
+import org.usfirst.frc.team4130.robot.Subsystems;
 import org.usfirst.frc.team4130.subsystem.Elevator;
 import org.usfirst.frc.team4130.subsystem.ElevatorPosition;
 
@@ -18,9 +20,16 @@ public class ElevatorTele implements ILoopable{
 	/**
 	 * Controls the elevator motor in teleoperated.
 	 */
+	
+	@Deprecated
 	public ElevatorTele(Elevator elevator, Joystick gamepad){
 		_elevator = elevator;
 		_gamepad = gamepad;
+	}
+	
+	public ElevatorTele() {
+		_elevator = Subsystems.elevator;
+		_gamepad = RobotMap.operatorJoystick;
 	}
 	
 	@Override

@@ -124,7 +124,7 @@ public class Elevator {
 	 * @return True if homed.
 	 */
 	public boolean setHome() {
-		elevator.set(ControlMode.PercentOutput, -0.05);
+		elevator.set(ControlMode.PercentOutput, -0.075);
 		if(elevator.getSensorCollection().isRevLimitSwitchClosed()) {
 			elevator.setSelectedSensorPosition(0, 0, kTimeout);
 			return true;

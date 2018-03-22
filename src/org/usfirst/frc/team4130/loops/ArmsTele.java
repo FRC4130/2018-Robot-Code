@@ -1,5 +1,7 @@
 package org.usfirst.frc.team4130.loops;
 
+import org.usfirst.frc.team4130.robot.RobotMap;
+import org.usfirst.frc.team4130.robot.Subsystems;
 import org.usfirst.frc.team4130.subsystem.Arms;
 
 import com.ctre.phoenix.ILoopable;
@@ -11,19 +13,21 @@ public class ArmsTele implements ILoopable {
 	private Arms _arms;
 	private Joystick _operator;
 	
-	private boolean clamped = true;
-	
+	@Deprecated
 	public ArmsTele (Arms arms, Joystick operator) {
 		_arms = arms;
 		_operator = operator;
+	}
+	
+	public ArmsTele() {
+		_arms = Subsystems.arms;
+		_operator = RobotMap.operatorJoystick;
 	}
 	
 	@Override
 	public void onStart() {
 		
 		System.out.println("[Info] Arms Teleoporated Control started");
-		
-		clamped = _arms.getClamped();
 		
 	}
 

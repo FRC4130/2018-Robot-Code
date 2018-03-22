@@ -25,7 +25,6 @@ public class Loops {
 		
 		System.out.println("Scheduled.");
 		
-		
 	}
 	
 	//Testing Loops

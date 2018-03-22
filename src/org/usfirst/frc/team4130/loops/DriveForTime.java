@@ -1,9 +1,11 @@
 package org.usfirst.frc.team4130.loops;
 
+import org.usfirst.frc.team4130.robot.Subsystems;
 import org.usfirst.frc.team4130.subsystem.DriveTrain;
 
 import com.ctre.phoenix.ILoopable;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+
 
 public class DriveForTime implements ILoopable {
 	
@@ -13,11 +15,19 @@ public class DriveForTime implements ILoopable {
 	double turn = 0;
 	DriveTrain drive;
 	
-	public DriveForTime(DriveTrain _drive, double ms, double _throttle, double _turn) {
-		delay = ms;
+	@Deprecated
+	public DriveForTime(DriveTrain _drive, double TimeToDriveMS, double percentThrottle, double percentTurn) {
+		delay = TimeToDriveMS;
 		drive = _drive;
-		turn = _turn;
-		throttle = _throttle;
+		turn = percentTurn;
+		throttle = percentThrottle;
+	}
+	
+	public DriveForTime(double TimeToDriveMS, double percentThrottle, double percentTurn) {
+		delay = TimeToDriveMS;
+		drive = Subsystems.driveTrain;
+		turn = percentTurn;
+		throttle = percentThrottle;
 	}
 
 	@Override

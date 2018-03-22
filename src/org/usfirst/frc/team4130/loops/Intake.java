@@ -1,5 +1,6 @@
 package org.usfirst.frc.team4130.loops;
 
+import org.usfirst.frc.team4130.robot.Subsystems;
 import org.usfirst.frc.team4130.subsystem.Arms;
 
 import com.ctre.phoenix.ILoopable;
@@ -10,8 +11,18 @@ public class Intake implements ILoopable {
 	private double durriationMs = 500;
 	private double endTimeMs = 0;
 	
+	@Deprecated
 	public Intake(Arms arms) {
 		_arms = arms;
+	}
+	
+	public Intake() {
+		_arms = Subsystems.arms;
+	}
+	
+	public Intake(double durriationMS) {
+		_arms = Subsystems.arms;
+		durriationMs = durriationMS;
 	}
 
 	@Override

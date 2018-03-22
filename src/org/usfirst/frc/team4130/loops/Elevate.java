@@ -1,5 +1,6 @@
 package org.usfirst.frc.team4130.loops;
 
+import org.usfirst.frc.team4130.robot.Subsystems;
 import org.usfirst.frc.team4130.subsystem.Elevator;
 
 import com.ctre.phoenix.ILoopable;
@@ -9,8 +10,14 @@ public class Elevate implements ILoopable {
 	double _height;
 	double acceptableErr = 20;
 	
+	@Deprecated
 	public Elevate(Elevator ele, double heightInches) {
 		_elevator = ele;
+		_height = _elevator.chainHeightToNative(heightInches);
+	}
+	
+	public Elevate(double heightInches) {
+		_elevator = Subsystems.elevator;
 		_height = _elevator.chainHeightToNative(heightInches);
 	}
 	
