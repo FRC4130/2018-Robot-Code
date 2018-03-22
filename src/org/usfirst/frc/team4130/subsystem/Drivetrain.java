@@ -49,12 +49,7 @@ public class DriveTrain {
 		rightf.follow(right);
 		rightf2.follow(right);
 		
-		left.set(ControlMode.PercentOutput, 0);
-		right.set(ControlMode.PercentOutput, 0);
 		
-		setNeutralMode(NeutralMode.Brake);
-		
-		setShifter(highGear);
 		
 		pigeon.setFusedHeading(0, 10);
 		
@@ -71,10 +66,12 @@ public class DriveTrain {
 		right.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, kTimeoutMs);
 		right.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, kTimeoutMs);
 		
+		
 		left.configNominalOutputForward(0, kTimeoutMs);
 		left.configNominalOutputReverse(0, kTimeoutMs);
 		left.configPeakOutputForward(1, kTimeoutMs);
 		left.configPeakOutputReverse(-1, kTimeoutMs);
+		
 		
 		right.configNominalOutputForward(0, kTimeoutMs);
 		right.configNominalOutputReverse(0, kTimeoutMs);
@@ -103,54 +100,27 @@ public class DriveTrain {
 		right.config_kD(1, 0, kTimeoutMs);
 		right.config_IntegralZone(1, 0, kTimeoutMs);
 		
-//		//Slot 2 High Reverse
-//		left.selectProfileSlot(0, 0);
-//		left.config_kF(2, 0, kTimeoutMs);
-//		left.config_kP(2, 0, kTimeoutMs);
-//		left.config_kI(2, 0, kTimeoutMs);
-//		left.config_kD(2, 0, kTimeoutMs);
-//		left.config_IntegralZone(0, 0, kTimeoutMs);
-//		
-//		right.selectProfileSlot(0, 0);
-//		right.config_kF(2, 0, kTimeoutMs);
-//		right.config_kP(2, 0, kTimeoutMs);
-//		right.config_kI(2, 0, kTimeoutMs);
-//		right.config_kD(2, 0, kTimeoutMs);
-//		right.config_IntegralZone(2, 0, kTimeoutMs);
-//		
-//		//Slot 3 Low Forward
-//		left.selectProfileSlot(0, 0);
-//		left.config_kF(3, 0.09422368421, kTimeoutMs);
-//		left.config_kP(3, 0, kTimeoutMs);
-//		left.config_kI(3, 0, kTimeoutMs);
-//		left.config_kD(3, 0, kTimeoutMs);
-//		left.config_IntegralZone(3, 0, kTimeoutMs);
-//		
-//		right.selectProfileSlot(0, 0);
-//		right.config_kF(3, 0.0961208053691, kTimeoutMs);
-//		right.config_kP(3, 0, kTimeoutMs);
-//		right.config_kI(3, 0, kTimeoutMs);
-//		right.config_kD(3, 0, kTimeoutMs);
-//		right.config_IntegralZone(3, 0, kTimeoutMs);
-//	
-//		//Slot 4 Low Reverse
-//		left.selectProfileSlot(0, 0);
-//		left.config_kF(4, 0.0961208053, kTimeoutMs);
-//		left.config_kP(4, 0, kTimeoutMs);
-//		left.config_kI(4, 0, kTimeoutMs);
-//		left.config_kD(4, 0, kTimeoutMs);
-//		left.config_IntegralZone(4, 0, kTimeoutMs);
-//		
-//		right.selectProfileSlot(0, 0);
-//		right.config_kF(4, 0.09422368421, kTimeoutMs);
-//		right.config_kP(4, 0, kTimeoutMs);
-//		right.config_kI(4, 0, kTimeoutMs);
-//		right.config_kD(4, 0, kTimeoutMs);
-//		right.config_IntegralZone(4, 0, kTimeoutMs);
+		//Slot 0 High Reverse
+		left.selectProfileSlot(0, 0);
+		left.config_kF(2, 0, kTimeoutMs);
+		left.config_kP(2, 0, kTimeoutMs);
+		left.config_kI(2, 0, kTimeoutMs);
+		left.config_kD(2, 0, kTimeoutMs);
+		left.config_IntegralZone(0, 0, kTimeoutMs);
 		
-
-		left.selectProfileSlot(1, 0);
-		right.selectProfileSlot(1, 0);
+		right.selectProfileSlot(0, 0);
+		right.config_kF(2, 0, kTimeoutMs);
+		right.config_kP(2, 0, kTimeoutMs);
+		right.config_kI(2, 0, kTimeoutMs);
+		right.config_kD(2, 0, kTimeoutMs);
+		right.config_IntegralZone(2, 0, kTimeoutMs);
+		
+		left.set(ControlMode.PercentOutput, 0);
+		right.set(ControlMode.PercentOutput, 0);
+		
+		setNeutralMode(NeutralMode.Brake);
+		
+		setShifter(highGear);
 		
 	}
 	
@@ -161,15 +131,17 @@ public class DriveTrain {
 		
 		right.configMotionCruiseVelocity(8000, kTimeoutMs);
 		right.configMotionAcceleration(8000, kTimeoutMs);
+		
 	}
 	
 	public void setMagicHighDefault() {
 		
-		left.configMotionCruiseVelocity(8000, kTimeoutMs);
-		left.configMotionAcceleration(8000, kTimeoutMs);
+		left.configMotionCruiseVelocity(30000, kTimeoutMs);
+		left.configMotionAcceleration(15000, kTimeoutMs);
 		
-		right.configMotionCruiseVelocity(8000, kTimeoutMs);
-		right.configMotionAcceleration(8000, kTimeoutMs);
+		right.configMotionCruiseVelocity(30000, kTimeoutMs);
+		right.configMotionAcceleration(15000, kTimeoutMs);
+		
 	}
 	
 	public void setMagic(int cruiseVelocity, int acceleration) {
@@ -220,6 +192,24 @@ public class DriveTrain {
 		
 		System.out.println("[Info] Shifted to ");
 		System.out.println(vl == highGear ? "High" : "Low");
+		
+		if (vl == highGear) {
+			
+			right.selectProfileSlot(0, 0);
+			left.selectProfileSlot(0, 0);
+			
+			setMagicHighDefault();
+			
+		}
+		
+		else {
+			
+			right.selectProfileSlot(1, 0);
+			left.selectProfileSlot(1, 0);
+			
+			setMagicLowDefault();
+			
+		}
 		
 	}
 	

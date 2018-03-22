@@ -6,7 +6,6 @@ import org.usfirst.frc.team4130.subsystem.DriveTrain;
 import com.ctre.phoenix.ILoopable;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DriveRotate implements ILoopable {

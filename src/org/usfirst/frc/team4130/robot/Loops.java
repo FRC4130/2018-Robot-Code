@@ -64,58 +64,47 @@ public class Loops {
 		
 		System.out.println("Scheduling Elevator Init.");
 		
-		auton.add(new ElevatorRelease(Subsystems.elevator));
-		auton.add(new Elevate(Subsystems.elevator, ElevatorPosition.Travel.value));
+		auton.add(new ElevatorRelease());
+		auton.add(new Elevate(ElevatorPosition.Travel.value));
 		
 		System.out.println("Scheduled.");
 		
 	}
 	
 	//Done 1
-	public static void schedule1RR(SequentialScheduler auton) {
+	public static void schedule1RR(SequentialScheduler auton, String target) {
 		
 		System.out.println("Scheduling Right Right from Left.");
 		
 		scheduleEleRelease(auton);
 		
-		auton.add(new DriveDistance(Subsystems.driveTrain, 12*11));
+		switch (target) {
 		
-//		auton.add(new DriveDistance(Subsystems.driveTrain, m*218.606));
-//		auton.add(new DriveRotate(Subsystems.driveTrain, -90));
-//		auton.add(new DriveDistance(Subsystems.driveTrain, m*197.245));
-//		auton.add(new DriveRotate(Subsystems.driveTrain, 90));
-//		auton.add(new Elevate(Subsystems.elevator, ElevatorPosition.ScaleMax.value));
-//		auton.add(new DriveDistance(Subsystems.driveTrain, m*60.136));
-//		auton.add(new Outtake(Subsystems.arms));
-//		auton.add(new DriveDistance(Subsystems.driveTrain, m*-60.136));
-//		auton.add(new Elevate(Subsystems.elevator, ElevatorPosition.Home.value));
-//		auton.add(new DriveRotate(Subsystems.driveTrain, -165));
-//		auton.add(new DriveDistance(Subsystems.driveTrain, 13.692));
-//		auton.add(new Intake(Subsystems.arms));
-//		auton.add(new Elevate(Subsystems.elevator, ElevatorPosition.Switch.value));
-//		auton.add(new Outtake(Subsystems.arms));
-//		auton.add(new Elevate(Subsystems.elevator, ElevatorPosition.Home.value));
-//		auton.add(new DriveDistance(Subsystems.driveTrain, m*-13.692));
+		case "Outside Switch Front":	schedule1RL(auton, target);
+										break;
+										
+		case "Cross The Line":			auton.add(new DriveDistance(11*12));
+										break;
+										
+		default:						break;
+		
+		}
+		
+		auton.add(new DriveDistance(12*11));
 		
 		System.out.print("Scheduled.");
 		
 	}
 	
-	public static void schedule1RL(SequentialScheduler auton) {
+	public static void schedule1RL(SequentialScheduler auton, String target) {
 		
 		System.out.println("Scheduling Right Left from Left.");
 		
 		scheduleEleRelease(auton);
 
-		auton.add(new DriveDistance(Subsystems.driveTrain, m*283.621));
-		auton.add(new DriveRotate(Subsystems.driveTrain, -75));
-		auton.add(new DriveDistance(Subsystems.driveTrain, m*-17));
-//		auton.add(new DriveDistance(Subsystems.driveTrain, m*17));
-//		auton.add(new Outtake(Subsystems.arms));
-//		auton.add(new DriveDistance(Subsystems.driveTrain, m*-17));
-//		auton.add(new Elevate(Subsystems.elevator, ElevatorPosition.Home.value));
-//		auton.add(new DriveDistance(Subsystems.driveTrain, m*10));
-//		auton.add(new DriveRotate(Subsystems.driveTrain, -105));		
+		auton.add(new DriveDistance(m*283.621));
+		auton.add(new DriveRotate(-75));
+		auton.add(new DriveDistance(m*-17));
 		
 		System.out.print("Scheduled.");
 		
