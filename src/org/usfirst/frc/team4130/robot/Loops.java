@@ -28,6 +28,14 @@ public class Loops {
 	}
 	
 	//Testing Loops
+	public static void sTest(SequentialScheduler auton) {
+		
+		auton.add(new DriveDistance(10));
+		auton.add(new Delay(1000));
+		auton.add(auton);
+		
+	}
+	
 	public static void sHokeyPokey(SequentialScheduler auton) {
 		
 		System.out.println("Preparing to get down...");
@@ -59,15 +67,14 @@ public class Loops {
 		
 		double mInvert = invert ? -1 : 1;
 		
-		sEleRelease(auton);
-		
 		System.out.println("[Info] Scheduling "+target+" for 1LL");
 		
 		auton.add(new Print("[Warning] Running "+target+" for 1LL"));
 		
 		switch (target) {
 		
-		case "Outside Switch":	auton.add(new DriveDistance(152.3));
+		case "Outside Switch":	sEleRelease(auton);
+								auton.add(new DriveDistance(152.3));
 								auton.add(new DriveRotate(-90*mInvert));
 								auton.add(new Elevate(ElevatorPosition.Switch.value));
 								auton.add(new DriveDistance(16.5));
@@ -76,7 +83,8 @@ public class Loops {
 								auton.add(new Elevate(ElevatorPosition.Home.value));
 								break;
 		
-		case "Front Switch":	auton.add(new DriveDistance(8));
+		case "Front Switch":	sEleRelease(auton);
+								auton.add(new DriveDistance(8));
 								auton.add(new DriveRotate(-39.193*mInvert));
 								auton.add(new DriveDistance(105.94));
 								auton.add(new DriveRotate(39.193*mInvert));
@@ -88,7 +96,8 @@ public class Loops {
 								auton.add(new DriveRotate(-45*mInvert));
 								break;
 		
-		case "Scale":			auton.add(new DriveDistance(258.02));
+		case "Scale":			sEleRelease(auton);
+								auton.add(new DriveDistance(258.02));
 								auton.add(new DriveRotate(-45*mInvert));
 								auton.add(new Elevate(ElevatorPosition.ScaleMax.value));
 								auton.add(new DriveDistance(35.54));
@@ -98,7 +107,8 @@ public class Loops {
 								auton.add(new DriveRotate(-45*mInvert));
 								break;
 		
-		case "Cross The Line":	auton.add(new DriveDistance(10.5*12));
+		case "Cross The Line":	sEleRelease(auton);
+								auton.add(new DriveDistance(10.5*12));
 								break;
 		
 		case "Nothing":			break;
@@ -115,8 +125,6 @@ public class Loops {
 		
 		double mInvert = invert ? -1 : 1;
 		
-		sEleRelease(auton);
-		
 		System.out.println("[Info] Scheduling "+target+" for 1LR");
 		
 		auton.add(new Print("[Warning] Running "+target+" for 1LR"));
@@ -129,7 +137,8 @@ public class Loops {
 		case "Front Switch":	s1LL(auton, target, invert);
 								break;
 		
-		case "Scale":			auton.add(new DriveDistance(218));
+		case "Scale":			sEleRelease(auton);
+								auton.add(new DriveDistance(218));
 								auton.add(new DriveRotate(-90*mInvert));
 								auton.add(new DriveDistance(188));
 								auton.add(new DriveRotate(90*mInvert));
@@ -157,15 +166,14 @@ public class Loops {
 		
 		double mInvert = invert ? -1 : 1;
 		
-		sEleRelease(auton);
-		
 		System.out.println("[Info] Scheduling "+target+" for 1RL");
 		
 		auton.add(new Print("[Warning] Running "+target+" for 1RL"));
 		
 		switch (target) {
 		
-		case "Outside Switch":	auton.add(new DriveDistance(224));
+		case "Outside Switch":	sEleRelease(auton);
+								auton.add(new DriveDistance(224));
 								auton.add(new DriveRotate(-90));
 								auton.add(new DriveDistance(221.5));
 								auton.add(new DriveRotate(-90));
@@ -178,7 +186,8 @@ public class Loops {
 								auton.add(new Elevate(ElevatorPosition.Home.value));
 								break;
 		
-		case "Front Switch":	auton.add(new DriveDistance(60.5));
+		case "Front Switch":	sEleRelease(auton);
+								auton.add(new DriveDistance(60.5));
 								auton.add(new DriveRotate(-90*mInvert));
 								auton.add(new DriveDistance(168));
 								auton.add(new DriveRotate(90*mInvert));
@@ -207,15 +216,14 @@ public class Loops {
 		
 		double mInvert = invert ? -1 : 1;
 		
-		sEleRelease(auton);
-		
 		System.out.println("[Info] Scheduling "+target+" for 1RR");
 		
 		auton.add(new Print("[Warning] Running "+target+" for 1RL"));
 		
 		switch (target) {
 		
-		case "Outside Switch":	auton.add(new DriveDistance(217));
+		case "Outside Switch":	sEleRelease(auton);
+								auton.add(new DriveDistance(217));
 								auton.add(new DriveRotate(-90*mInvert));
 								auton.add(new DriveDistance(227));
 								auton.add(new DriveRotate(-90*mInvert));
@@ -251,15 +259,14 @@ public class Loops {
 		
 		double mInvert = invert ? -1 : 1;
 		
-		sEleRelease(auton);
-		
 		System.out.println("[Info] Scheduling "+target+" for 2LL");
 		
 		auton.add(new Print("[Warning] Running "+target+" for 2LL"));
 		
 		switch (target) {
 		
-		case "Front Switch":	auton.add(new DriveDistance(29.3));
+		case "Front Switch":	sEleRelease(auton);
+								auton.add(new DriveDistance(29.3));
 								auton.add(new DriveRotate(40*mInvert));
 								auton.add(new DriveDistance(83.4));
 								auton.add(new DriveRotate(-40*mInvert));
@@ -288,8 +295,6 @@ public class Loops {
 		
 		double mInvert = invert ? -1 : 1;
 		
-		sEleRelease(auton);
-		
 		System.out.println("[Info] Scheduling "+target+" for 2LR");
 		
 		auton.add(new Print("[Warning] Running "+target+" for 2LR"));
@@ -316,15 +321,14 @@ public class Loops {
 		
 		double mInvert = invert ? -1 : 1;
 		
-		sEleRelease(auton);
-		
 		System.out.println("[Info] Scheduling "+target+" for 2RL");
 		
 		auton.add(new Print("[Warning] Running "+target+" for 2RL"));
 		
 		switch (target) {
 		
-		case "Front Switch":	auton.add(new DriveDistance(47.9));
+		case "Front Switch":	sEleRelease(auton);
+								auton.add(new DriveDistance(47.9));
 								auton.add(new DriveRotate(-40));
 								auton.add(new DriveDistance(59));
 								auton.add(new Outtake());
@@ -336,7 +340,8 @@ public class Loops {
 								auton.add(new DriveRotate(-90));
 								break;
 		
-		case "Cross The Line":	auton.add(new DriveDistance(29.3));
+		case "Cross The Line":	sEleRelease(auton);
+								auton.add(new DriveDistance(29.3));
 								auton.add(new DriveRotate(-40));
 								auton.add(new DriveDistance(83.4));
 								auton.add(new DriveRotate(-140));
@@ -356,8 +361,6 @@ public class Loops {
 	public static void s2RR(SequentialScheduler auton, String target, boolean invert) {
 		
 		double mInvert = invert ? -1 : 1;
-		
-		sEleRelease(auton);
 		
 		System.out.println("[Info] Scheduling "+target+" for 2RR");
 		
@@ -385,13 +388,11 @@ public class Loops {
 		
 		double mInvert = invert ? -1 : 1;
 		
-		sEleRelease(auton);
-		
 		System.out.println("[Info] Scheduling "+target+" for 3LL");
 		
 		auton.add(new Print("[Warning] Running "+target+" for 3LL"));
 		
-		s1RR(auton, target, true);
+		s1RR(auton, target, !invert);
 	
 	}
 	
@@ -399,13 +400,11 @@ public class Loops {
 		
 		double mInvert = invert ? -1 : 1;
 		
-		sEleRelease(auton);
-		
 		System.out.println("[Info] Scheduling "+target+" for 3LR");
 		
 		auton.add(new Print("[Warning] Running "+target+" for 3LR"));
 		
-		s1RL(auton, target, true);
+		s1RL(auton, target, !invert);
 	
 	}
 	
@@ -413,13 +412,11 @@ public class Loops {
 		
 		double mInvert = invert ? -1 : 1;
 		
-		sEleRelease(auton);
-		
 		System.out.println("[Info] Scheduling "+target+" for 3RL");
 		
 		auton.add(new Print("[Warning] Running "+target+" for 3RL"));
 		
-		s1LR(auton, target, true);
+		s1LR(auton, target, !invert);
 	
 	}
 	
@@ -427,13 +424,11 @@ public class Loops {
 		
 		double mInvert = invert ? -1 : 1;
 		
-		sEleRelease(auton);
-		
 		System.out.println("[Info] Scheduling "+target+" for 3RR");
 		
 		auton.add(new Print("[Warning] Running "+target+" for 3RR"));
 		
-		s1LL(auton, target, true);
+		s1LL(auton, target, !invert);
 	
 	}
 	

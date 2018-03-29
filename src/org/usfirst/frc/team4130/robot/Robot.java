@@ -7,6 +7,8 @@
 
 package org.usfirst.frc.team4130.robot;
 
+import java.util.ArrayList;
+
 import org.usfirst.frc.team4130.loops.Delay;
 import org.usfirst.frc.team4130.loops.DriveDistance;
 import org.usfirst.frc.team4130.loops.DriveForTime;
@@ -24,7 +26,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends IterativeRobot {
 	
-	String[] positions = {"Do Nothing","Left","Center","Right"};
+	String[] pos = {"Test","Left","Center","Right"};
 	
 	ConcurrentScheduler teleop;
 	
@@ -35,12 +37,28 @@ public class Robot extends IterativeRobot {
 	
 	SequentialScheduler test = new SequentialScheduler(0);
 	
+	int target1i = 0;
+	int target2i = 0;
+	int target3i = 0;
+	int target4i = 0;
+	
+	ArrayList<String> target1 = new ArrayList<String>();
+	ArrayList<String> target2 = new ArrayList<String>();
+	ArrayList<String> target3 = new ArrayList<String>();
+	ArrayList<String> target4 = new ArrayList<String>();
+	
 	String gameData;
 	
-	int pos = 0;
+	int posi = 0;
 
 	@Override
 	public void robotInit() {
+		
+		target1.add("Targets not set (targetLL)");
+		target2.add("Targets not set (targetLR)");
+		target3.add("Targets not set (targetRL)");
+		target4.add("Targets not set (targetRR)");
+		
 		RobotMap.init();
 		Subsystems.init();
 		
@@ -54,30 +72,32 @@ public class Robot extends IterativeRobot {
 		autonLR = new SequentialScheduler(0);
 		autonLL = new SequentialScheduler(0);
 		
-		switch (pos) {
+		switch (posi) {
+		
+		case 0:		Loops.sTest(test);
 			
-		case 1:		Loops.schedule1RR(autonRR);
-					Loops.schedule1RL(autonRL);
-					Loops.schedule1LR(autonLR);
-					Loops.schedule1LL(autonLL);
+		case 1:		Loops.s1RR(autonRR, target1.get(target1i), false);
+					Loops.s1RL(autonRL, target2.get(target2i), false);
+					Loops.s1LR(autonLR, target3.get(target3i), false);
+					Loops.s1LL(autonLL, target4.get(target4i), false);
 					break;
 		
-		case 2:		Loops.schedule2RR(autonRR);
-					Loops.schedule2RL(autonRL);
-					Loops.schedule2LR(autonLR);
-					Loops.schedule2LL(autonLL);
+		case 2:		Loops.s2RR(autonRR, target1.get(target1i), false);
+					Loops.s2RL(autonRL, target2.get(target2i), false);
+					Loops.s2LR(autonLR, target3.get(target3i), false);
+					Loops.s2LL(autonLL, target4.get(target4i), false);
 					break;
 				
-		case 3: 	Loops.schedule3RR(autonRR);
-					Loops.schedule3RL(autonRL);
-					Loops.schedule3LR(autonLR);
-					Loops.schedule3LL(autonLL);
+		case 3:		Loops.s3RR(autonRR, target1.get(target1i), false);
+					Loops.s3RL(autonRL, target2.get(target2i), false);
+					Loops.s3LR(autonLR, target3.get(target3i), false);
+					Loops.s3LL(autonLL, target4.get(target4i), false);
 					break;
 		
-		default:	Loops.scheduleEleRelease(autonRR);
-					Loops.scheduleEleRelease(autonRL);
-					Loops.scheduleEleRelease(autonLR);
-					Loops.scheduleEleRelease(autonLL);
+		default:	Loops.sEleRelease(autonRR);
+					Loops.sEleRelease(autonRL);
+					Loops.sEleRelease(autonLR);
+					Loops.sEleRelease(autonLL);
 					break;
 		
 		}
@@ -122,7 +142,7 @@ public class Robot extends IterativeRobot {
 	public void teleopInit(){
 		
 		teleop = new ConcurrentScheduler();
-		Loops.scheduleTeleop(teleop);
+		Loops.sTeleop(teleop);
 		teleop.startAll();
 		
 	}
@@ -135,31 +155,103 @@ public class Robot extends IterativeRobot {
 	
 	@Override
 	public void disabledInit(){
-		pos = DriverStation.getInstance().getLocation();
+		posi = DriverStation.getInstance().getLocation();
 	}
 	
 	@Override
 	public void disabledPeriodic(){
 		if (RobotMap.driverJoystick.getRawButtonPressed(1)) {
-			pos = 2;
+			target1i++;
+			target1i = target1i >= target1.size()-1 ? 0 : target1i;
 		}
 		if (RobotMap.driverJoystick.getRawButton(3)) {
-			pos = 1;
+			target2i++;
+			target2i = target2i >= target2.size()-1 ? 0 : target2i;
 		}
 		if (RobotMap.driverJoystick.getRawButton(2)) {
-			pos = 3;
+			target3i++;
+			target3i = target3i >= target3.size()-1 ? 0 : target3i;
 		}
 		if (RobotMap.driverJoystick.getRawButton(4)) {
-			pos = 0;
+			target4i++;
+			target4i = target4i >= target4.size()-1 ? 0 : target4i;
 		}
-		pos = pos > 3 ? 0 : pos;
+		
+		if (RobotMap.driverJoystick.getRawButtonPressed(8)) {
+			
+			ArrayList<ArrayList<String>> targets = new ArrayList<ArrayList<String>>();
+			
+			targets.add(target1);
+			targets.add(target2);
+			targets.add(target3);
+			targets.add(target4);
+			
+			posi++;
+			
+			posi = posi >= pos.length ? 0 : posi;
+			
+			for (ArrayList<String> target : targets) {
+				
+				target.clear();
+				target.add("Default");
+				target.add("Front Switch");
+				target.add("Cross The Line");
+				target.add("Nothing");
+				
+			}
+			
+			switch (posi) {
+			
+			case 0:		for (ArrayList<String> target : targets) {
+							
+							target.add("Test");
+							
+						}
+						break;
+			
+			case 1:		for (ArrayList<String> target : targets) {
+							
+							target.add("Outside Switch");
+							target.add("Scale");
+							
+						}
+						break;
+			
+			case 2:		for (ArrayList<String> target : targets) {
+							
+						}
+						break;
+					
+			case 3: 	for (ArrayList<String> target : targets) {
+							
+							target.add("Outside Switch");
+							target.add("Scale");
+							
+						}
+						break;
+			
+			default:	for (ArrayList<String> target : targets) {
+						
+							target.clear();
+							target.add("Pos out of bounds");
+							
+						}
+			
+			}
+			
+		}
+		
 	}
 	
 	@Override
 	public void robotPeriodic() {
 		
-		SmartDashboard.putString("Position", positions[pos]);
+		SmartDashboard.putString("Position", pos[posi]);
 		SmartDashboard.putString("Shifter", Subsystems.driveTrain.getShifter() == Subsystems.driveTrain.highGear ? "High Gear" : "Low Gear");
+		SmartDashboard.putString("Left Left", target1.get(target1i));
+		SmartDashboard.putString("Left Right", target1.get(target2i));
+		SmartDashboard.putString("Right Left", target1.get(target3i));
+		SmartDashboard.putString("Right Right", target1.get(target4i));
 		
 	}
 }

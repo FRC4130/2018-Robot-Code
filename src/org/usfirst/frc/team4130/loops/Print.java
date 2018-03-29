@@ -2,6 +2,8 @@ package org.usfirst.frc.team4130.loops;
 
 import com.ctre.phoenix.ILoopable;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 public class Print implements ILoopable {
 	
 	private String x = "";
@@ -12,7 +14,9 @@ public class Print implements ILoopable {
 	
 	@Override
 	public void onStart() {
-		System.out.println("[Info] (Print) "+x);
+		String toPrint = "[Info] (Print) "+x;
+		System.out.println(toPrint);
+		SmartDashboard.putString("Scheduler Output", toPrint);
 	}
 
 	@Override
@@ -26,6 +30,7 @@ public class Print implements ILoopable {
 
 	@Override
 	public void onStop() {
+		
 	}
 
 }
