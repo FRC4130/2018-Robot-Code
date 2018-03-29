@@ -4,7 +4,9 @@ import com.ctre.phoenix.ILoopable;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.command.Subsystem;
 
+import org.usfirst.frc.team4130.robot.RobotMap;
 import org.usfirst.frc.team4130.robot.Subsystems;
 import org.usfirst.frc.team4130.subsystem.DriveTrain;
 
@@ -16,18 +18,10 @@ public class DriveTele implements ILoopable {
 	double targetNativeLeft = 0;
 	double targetNativeRight = 0;
 	
-	@Deprecated
-	public DriveTele (DriveTrain driveTrain, Joystick gamepad) {
-		
-		_drive = driveTrain;
-		_gamepad = gamepad;
-		
-	}
-
-	public DriveTele (Joystick gamepad) {
+	public DriveTele () {
 		
 		_drive = Subsystems.driveTrain;
-		_gamepad = gamepad;
+		_gamepad = RobotMap.driverJoystick;
 		
 	}
 	

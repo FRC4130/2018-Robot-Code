@@ -14,32 +14,32 @@ public class Loops {
 	private static double m = 1;
 	
 	//Teleop Loops
-	public static void scheduleTeleop(ConcurrentScheduler teleop){
+	public static void sTeleop(ConcurrentScheduler teleop){
 		
 		System.out.println("Scheduling Teleop.");
 		
 		//Schedule all tasks for teleop
-		teleop.add(new ElevatorTele(Subsystems.elevator, RobotMap.operatorJoystick));
-		teleop.add(new DriveTele(Subsystems.driveTrain, RobotMap.driverJoystick));
-		teleop.add(new ArmsTele(Subsystems.arms, RobotMap.operatorJoystick));
+		teleop.add(new ElevatorTele());
+		teleop.add(new DriveTele());
+		teleop.add(new ArmsTele());
 		
 		System.out.println("Scheduled.");
 		
 	}
 	
 	//Testing Loops
-	public static void hokeyPokey(SequentialScheduler auton) {
+	public static void sHokeyPokey(SequentialScheduler auton) {
 		
 		System.out.println("Preparing to get down...");
 		
-		auton.add(new DriveDistance(Subsystems.driveTrain, 2*12));
-		auton.add(new DriveRotate(Subsystems.driveTrain, 45));
+		auton.add(new DriveDistance(2*12));
+		auton.add(new DriveRotate(45));
 		
 		SequentialScheduler h = new SequentialScheduler(0);
 		
-		h.add(new DriveDistance(Subsystems.driveTrain, 2*12));
-		h.add(new DriveDistance(Subsystems.driveTrain, -2*12));
-		h.add(new DriveRotate(Subsystems.driveTrain, 90));
+		h.add(new DriveDistance(2*12));
+		h.add(new DriveDistance(-2*12));
+		h.add(new DriveRotate(90));
 		h.add(h);
 		
 		auton.add(h);
@@ -47,286 +47,394 @@ public class Loops {
 		System.out.println("Prepared.");
 		
 	}
-
-	public static void scheduleTest(SequentialScheduler test) {
-		
-		System.out.println("Scheduling Test");
-		
-		//hokeyPokey(test);
-		test.add(new DriveDistance(Subsystems.driveTrain, m*250));
-		
-		System.out.println("Scheduled Test");
-		
-	}
 	
-	//Auton Loops
-	public static void scheduleEleRelease(SequentialScheduler auton) {
-		
-		System.out.println("Scheduling Elevator Init.");
-		
+	//Multi-Use Loops
+	public static void sEleRelease(SequentialScheduler auton) {
 		auton.add(new ElevatorRelease());
 		auton.add(new Elevate(ElevatorPosition.Travel.value));
-		
-		System.out.println("Scheduled.");
-		
 	}
 	
-	//Done 1
-	public static void schedule1RR(SequentialScheduler auton, String target) {
+	//1LL
+	public static void s1LL(SequentialScheduler auton, String target, boolean invert) {
 		
-		System.out.println("Scheduling Right Right from Left.");
+		double mInvert = invert ? -1 : 1;
 		
-		scheduleEleRelease(auton);
+		sEleRelease(auton);
+		
+		System.out.println("[Info] Scheduling "+target+" for 1LL");
+		
+		auton.add(new Print("[Warning] Running "+target+" for 1LL"));
 		
 		switch (target) {
 		
-		case "Outside Switch Front":	schedule1RL(auton, target);
-										break;
-										
-		case "Cross The Line":			auton.add(new DriveDistance(11*12));
-										break;
-										
-		default:						break;
+		case "Outside Switch":	auton.add(new DriveDistance(152.3));
+								auton.add(new DriveRotate(-90*mInvert));
+								auton.add(new Elevate(ElevatorPosition.Switch.value));
+								auton.add(new DriveDistance(16.5));
+								auton.add(new Outtake());
+								auton.add(new DriveDistance(-16.5));
+								auton.add(new Elevate(ElevatorPosition.Home.value));
+								break;
+		
+		case "Front Switch":	auton.add(new DriveDistance(8));
+								auton.add(new DriveRotate(-39.193*mInvert));
+								auton.add(new DriveDistance(105.94));
+								auton.add(new DriveRotate(39.193*mInvert));
+								auton.add(new Elevate(ElevatorPosition.Switch.value));
+								auton.add(new DriveDistance(8));
+								auton.add(new Outtake());
+								auton.add(new DriveDistance(-8));
+								auton.add(new Elevate(ElevatorPosition.Home.value));
+								auton.add(new DriveRotate(-45*mInvert));
+								break;
+		
+		case "Scale":			auton.add(new DriveDistance(258.02));
+								auton.add(new DriveRotate(-45*mInvert));
+								auton.add(new Elevate(ElevatorPosition.ScaleMax.value));
+								auton.add(new DriveDistance(35.54));
+								auton.add(new Outtake());
+								auton.add(new DriveDistance(-35.54));
+								auton.add(new Elevate(ElevatorPosition.Home.value));
+								auton.add(new DriveRotate(-45*mInvert));
+								break;
+		
+		case "Cross The Line":	auton.add(new DriveDistance(10.5*12));
+								break;
+		
+		case "Nothing":			break;
+		
+		default:				System.out.println("[WARNING] Scheduling Default, recieved target: \""+target+"\" for 1LL");
+								s1LL(auton, "Outside Switch", invert);
+								break;
 		
 		}
 		
-		auton.add(new DriveDistance(12*11));
+	}
+	
+	public static void s1LR(SequentialScheduler auton, String target, boolean invert) {
 		
-		System.out.print("Scheduled.");
+		double mInvert = invert ? -1 : 1;
+		
+		sEleRelease(auton);
+		
+		System.out.println("[Info] Scheduling "+target+" for 1LR");
+		
+		auton.add(new Print("[Warning] Running "+target+" for 1LR"));
+		
+		switch (target) {
+		
+		case "Outside Switch":	s1LL(auton, target, invert);
+								break;
+		
+		case "Front Switch":	s1LL(auton, target, invert);
+								break;
+		
+		case "Scale":			auton.add(new DriveDistance(218));
+								auton.add(new DriveRotate(-90*mInvert));
+								auton.add(new DriveDistance(188));
+								auton.add(new DriveRotate(90*mInvert));
+								auton.add(new Elevate(ElevatorPosition.ScaleMax.value));
+								auton.add(new DriveDistance(58.75));
+								auton.add(new Outtake());
+								auton.add(new DriveDistance(-58.75));
+								auton.add(new Elevate(ElevatorPosition.Home.value));
+								break;
+		
+		case "Cross The Line":	s1LL(auton, target, invert);
+								break;
+		
+		case "Nothing":			break;
+		
+		default:				System.out.println("[WARNING] Scheduling Default, recieved target: \""+target+"\" for 1LR");
+								s1LR(auton, "Outside Switch", invert);
+								break;
+		
+		}
 		
 	}
 	
-	public static void schedule1RL(SequentialScheduler auton, String target) {
+	public static void s1RL(SequentialScheduler auton, String target, boolean invert) {
 		
-		System.out.println("Scheduling Right Left from Left.");
+		double mInvert = invert ? -1 : 1;
 		
-		scheduleEleRelease(auton);
-
-		auton.add(new DriveDistance(m*283.621));
-		auton.add(new DriveRotate(-75));
-		auton.add(new DriveDistance(m*-17));
+		sEleRelease(auton);
 		
-		System.out.print("Scheduled.");
+		System.out.println("[Info] Scheduling "+target+" for 1RL");
 		
-	}
-	
-	public static void schedule1LL(SequentialScheduler auton) {
+		auton.add(new Print("[Warning] Running "+target+" for 1RL"));
 		
-		System.out.println("Scheduling Left Left from Left.");
+		switch (target) {
 		
-		schedule1LR(auton);
+		case "Outside Switch":	auton.add(new DriveDistance(224));
+								auton.add(new DriveRotate(-90));
+								auton.add(new DriveDistance(221.5));
+								auton.add(new DriveRotate(-90));
+								auton.add(new DriveDistance(59));
+								auton.add(new DriveRotate(-90));
+								auton.add(new Elevate(ElevatorPosition.Switch.value));
+								auton.add(new DriveDistance(16));
+								auton.add(new Outtake());
+								auton.add(new DriveDistance(-16));
+								auton.add(new Elevate(ElevatorPosition.Home.value));
+								break;
 		
-//		auton.add(new DriveDistance(Subsystems.driveTrain, m*283.621));
-//		auton.add(new DriveRotate(Subsystems.driveTrain, -75));
-//		auton.add(new DriveDistance(Subsystems.driveTrain, m*-17));
-//		auton.add(new Elevate(Subsystems.elevator, ElevatorPosition.ScaleMax.value));
-//		auton.add(new DriveDistance(Subsystems.driveTrain, m*17));
-//		auton.add(new Outtake(Subsystems.arms));
-//		auton.add(new DriveDistance(Subsystems.driveTrain, m*-17));
-//		auton.add(new Elevate(Subsystems.elevator, ElevatorPosition.Home.value));
-//		auton.add(new DriveRotate(Subsystems.driveTrain, 80));
-//		auton.add(new DriveDistance(Subsystems.driveTrain, m*91.502));
-//		auton.add(new Intake(Subsystems.arms));
-//		auton.add(new Elevate(Subsystems.elevator, 30));
-//		auton.add(new Outtake(Subsystems.arms));
-//		auton.add(new Elevate(Subsystems.elevator, ElevatorPosition.Home.value));
-//		auton.add(new DriveDistance(Subsystems.driveTrain, m*-13.692));
+		case "Front Switch":	auton.add(new DriveDistance(60.5));
+								auton.add(new DriveRotate(-90*mInvert));
+								auton.add(new DriveDistance(168));
+								auton.add(new DriveRotate(90*mInvert));
+								auton.add(new Elevate(ElevatorPosition.Switch.value));
+								auton.add(new DriveDistance(39));
+								auton.add(new Outtake());
+								break;
 		
-		System.out.print("Scheduled.");
+		case "Scale":			s1LL(auton, target, invert);
+								break;
 		
-	}
-	
-	//Done
-	public static void schedule1LR(SequentialScheduler auton) {
+		case "Cross The Line":	s1LL(auton, target, invert);
+								break;
 		
-		System.out.println("Scheduling Right Left from Left.");
+		case "Nothing":			break;
 		
-		scheduleEleRelease(auton);
+		default:				System.out.println("[WARNING] Scheduling Default, recieved target: \""+target+"\" for 1RL");
+								s1RL(auton, "Cross The Line", invert);
+								break;
 		
-		auton.add(new DriveDistance(Subsystems.driveTrain, m*152.338));
-		auton.add(new DriveRotate(Subsystems.driveTrain, -90));
-		auton.add(new Elevate(Subsystems.elevator, ElevatorPosition.Switch.value));
-		auton.add(new DriveForTime(Subsystems.driveTrain, 2000, 0.5, 0));
-		auton.add(new Outtake(Subsystems.arms));
-		auton.add(new DriveDistance(Subsystems.driveTrain, m*-16.5));
-		auton.add(new Elevate(Subsystems.elevator, ElevatorPosition.Home.value));
-		auton.add(new DriveRotate(Subsystems.driveTrain, 90));
-		
-		System.out.print("Scheduled.");
+		}
 		
 	}
 	
-	//Done 3
-	public static void schedule2RR(SequentialScheduler auton) {
+	public static void s1RR(SequentialScheduler auton, String target, boolean invert) {
 		
-		System.out.println("Scheduling Right Right from Center.");
+		double mInvert = invert ? -1 : 1;
 		
-		scheduleEleRelease(auton);
+		sEleRelease(auton);
 		
-		auton.add(new DriveDistance(Subsystems.driveTrain, m*47.9));
-		auton.add(new DriveRotate(Subsystems.driveTrain, -40));
-		auton.add(new DriveDistance(Subsystems.driveTrain, m*59));
-		auton.add(new DriveRotate(Subsystems.driveTrain, 40));
-		auton.add(new Elevate(Subsystems.elevator, ElevatorPosition.Switch.value));
-		auton.add(new DriveForTime(Subsystems.driveTrain, 1000, 0.5, 0));
-		auton.add(new Outtake(Subsystems.arms));
-		auton.add(new DriveDistance(Subsystems.driveTrain, m*-50));
-		auton.add(new Elevate(Subsystems.elevator, ElevatorPosition.Home.value));
+		System.out.println("[Info] Scheduling "+target+" for 1RR");
 		
-		System.out.print("Scheduled.");
+		auton.add(new Print("[Warning] Running "+target+" for 1RL"));
 		
-	}
-
-	public static void schedule2RL(SequentialScheduler auton) {
+		switch (target) {
 		
-		System.out.println("Scheduling Right Left from Center.");
+		case "Outside Switch":	auton.add(new DriveDistance(217));
+								auton.add(new DriveRotate(-90*mInvert));
+								auton.add(new DriveDistance(227));
+								auton.add(new DriveRotate(-90*mInvert));
+								auton.add(new DriveDistance(64));
+								auton.add(new DriveRotate(-90*mInvert));
+								auton.add(new Elevate(ElevatorPosition.Switch.value));
+								auton.add(new DriveDistance(11.5));
+								auton.add(new Outtake());
+								auton.add(new DriveDistance(-11.5));
+								auton.add(new Elevate(ElevatorPosition.Home.value));
+								break;
 		
-		schedule2RR(auton);
+		case "Front Switch":	s1RL(auton, target, invert);
+								break;
 		
-		System.out.print("Scheduled.");
+		case "Scale":			s1LR(auton, target, invert);
+								break;
 		
-	}
-
-	public static void schedule2LR(SequentialScheduler auton) {
+		case "Cross The Line":	s1LL(auton, target, invert);
+								break;
 		
-		System.out.println("Scheduling Left Right from Center.");
+		case "Nothing":			break;
 		
-		schedule2LL(auton);
+		default:				System.out.println("[WARNING] Scheduling Default, recieved target: \""+target+"\" for 1RR");
+								s1RR(auton, "Outside Switch", invert);
+								break;
 		
-		System.out.print("Scheduled.");
-		
-	}
-	
-	//Done 3
-	public static void schedule2LL(SequentialScheduler auton) {
-		
-		System.out.println("Scheduling Left Left from Center.");
-		
-		scheduleEleRelease(auton);
-		
-		auton.add(new DriveDistance(Subsystems.driveTrain, m*29.3));
-		auton.add(new DriveRotate(Subsystems.driveTrain, 40));
-		auton.add(new DriveDistance(Subsystems.driveTrain, m*83.4));
-		auton.add(new DriveRotate(Subsystems.driveTrain, -40));
-		auton.add(new Elevate(Subsystems.elevator, ElevatorPosition.Switch.value));
-		auton.add(new DriveForTime(Subsystems.driveTrain, 1000, 0.5, 0));
-		auton.add(new Outtake(Subsystems.arms));
-		auton.add(new DriveDistance(Subsystems.driveTrain, m*-50));
-		auton.add(new Elevate(Subsystems.elevator, ElevatorPosition.Home.value));
-		
-		System.out.print("Scheduled Left Left from Center.");
+		}
 		
 	}
 	
-	//Done 2
-	public static void schedule3RR(SequentialScheduler auton) {
-
-		System.out.println("Scheduling Right Right from Right.");
+	public static void s2LL(SequentialScheduler auton, String target, boolean invert) {
 		
-		schedule3RL(auton);
+		double mInvert = invert ? -1 : 1;
 		
-//		scheduleEleRelease(auton);
+		sEleRelease(auton);
 		
-//		auton.add(new DriveDistance(Subsystems.driveTrain, m*283.621));
-//		auton.add(new DriveRotate(Subsystems.driveTrain, 75));
-//		auton.add(new DriveDistance(Subsystems.driveTrain, m*-17));
-//		auton.add(new Elevate(Subsystems.elevator, ElevatorPosition.ScaleMax.value));
-//		auton.add(new DriveDistance(Subsystems.driveTrain, m*17));
-//		auton.add(new Outtake(Subsystems.arms));
-//		auton.add(new DriveDistance(Subsystems.driveTrain, m*-17));
-//		auton.add(new Elevate(Subsystems.elevator, ElevatorPosition.Home.value));
+		System.out.println("[Info] Scheduling "+target+" for 2LL");
 		
-//		auton.add(new DriveRotate(Subsystems.driveTrain, 80));
-//		auton.add(new DriveDistance(Subsystems.driveTrain, m*91.502));
-//		auton.add(new Intake(Subsystems.arms));
-//		auton.add(new Elevate(Subsystems.elevator, 30));
-//		auton.add(new Outtake(Subsystems.arms));
-//		auton.add(new Elevate(Subsystems.elevator, ElevatorPosition.Home.value));
-//		auton.add(new DriveDistance(Subsystems.driveTrain, m*-13.692));
+		auton.add(new Print("[Warning] Running "+target+" for 2LL"));
 		
-		System.out.print("Scheduled.");
+		switch (target) {
 		
-	}
-	
-	//done
-	public static void schedule3RL(SequentialScheduler auton) {
-
-		System.out.println("Scheduling Right Left from Right.");
+		case "Front Switch":	auton.add(new DriveDistance(29.3));
+								auton.add(new DriveRotate(40*mInvert));
+								auton.add(new DriveDistance(83.4));
+								auton.add(new DriveRotate(-40*mInvert));
+								auton.add(new Elevate(ElevatorPosition.Switch.value));
+								auton.add(new DriveDistance(8));
+								auton.add(new Outtake());
+								auton.add(new DriveDistance(-8));
+								auton.add(new Elevate(ElevatorPosition.Home.value));
+								auton.add(new DriveRotate(-40*mInvert));
+								break;
 		
-		scheduleEleRelease(auton);
+		case "Cross The Line":	s2RL(auton, target, invert);
+								break;
 		
-		auton.add(new DriveDistance(Subsystems.driveTrain, m*152.338));
-		auton.add(new DriveRotate(Subsystems.driveTrain, 90));
-		auton.add(new Elevate(Subsystems.elevator, ElevatorPosition.Switch.value));
-		auton.add(new DriveForTime(Subsystems.driveTrain, 2000, 0.5, 0));
-		auton.add(new Outtake(Subsystems.arms));
-		auton.add(new DriveDistance(Subsystems.driveTrain, m*-16.5));
-		auton.add(new Elevate(Subsystems.elevator, ElevatorPosition.Home.value));
-		auton.add(new DriveRotate(Subsystems.driveTrain, -90));
-//		auton.add(new DriveDistance(Subsystems.driveTrain, m*65.786));
-//		auton.add(new DriveRotate(Subsystems.driveTrain, 90));
-//		auton.add(new DriveDistance(Subsystems.driveTrain, m*138.6));
-//		auton.add(new DriveRotate(Subsystems.driveTrain, 60));
-//		auton.add(new DriveDistance(Subsystems.driveTrain, m*13.1));
-//		auton.add(new Intake(Subsystems.arms));
-//		auton.add(new Elevate(Subsystems.elevator, 3)
-//		auton.add(new DriveDistance(Subsystems.driveTrain, m*-13.1));
+		case "Nothing":			break;
 		
-		System.out.print("Scheduled Right Left from Right.");
+		default:				System.out.println("[WARNING] Scheduling Default, recieved target: \""+target+"\" for 2LL");
+								s2LL(auton, "Front Switch", invert);
+								break;
 		
-	}
-
-	public static void schedule3LR(SequentialScheduler auton) {
-
-		System.out.println("Scheduling Left Right from Right.");
-		
-		scheduleEleRelease(auton);
-
-		auton.add(new DriveDistance(Subsystems.driveTrain, m*283.621));
-		auton.add(new DriveRotate(Subsystems.driveTrain, 75));
-		auton.add(new DriveDistance(Subsystems.driveTrain, m*-17));
-//		auton.add(new DriveDistance(Subsystems.driveTrain, m*17));
-//		auton.add(new Outtake(Subsystems.arms));
-//		auton.add(new DriveDistance(Subsystems.driveTrain, m*-17));
-//		auton.add(new Elevate(Subsystems.elevator, ElevatorPosition.Home.value));
-//		auton.add(new DriveDistance(Subsystems.driveTrain, m*10));
-//		auton.add(new DriveRotate(Subsystems.driveTrain, 105));
-		
-		System.out.print("Scheduled Left Right from Right.");
+		}
 		
 	}
 	
-	//Done 1
-	public static void schedule3LL(SequentialScheduler auton) {
-
-		System.out.println("Scheduling Left Left from Right");
+	public static void s2LR(SequentialScheduler auton, String target, boolean invert) {
 		
-		scheduleEleRelease(auton);
+		double mInvert = invert ? -1 : 1;
 		
-		auton.add(new DriveDistance(Subsystems.driveTrain, 12*11));
+		sEleRelease(auton);
 		
-//		scheduleEleRelease(auton);
+		System.out.println("[Info] Scheduling "+target+" for 2LR");
 		
-//		auton.add(new DriveDistance(Subsystems.driveTrain, m*218.606));
-//		auton.add(new DriveRotate(Subsystems.driveTrain, 90));
-//		auton.add(new DriveDistance(Subsystems.driveTrain, m*197.245));
-//		auton.add(new DriveRotate(Subsystems.driveTrain, -90));
-//		auton.add(new Elevate(Subsystems.elevator, ElevatorPosition.ScaleMax.value));
-//		auton.add(new DriveDistance(Subsystems.driveTrain, m*60.136));
-//		auton.add(new Outtake(Subsystems.arms));
-//		auton.add(new DriveDistance(Subsystems.driveTrain, m*-60.136));
-//		auton.add(new Elevate(Subsystems.elevator, ElevatorPosition.Home.value));
-//		auton.add(new DriveRotate(Subsystems.driveTrain, -165));
-//		auton.add(new DriveDistance(Subsystems.driveTrain, m*13.692));
-//		auton.add(new Intake(Subsystems.arms));
-//		auton.add(new Elevate(Subsystems.elevator, 30));
-//		auton.add(new Outtake(Subsystems.arms));
-//		auton.add(new Elevate(Subsystems.elevator, ElevatorPosition.Home.value));
-//		auton.add(new DriveDistance(Subsystems.driveTrain, m*-13.692));
-//		auton.add(new DriveRotate(Subsystems.driveTrain, 30));
+		auton.add(new Print("[Warning] Running "+target+" for 2LR"));
 		
-		System.out.print("Scheduled Left Left from Right.");
+		switch (target) {
 		
+		case "Front Switch":	s2LL(auton, target, invert);
+								break;
+		
+		case "Cross The Line":	s2LL(auton, target, invert);
+								break;
+		
+		case "Nothing":			break;
+		
+		default:				System.out.println("[WARNING] Scheduling Default, recieved target: \""+target+"\" for 2LR");
+								s2LR(auton, "Front Switch", invert);
+								break;
+		
+		}
+		
+	}
+	
+	public static void s2RL(SequentialScheduler auton, String target, boolean invert) {
+		
+		double mInvert = invert ? -1 : 1;
+		
+		sEleRelease(auton);
+		
+		System.out.println("[Info] Scheduling "+target+" for 2RL");
+		
+		auton.add(new Print("[Warning] Running "+target+" for 2RL"));
+		
+		switch (target) {
+		
+		case "Front Switch":	auton.add(new DriveDistance(47.9));
+								auton.add(new DriveRotate(-40));
+								auton.add(new DriveDistance(59));
+								auton.add(new Outtake());
+								auton.add(new Elevate(ElevatorPosition.Switch.value));
+								auton.add(new DriveDistance(8));
+								auton.add(new Outtake());
+								auton.add(new DriveDistance(-8));
+								auton.add(new Elevate(ElevatorPosition.Home.value));
+								auton.add(new DriveRotate(-90));
+								break;
+		
+		case "Cross The Line":	auton.add(new DriveDistance(29.3));
+								auton.add(new DriveRotate(-40));
+								auton.add(new DriveDistance(83.4));
+								auton.add(new DriveRotate(-140));
+								auton.add(new DriveDistance(-8));
+								break;
+		
+		case "Nothing":			break;
+		
+		default:				System.out.println("[WARNING] Scheduling Default, recieved target: \""+target+"\" for 2RL");
+								s2RL(auton, "Front Switch", invert);
+								break;
+		
+		}
+		
+	}
+	
+	public static void s2RR(SequentialScheduler auton, String target, boolean invert) {
+		
+		double mInvert = invert ? -1 : 1;
+		
+		sEleRelease(auton);
+		
+		System.out.println("[Info] Scheduling "+target+" for 2RR");
+		
+		auton.add(new Print("[Warning] Running "+target+" for 2RR"));
+		
+		switch (target) {
+		
+		case "Front Switch":	s2RL(auton, target, invert);
+								break;
+		
+		case "Cross The Line":	s2LR(auton, target, invert);
+								break;
+		
+		case "Nothing":			break;
+		
+		default:				System.out.println("[WARNING] Scheduling Default, recieved target: \""+target+"\" for 2RR");
+								s2RR(auton, "Front Switch", invert);
+								break;
+		
+		}
+		
+	}
+	
+	public static void s3LL(SequentialScheduler auton, String target, boolean invert) {
+		
+		double mInvert = invert ? -1 : 1;
+		
+		sEleRelease(auton);
+		
+		System.out.println("[Info] Scheduling "+target+" for 3LL");
+		
+		auton.add(new Print("[Warning] Running "+target+" for 3LL"));
+		
+		s1RR(auton, target, true);
+	
+	}
+	
+	public static void s3LR(SequentialScheduler auton, String target, boolean invert) {
+		
+		double mInvert = invert ? -1 : 1;
+		
+		sEleRelease(auton);
+		
+		System.out.println("[Info] Scheduling "+target+" for 3LR");
+		
+		auton.add(new Print("[Warning] Running "+target+" for 3LR"));
+		
+		s1RL(auton, target, true);
+	
+	}
+	
+	public static void s3RL(SequentialScheduler auton, String target, boolean invert) {
+		
+		double mInvert = invert ? -1 : 1;
+		
+		sEleRelease(auton);
+		
+		System.out.println("[Info] Scheduling "+target+" for 3RL");
+		
+		auton.add(new Print("[Warning] Running "+target+" for 3RL"));
+		
+		s1LR(auton, target, true);
+	
+	}
+	
+	public static void s3RR(SequentialScheduler auton, String target, boolean invert) {
+		
+		double mInvert = invert ? -1 : 1;
+		
+		sEleRelease(auton);
+		
+		System.out.println("[Info] Scheduling "+target+" for 3RR");
+		
+		auton.add(new Print("[Warning] Running "+target+" for 3RR"));
+		
+		s1LL(auton, target, true);
+	
 	}
 	
 }
