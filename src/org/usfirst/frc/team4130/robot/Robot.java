@@ -155,7 +155,7 @@ public class Robot extends IterativeRobot {
 	
 	@Override
 	public void disabledInit(){
-		posi = DriverStation.getInstance().getLocation();
+		setPos(DriverStation.getInstance().getLocation());
 	}
 	
 	@Override
@@ -164,81 +164,21 @@ public class Robot extends IterativeRobot {
 			target1i++;
 			target1i = target1i >= target1.size()-1 ? 0 : target1i;
 		}
-		if (RobotMap.driverJoystick.getRawButton(3)) {
+		if (RobotMap.driverJoystick.getRawButtonPressed(3)) {
 			target2i++;
 			target2i = target2i >= target2.size()-1 ? 0 : target2i;
 		}
-		if (RobotMap.driverJoystick.getRawButton(2)) {
+		if (RobotMap.driverJoystick.getRawButtonPressed(2)) {
 			target3i++;
 			target3i = target3i >= target3.size()-1 ? 0 : target3i;
 		}
-		if (RobotMap.driverJoystick.getRawButton(4)) {
+		if (RobotMap.driverJoystick.getRawButtonPressed(4)) {
 			target4i++;
 			target4i = target4i >= target4.size()-1 ? 0 : target4i;
 		}
 		
 		if (RobotMap.driverJoystick.getRawButtonPressed(8)) {
-			
-			ArrayList<ArrayList<String>> targets = new ArrayList<ArrayList<String>>();
-			
-			targets.add(target1);
-			targets.add(target2);
-			targets.add(target3);
-			targets.add(target4);
-			
-			posi++;
-			
-			posi = posi >= pos.length ? 0 : posi;
-			
-			for (ArrayList<String> target : targets) {
-				
-				target.clear();
-				target.add("Default");
-				target.add("Front Switch");
-				target.add("Cross The Line");
-				target.add("Nothing");
-				
-			}
-			
-			switch (posi) {
-			
-			case 0:		for (ArrayList<String> target : targets) {
-							
-							target.add("Test");
-							
-						}
-						break;
-			
-			case 1:		for (ArrayList<String> target : targets) {
-							
-							target.add("Outside Switch");
-							target.add("Scale");
-							
-						}
-						break;
-			
-			case 2:		for (ArrayList<String> target : targets) {
-							
-						}
-						break;
-					
-			case 3: 	for (ArrayList<String> target : targets) {
-							
-							target.add("Outside Switch");
-							target.add("Scale");
-							
-						}
-						break;
-			
-			default:	for (ArrayList<String> target : targets) {
-						
-							target.clear();
-							target.add("Pos out of bounds");
-							
-						}
-			
-			}
-			
+			setPos(posi+1);
 		}
 		
 	}
@@ -252,6 +192,81 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putString("Left Right", target1.get(target2i));
 		SmartDashboard.putString("Right Left", target1.get(target3i));
 		SmartDashboard.putString("Right Right", target1.get(target4i));
+		
+	}
+	
+	public void setPos(int p) {
+		
+		target1i = 0;
+		target2i = 0;
+		target3i = 0;
+		target4i = 0;
+		
+		ArrayList<ArrayList<String>> targets = new ArrayList<ArrayList<String>>();
+		
+		targets.add(target1);
+		targets.add(target2);
+		targets.add(target3);
+		targets.add(target4);
+		
+		posi = p;
+		
+		posi = posi >= pos.length ? 0 : posi;
+		
+		System.out.println(posi);
+		
+		for (ArrayList<String> target : targets) {
+			
+			target.clear();
+			target.add("Default");
+			target.add("Front Switch");
+			target.add("Front Switch Double");
+			target.add("Cross The Line");
+			target.add("Nothing");
+			
+		}
+		
+		switch (posi) {
+		
+		case 0:		for (ArrayList<String> target : targets) {
+						
+						target.add("Test");
+						
+					}
+					break;
+		
+		case 1:		for (ArrayList<String> target : targets) {
+						
+						target.add("Outside Switch");
+						target.add("Scale");
+						target.add("Scale Double");
+						
+					}
+					break;
+		
+		case 2:		for (ArrayList<String> target : targets) {
+						
+					}
+					break;
+				
+		case 3: 	for (ArrayList<String> target : targets) {
+						
+						target.add("Outside Switch");
+						target.add("Scale");
+						target.add("Scale Double");
+						
+					}
+					break;
+		
+		default:	for (ArrayList<String> target : targets) {
+					
+						target.clear();
+						target.add("Pos out of bounds");
+						
+					}
+					break;
+		
+		}
 		
 	}
 }
