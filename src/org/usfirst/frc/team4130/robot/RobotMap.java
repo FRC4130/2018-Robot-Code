@@ -62,7 +62,7 @@ public class RobotMap {
 		driverJoystick = new Joystick(0);
 		operatorJoystick = new Joystick(1);
 		
-		pigeon = new PigeonIMU(rightDriveFollower2);
+		pigeon = new PigeonIMU(0);//rightDriveFollower2);
 		
 	}
 }

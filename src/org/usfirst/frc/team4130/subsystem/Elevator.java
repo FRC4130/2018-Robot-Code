@@ -36,11 +36,19 @@ public class Elevator {
 		elevator.configNominalOutputForward(0.0, kTimeout);
 		elevator.configNominalOutputReverse(0.0, kTimeout);
 		
-		//Closed-loop Constants
+		//Up Gains
 		elevator.config_kF(0, 0.6959, kTimeout);
 		elevator.config_kP(0, 0.7, kTimeout);
-		elevator.config_kI(0, 0.007, kTimeout);
-		elevator.config_kD(0, 0, kTimeout);
+		
+		//Down Gains
+		elevator.selectProfileSlot(1, 0);
+		elevator.config_kF(1, 0.6959, kTimeout);
+		elevator.config_kP(1, 0.7, kTimeout);
+		elevator.config_kI(1, 0, kTimeout);
+		elevator.config_kD(1, 0, kTimeout);
+		elevator.config_IntegralZone(0, 0, kTimeout);
+		
+		//Magic Shit
 		elevator.configMotionAcceleration(1322, kTimeout);
 		elevator.configMotionCruiseVelocity(1322, kTimeout);
 		
@@ -94,15 +102,27 @@ public class Elevator {
 	 */
 	public boolean setHeight(double valueNativeUnits) {
 		
+		if (valueNativeUnits > targetHeight) {
+			elevator.configMotionAcceleration(1400, kTimeout);
+			elevator.configMotionCruiseVelocity(1400, kTimeout);
+		}
+		
+		else if (valueNativeUnits < targetHeight) {
+			elevator.configMotionAcceleration(1000, kTimeout);
+			elevator.configMotionCruiseVelocity(1400*3, kTimeout);
+		}
+		
 		targetHeight = valueNativeUnits;
 		
 		elevator.set(ControlMode.MotionMagic, valueNativeUnits);
 		
 		//TODO: Debounce this
-		if(elevator.getClosedLoopError(0) < kPosBandwidth)
+		if(elevator.getClosedLoopError(0) < kPosBandwidth) {
 			return true;
+		}
 		
 		return false;
+		
 	}
 	/**
 	 * Set the speed of the elevator.
@@ -118,6 +138,9 @@ public class Elevator {
 	 */
 	public double chainHeightToNative(double inches) {
 		return (inches/79)*36764;
+	}
+	public double nativeToChainHeight(double n) {
+		return (n/36764)*79;
 	}
 	/**
 	 * Home the elevator back to zero (all the way down).
@@ -151,5 +174,8 @@ public class Elevator {
 	}
 	public double getPos() {
 		return elevator.getSelectedSensorPosition(0);
+	}
+	public double getHeight() {
+		return nativeToChainHeight(getPos());
 	}
 }

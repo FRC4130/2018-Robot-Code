@@ -35,7 +35,11 @@ public enum ElevatorPosition {
 	/**
 	 * Height to place a cube on a scale that's not owned (so we need to go higher).
 	 */
-	ScaleMax(73);
+	ScaleMax(73),
+	/**
+	 * Height where we should change the ramp rate
+	 */
+	MaxStable(73);
 	
 	public final double value;
 	ElevatorPosition(double initValue)

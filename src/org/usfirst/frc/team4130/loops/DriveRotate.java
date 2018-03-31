@@ -17,9 +17,9 @@ public class DriveRotate implements ILoopable {
 	double error;
 	double lastErr;
 	
-	double pGain = 0.0125;   //.015;
-	double iGain = 0.0011;       //0.001;		//0.005;    //.001;
-	double dGain = 0.01;       //.001;		//.03;    //.025;
+	double pGain = 0.0125;
+	double iGain = 0.0011;
+	double dGain = 0.01;
 	
 	double iZone = 10;
 	double iAccum = 0;
@@ -69,6 +69,8 @@ public class DriveRotate implements ILoopable {
 		target = drive.getHeading() + diff;
 		
 		drive.setShifter(drive.lowGear);
+		drive.setLowRampRate(0);
+		drive.setHighRampRate(0);
 		
 		System.out.print("Turning ");
 		System.out.print(diff);

@@ -3,12 +3,14 @@ package org.usfirst.frc.team4130.loops;
 import com.ctre.phoenix.ILoopable;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 import org.usfirst.frc.team4130.robot.RobotMap;
 import org.usfirst.frc.team4130.robot.Subsystems;
 import org.usfirst.frc.team4130.subsystem.DriveTrain;
+import org.usfirst.frc.team4130.subsystem.ElevatorPosition;
 
 public class DriveTele implements ILoopable {
 	
@@ -17,6 +19,10 @@ public class DriveTele implements ILoopable {
 	
 	double targetNativeLeft = 0;
 	double targetNativeRight = 0;
+	
+	boolean rampRateLimited = false;
+	
+	Value gearBeforeBrake = _drive.getShifter();
 	
 	public DriveTele () {
 		
@@ -37,17 +43,28 @@ public class DriveTele implements ILoopable {
 
 	@Override
 	public void onLoop() {
-		
-		//Tank Drive (leftY, rightY) with brake button (B)
+		//Manage ramp rate
+		if (Subsystems.elevator.getHeight() > ElevatorPosition.MaxStable.value && !rampRateLimited) {
+			System.out.println("[Info] Ramp rate is limited");
+			_drive.setHighRampRate(1);
+			_drive.setLowRampRate(1);
+		}
+		else if (Subsystems.elevator.getHeight() < ElevatorPosition.MaxStable.value && rampRateLimited) {
+			System.out.println("[Info] Ramp rate limit removed");
+			_drive.setHighRampRate(0);
+			_drive.setLowRampRate(0);
+		}
+		//Driver speed input
 		if (_gamepad.getRawButtonPressed(2)) {
 			_drive.setNeutralMode(NeutralMode.Brake);
 			_drive.setShifter(_drive.lowGear);
 		}
-		else if (_gamepad.getRawButtonReleased(2)) {
-			_drive.setNeutralMode(NeutralMode.Coast);
-		}
 		else if (_gamepad.getRawButton(2)){
 			_drive.driveDirect(0, 0);
+		}
+		else if (_gamepad.getRawButtonReleased(2)) {
+			_drive.setNeutralMode(NeutralMode.Coast);
+			_drive.setShifter(gearBeforeBrake);
 		}
 		else if (_gamepad.getRawButton(1)) {
 			_drive.driveDirect(_gamepad.getRawAxis(1)*-1,_gamepad.getRawAxis(1)*-1);
@@ -55,16 +72,16 @@ public class DriveTele implements ILoopable {
 		else {
 			_drive.driveDirect(_gamepad.getRawAxis(1)*-1, _gamepad.getRawAxis(5)*-1);
 		}
-		
-		//Shift with right button
+		//Shifting input
 		if (_gamepad.getRawButtonPressed(6)) {
 			_drive.setShifter(_drive.lowGear);
+			gearBeforeBrake = _drive.getShifter();
 		}
-		if (_gamepad.getRawButtonPressed(5)) {
+		else if (_gamepad.getRawButtonPressed(5)) {
 			_drive.setShifter(_drive.highGear);
+			gearBeforeBrake = _drive.getShifter();
 		}
 		
-		//_drive.driveDirect(_gamepad.getRawAxis(1)*01, _gamepad.getRawAxis(5));
 	}
 
 	@Override
@@ -79,6 +96,12 @@ public class DriveTele implements ILoopable {
 		
 		_drive.setNeutralMode(NeutralMode.Brake);
 		_drive.driveDirect(0, 0);
+		_drive.setHighRampRate(0);
+		_drive.setLowRampRate(0);
+		System.out.println("[Info] Ramp rate limit removed");
+		
+		rampRateLimited = false;
+		
 	}
 
 }

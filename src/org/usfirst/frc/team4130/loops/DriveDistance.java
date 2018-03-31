@@ -6,6 +6,7 @@ import org.usfirst.frc.team4130.subsystem.DriveTrain;
 import com.ctre.phoenix.ILoopable;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DriveDistance implements ILoopable {
@@ -15,6 +16,10 @@ public class DriveDistance implements ILoopable {
 	private double targetNativeLeft;
 	private double targetNativeRight;
 	private double acceptableError = 1000;
+	
+	private Value	gear			=	Subsystems.driveTrain.lowGear;
+	private int 	cruiseVelocity	=	0;
+	private int 	acceleration	=	0;
 	
 	@Deprecated
 	public DriveDistance(DriveTrain driveTrain, double inches) {
@@ -30,8 +35,22 @@ public class DriveDistance implements ILoopable {
 		
 		System.out.println("Drive Distance task has been created.");
 		
-		distanceNative = ( ( (2048*75) * inches ) / 92 );
 		_drive = Subsystems.driveTrain;
+		distanceNative = _drive.distanceToRotations(inches);
+		gear = inches > (12*3) ? Subsystems.driveTrain.highGear : Subsystems.driveTrain.lowGear;
+		
+	}
+	
+	public DriveDistance(double inches, Value gear1, int cruiseVelocity1, int acceleration1) {
+		
+		System.out.println("Custom Drive Distance task has been created.");
+		
+		_drive = Subsystems.driveTrain;
+		
+		distanceNative = _drive.distanceToRotations(inches);
+		gear = gear1;
+		cruiseVelocity = cruiseVelocity1;
+		acceleration = acceleration1;
 		
 	}
 	
@@ -50,6 +69,10 @@ public class DriveDistance implements ILoopable {
 		
 		_drive.setShifter(_drive.lowGear);
 		_drive.setNeutralMode(NeutralMode.Brake);
+		
+		if (cruiseVelocity > 0 && acceleration > 0) {
+			_drive.setMagic(cruiseVelocity, acceleration);
+		}
 		
 	}
 

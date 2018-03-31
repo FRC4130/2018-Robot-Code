@@ -26,9 +26,10 @@ public class DriveTrain {
 	private final int kTimeoutMs = 10;
 	public final Value highGear = Value.kForward;
 	public final Value lowGear = Value.kReverse;
+	private Value gear = highGear;
 	public double kPosError = 15;
-	double highRampRate = 1;
-	double lowRampRate = 1;
+	private double highRampRate = 1;
+	private double lowRampRate = 1;
 	
 	public DriveTrain () {
 		
@@ -112,7 +113,21 @@ public class DriveTrain {
 		
 		setNeutralMode(NeutralMode.Coast);
 		
-		setShifter(highGear);
+		setShifter(gear);
+		
+	}
+	
+	public void setHighRampRate(double secondsToFull) {
+		
+		highRampRate = secondsToFull;
+		updateShifter();
+		
+	}
+	
+	public void setLowRampRate(double secondsToFull) {
+		
+		lowRampRate = secondsToFull;
+		updateShifter();
 		
 	}
 	
@@ -177,17 +192,24 @@ public class DriveTrain {
 		
 	}
 	
+	public void updateShifter() {
+		
+		setShifter(shifter.get());
+		
+	}
+	
 	public void setShifter(Value vl) {
 		
-		shifter.set(vl);
-		shifter.set(vl);
+		gear = vl;
+		
+		shifter.set(gear); 
 		
 		System.out.print("[Info] Shifted to ");
-		System.out.println(vl == highGear ? "High" : "Low");
+		System.out.println(gear == highGear ? "High" : "Low");
 		
 		double secondsFromNeutralToFull;
 		
-		if (vl == highGear) {
+		if (gear == highGear) {
 			
 			right.selectProfileSlot(1, 0);
 			left.selectProfileSlot(1, 0);
@@ -219,7 +241,7 @@ public class DriveTrain {
 	
 	public void toggleShifter() {
 		
-		shifter.set(shifter.get() == highGear ? lowGear : highGear);
+		setShifter(gear == highGear ? lowGear : highGear);
 		
 	}
 	
@@ -242,12 +264,11 @@ public class DriveTrain {
 		
 	}
 	
-//	public double distanceToRotations(double inches) {
-//		
-//		double kInchesPerRotation = 1;
-//		return inches * kInchesPerRotation;
-//		
-//	}
+	public double distanceToRotations(double inches) {
+		
+		return ( ( (2048*75) * inches ) / 92 );
+		
+	}
 	
 	public double getLeftPos() {
 		
@@ -281,7 +302,7 @@ public class DriveTrain {
 
 	public Value getShifter() {
 		
-		return shifter.get();
+		return gear;
 		
 	}
 	
