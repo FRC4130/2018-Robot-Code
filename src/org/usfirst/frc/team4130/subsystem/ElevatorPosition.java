@@ -39,9 +39,18 @@ public enum ElevatorPosition {
 	/**
 	 * Height where we should change the ramp rate
 	 */
-	MaxStable(73);
+	MaxStable(30),
+	/**
+	 * Height where the lift does not need to go any further down
+	 */
+	ReverseSoftLimit(0),
+	/**
+	 * Height where it is not safe to go up any further
+	 */
+	ForwardSoftLimit(80);
 	
 	public final double value;
+	
 	ElevatorPosition(double initValue)
 	{
 		this.value = initValue;

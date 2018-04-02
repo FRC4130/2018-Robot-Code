@@ -20,7 +20,7 @@ public class SetHome implements ILoopable {
 	
 	@Override
 	public void onStart() {
-		System.out.println("Setting Home.");
+		System.out.println("[Info] Setting Home.");
 	}
 
 	@Override
@@ -31,7 +31,7 @@ public class SetHome implements ILoopable {
 	@Override
 	public boolean isDone() {
 		if (ele.setHome()) {
-			System.out.println("Set Home.");
+			System.out.println("[Info] Set Home.");
 			return true;
 		}
 		return false;

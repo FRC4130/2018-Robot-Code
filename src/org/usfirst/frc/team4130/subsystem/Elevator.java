@@ -22,7 +22,7 @@ public class Elevator {
 	private final int kTimeout = 5;
 	private final int kPosBandwidth = 10;
 	
-	double targetHeight = 0;
+	double targetHeightNativeUnits = 0;
 	
 	/**
 	 * Constructor.  Sets all of the configuration parameters for the elevator.
@@ -74,8 +74,10 @@ public class Elevator {
 		elevator.enableCurrentLimit(true);
 		
 		//soft limits
-		elevator.configReverseSoftLimitThreshold((int)Math.round(ElevatorPosition.Travel.value), kTimeout);
-		elevator.configReverseSoftLimitEnable(true, 10);
+		elevator.configReverseSoftLimitThreshold((int) chainHeightToNative(ElevatorPosition.ReverseSoftLimit.value), kTimeout);
+		elevator.configReverseSoftLimitEnable(true, kTimeout);
+		elevator.configForwardSoftLimitThreshold((int) chainHeightToNative(ElevatorPosition.ForwardSoftLimit.value), kTimeout);
+		elevator.configForwardSoftLimitEnable(true, kTimeout);
 	}
 	/**
 	 * Set the height of the elevator (along the chain) 
@@ -102,17 +104,17 @@ public class Elevator {
 	 */
 	public boolean setHeight(double valueNativeUnits) {
 		
-		if (valueNativeUnits > targetHeight) {
+		if (valueNativeUnits > targetHeightNativeUnits) {
 			elevator.configMotionAcceleration(1400, kTimeout);
 			elevator.configMotionCruiseVelocity(1400, kTimeout);
 		}
 		
-		else if (valueNativeUnits < targetHeight) {
+		else if (valueNativeUnits < targetHeightNativeUnits) {
 			elevator.configMotionAcceleration(1400, kTimeout);
 			elevator.configMotionCruiseVelocity(1400*3, kTimeout);
 		}
 		
-		targetHeight = valueNativeUnits;
+		targetHeightNativeUnits = valueNativeUnits;
 		
 		elevator.set(ControlMode.MotionMagic, valueNativeUnits);
 		
@@ -157,17 +159,12 @@ public class Elevator {
 	
 	public double getError() {
 		
-		System.out.print(elevator.getSelectedSensorPosition(0));
-		System.out.print(" ");
-		System.out.println(elevator.getActiveTrajectoryPosition());
+		return elevator.getSelectedSensorPosition(0)-targetHeightNativeUnits;
 		
-		return elevator.getSelectedSensorPosition(0)-targetHeight;
 	}
 	
 	public void setServo(boolean a) {
 		servo.set(a ? 1 : 0);
-		System.out.print("SET SERVO TO ");
-		System.out.println(a ? 1 : 0);
 	}
 	public double getCurrent() {
 		return elevator.getOutputCurrent();

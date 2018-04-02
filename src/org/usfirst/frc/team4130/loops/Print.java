@@ -14,9 +14,9 @@ public class Print implements ILoopable {
 	
 	@Override
 	public void onStart() {
-		String toPrint = "[Info] (Print) "+x;
+		String toPrint = "[Print] "+x;
 		System.out.println(toPrint);
-		SmartDashboard.putString("Scheduler Output", toPrint);
+		SmartDashboard.putString("[Print]", toPrint);
 	}
 
 	@Override

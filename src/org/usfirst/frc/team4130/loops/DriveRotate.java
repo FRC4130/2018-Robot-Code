@@ -69,8 +69,7 @@ public class DriveRotate implements ILoopable {
 		target = drive.getHeading() + diff;
 		
 		drive.setShifter(drive.lowGear);
-		drive.setLowRampRate(0);
-		drive.setHighRampRate(0);
+		drive.setRampRate(0,0);
 		
 		System.out.print("Turning ");
 		System.out.print(diff);

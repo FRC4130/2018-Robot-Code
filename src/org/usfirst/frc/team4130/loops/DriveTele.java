@@ -21,9 +21,9 @@ public class DriveTele implements ILoopable {
 	double targetNativeLeft = 0;
 	double targetNativeRight = 0;
 	
-	boolean rampRateLimited = false;
+	boolean rampRateLimited = true;
 	
-	Value gearBeforeBrake = _drive.getShifter();
+	Value gearBeforeBrake = Subsystems.driveTrain.getShifter();
 	
 	public DriveTele () {
 		
@@ -48,13 +48,13 @@ public class DriveTele implements ILoopable {
 		//Manage ramp rate
 		if (Subsystems.elevator.getHeight() > ElevatorPosition.MaxStable.value && !rampRateLimited) {
 			System.out.println("[Info] Ramp rate is limited");
-			_drive.setHighRampRate(1);
-			_drive.setLowRampRate(1);
+			_drive.setRampRate(1, 1);
+			rampRateLimited = true;
 		}
-		else if (Subsystems.elevator.getHeight() < ElevatorPosition.MaxStable.value && rampRateLimited) {
+		else if (Subsystems.elevator.getHeight() <= ElevatorPosition.MaxStable.value && rampRateLimited) {
 			System.out.println("[Info] Ramp rate limit removed");
-			_drive.setHighRampRate(0);
-			_drive.setLowRampRate(0);
+			_drive.setRampRate(0, 0);
+			rampRateLimited = false;
 		}
 		
 		//Driver speed input
@@ -85,7 +85,8 @@ public class DriveTele implements ILoopable {
 			_drive.setShifter(_drive.highGear);
 			gearBeforeBrake = _drive.highGear;
 		}
-		else if (DriverStation.getInstance().getMatchTime() <= 1) {
+		else if (DriverStation.getInstance().getMatchTime() == 1) {
+			System.out.println("[Info] Automatically shifting to high gear for post match");
 			_drive.setShifter(_drive.highGear);
 		}
 		
@@ -102,9 +103,8 @@ public class DriveTele implements ILoopable {
 		System.out.println("[Warning] Driving Teleoporated Control was Stopped");
 		
 		_drive.setNeutralMode(NeutralMode.Brake);
+		_drive.setRampRate(0, 0);
 		_drive.driveDirect(0, 0);
-		_drive.setHighRampRate(0);
-		_drive.setLowRampRate(0);
 		System.out.println("[Info] Ramp rate limit removed");
 		
 		rampRateLimited = false;

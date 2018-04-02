@@ -24,6 +24,12 @@ public class ElevatorRelease implements ILoopable {
 		
 	}
 	
+	public ElevatorRelease(double durrationMS1) {
+		
+		durrationMS = durrationMS1;
+		
+	}
+	
 	@Override
 	public void onStart() {
 		

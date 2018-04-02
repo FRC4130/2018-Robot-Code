@@ -35,6 +35,7 @@ public class DriveDistance implements ILoopable {
 		
 		System.out.println("Drive Distance task has been created.");
 		
+		distanceInches = inches;
 		_drive = Subsystems.driveTrain;
 		gear = inches > (12*3) ? Subsystems.driveTrain.highGear : Subsystems.driveTrain.lowGear;
 		
@@ -46,6 +47,7 @@ public class DriveDistance implements ILoopable {
 		
 		_drive = Subsystems.driveTrain;
 		
+		distanceInches = inches;
 		gear = gear1;
 		cruiseVelocity = cruiseVelocity1;
 		acceleration = acceleration1;

@@ -28,8 +28,8 @@ public class DriveTrain {
 	public final Value lowGear = Value.kReverse;
 	private Value gear = highGear;
 	public double kPosError = 15;
-	private double highRampRate = 1;
-	private double lowRampRate = 1;
+	private double highRampRate = 0;
+	private double lowRampRate = 0;
 	
 	public DriveTrain () {
 		
@@ -117,27 +117,21 @@ public class DriveTrain {
 		
 	}
 	
-	public void setHighRampRate(double secondsToFull) {
+	public void setRampRate(double secondsHigh, double secondsLow) {
 		
-		highRampRate = secondsToFull;
-		update();
-		
-	}
-	
-	public void setLowRampRate(double secondsToFull) {
-		
-		lowRampRate = secondsToFull;
+		highRampRate = secondsHigh;
+		lowRampRate = secondsLow;
 		update();
 		
 	}
 	
 	public void setMagicLowDefault() {
 		
-		left.configMotionCruiseVelocity(8000, kTimeoutMs);
-		left.configMotionAcceleration(1200, kTimeoutMs);
+		left.configMotionCruiseVelocity(11000, kTimeoutMs);
+		left.configMotionAcceleration(20000, kTimeoutMs);
 		
-		right.configMotionCruiseVelocity(8000, kTimeoutMs);
-		right.configMotionAcceleration(1200, kTimeoutMs);
+		right.configMotionCruiseVelocity(11000, kTimeoutMs);
+		right.configMotionAcceleration(20000, kTimeoutMs);
 		
 	}
 	
@@ -162,21 +156,21 @@ public class DriveTrain {
 	}
 	
 	public void putDash() {
-//		
-//		SmartDashboard.putNumber("Left Vel", left.getSelectedSensorVelocity(0));
-//		SmartDashboard.putNumber("Left Tarjectory Vel", left.getActiveTrajectoryVelocity());
-//		SmartDashboard.putNumber("Left Tarjectory Pos",left.getActiveTrajectoryPosition());
-//		SmartDashboard.putNumber("Left Target Pos", left.getClosedLoopTarget(0));
-//		SmartDashboard.putNumber("Left Pos", left.getSelectedSensorPosition(0));
-//		SmartDashboard.putNumber("Left Closed loop error", left.getClosedLoopError(0));
-//		
-//		SmartDashboard.putNumber("Right Vel", right.getSelectedSensorVelocity(0));
-//		SmartDashboard.putNumber("Right Tarjectory Vel", right.getActiveTrajectoryVelocity());
-//		SmartDashboard.putNumber("Right Tarjectory Pos",right.getActiveTrajectoryPosition());
-//		SmartDashboard.putNumber("Right Target Pos", right.getClosedLoopTarget(0));
-//		SmartDashboard.putNumber("Right Pos", right.getSelectedSensorPosition(0));
-//		SmartDashboard.putNumber("Right Closed loop error", right.getClosedLoopError(0));
-//		
+		
+		SmartDashboard.putNumber("Left Vel", left.getSelectedSensorVelocity(0));
+		SmartDashboard.putNumber("Left Tarjectory Vel", left.getActiveTrajectoryVelocity());
+		SmartDashboard.putNumber("Left Tarjectory Pos",left.getActiveTrajectoryPosition());
+		SmartDashboard.putNumber("Left Target Pos", left.getClosedLoopTarget(0));
+		SmartDashboard.putNumber("Left Pos", left.getSelectedSensorPosition(0));
+		SmartDashboard.putNumber("Left Closed loop error", left.getClosedLoopError(0));
+		
+		SmartDashboard.putNumber("Right Vel", right.getSelectedSensorVelocity(0));
+		SmartDashboard.putNumber("Right Tarjectory Vel", right.getActiveTrajectoryVelocity());
+		SmartDashboard.putNumber("Right Tarjectory Pos",right.getActiveTrajectoryPosition());
+		SmartDashboard.putNumber("Right Target Pos", right.getClosedLoopTarget(0));
+		SmartDashboard.putNumber("Right Pos", right.getSelectedSensorPosition(0));
+		SmartDashboard.putNumber("Right Closed loop error", right.getClosedLoopError(0));
+		
 	}
 	
 	public double inchesToNative(double inches) {

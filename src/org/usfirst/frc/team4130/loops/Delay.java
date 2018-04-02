@@ -8,7 +8,7 @@ public class Delay implements ILoopable {
 	double stopTime = 0;
 	boolean done = false;
 	
-	public Delay(double delayMs) {
+	public Delay(int delayMs) {
 		
 		delay = delayMs;
 		
@@ -18,7 +18,9 @@ public class Delay implements ILoopable {
 	public void onStart() {
 		
 		stopTime = System.currentTimeMillis() + delay;
-		System.out.println("[Info] Starting Delay");
+		System.out.print("[Info] Starting Delay for ");
+		System.out.print(delay);
+		System.out.print("ms");
 		
 	}
 

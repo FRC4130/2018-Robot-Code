@@ -20,7 +20,7 @@ public class Loops {
 		
 		//Schedule all tasks for teleop
 		teleop.add(new ElevatorTele());
-		teleop.add(new DriveTele());
+		teleop.add(new DriveTest());
 		teleop.add(new ArmsTele());
 		
 		System.out.println("Scheduled.");
@@ -39,6 +39,8 @@ public class Loops {
 	public static void sHokeyPokey(SequentialScheduler auton) {
 		
 		System.out.println("Preparing to get down...");
+		
+		sEleRelease(auton);
 		
 		auton.add(new DriveDistance(2*12));
 		auton.add(new DriveRotate(45));
@@ -108,7 +110,8 @@ public class Loops {
 								auton.add(new DriveDistance(10.5*12));
 								break;
 		
-		case "Nothing":			break;
+		case "Nothing":			sEleRelease(auton);
+								break;
 		
 		default:				System.out.println("[WARNING] Scheduling Default, recieved target: \""+target+"\" for 1LL");
 								s1LL(auton, "Outside Switch", invert);
@@ -149,7 +152,8 @@ public class Loops {
 		case "Cross The Line":	s1LL(auton, target, invert);
 								break;
 		
-		case "Nothing":			break;
+		case "Nothing":			sEleRelease(auton);
+								break;
 		
 		default:				System.out.println("[WARNING] Scheduling Default, recieved target: \""+target+"\" for 1LR");
 								s1LR(auton, "Outside Switch", invert);
@@ -201,7 +205,8 @@ public class Loops {
 		case "Cross The Line":	s1LL(auton, target, invert);
 								break;
 		
-		case "Nothing":			break;
+		case "Nothing":			sEleRelease(auton);
+								break;
 		
 		default:				System.out.println("[WARNING] Scheduling Default, recieved target: \""+target+"\" for 1RL");
 								s1RL(auton, "Cross The Line", invert);
@@ -232,7 +237,8 @@ public class Loops {
 		case "Cross The Line":	s1LL(auton, target, invert);
 								break;
 		
-		case "Nothing":			break;
+		case "Nothing":			sEleRelease(auton);
+								break;
 		
 		default:				System.out.println("[WARNING] Scheduling Default, recieved target: \""+target+"\" for 1RR");
 								s1RR(auton, "Outside Switch", invert);
@@ -268,10 +274,11 @@ public class Loops {
 								auton.add(new DriveDistance(46.5));
 								auton.add(new DriveRotate(-40*mInvert));
 								auton.add(new DriveDistance(59));
-								auton.add(new DriveRotate(170*mInvert);
+								auton.add(new DriveRotate(170*mInvert));
 								break;
 		
-		case "Nothing":			break;
+		case "Nothing":			sEleRelease(auton);
+								break;
 		
 		default:				System.out.println("[WARNING] Scheduling Default, recieved target: \""+target+"\" for 2LL");
 								s2LL(auton, "Front Switch", invert);
@@ -297,7 +304,8 @@ public class Loops {
 		case "Cross The Line":	s2LL(auton, target, invert);
 								break;
 		
-		case "Nothing":			break;
+		case "Nothing":			sEleRelease(auton);
+								break;
 		
 		default:				System.out.println("[WARNING] Scheduling Default, recieved target: \""+target+"\" for 2LR");
 								s2LR(auton, "Front Switch", invert);
@@ -363,7 +371,8 @@ public class Loops {
 		case "Cross The Line":	s2LR(auton, target, invert);
 								break;
 		
-		case "Nothing":			break;
+		case "Nothing":			sEleRelease(auton);
+								break;
 		
 		default:				System.out.println("[WARNING] Scheduling Default, recieved target: \""+target+"\" for 2RR");
 								s2RR(auton, "Front Switch", invert);

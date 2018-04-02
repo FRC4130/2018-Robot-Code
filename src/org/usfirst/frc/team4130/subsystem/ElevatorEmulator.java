@@ -90,8 +90,7 @@ public class ElevatorEmulator extends Elevator {
 	}
 	
 	public void setServo(boolean a) {
-		System.out.print("SET SERVO TO ");
-		System.out.println(a ? 1 : 0);
+		
 	}
 	public double getCurrent() {
 		return 0;

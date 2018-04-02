@@ -193,6 +193,8 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putString("Right Left", target1.get(target3i));
 		SmartDashboard.putString("Right Right", target1.get(target4i));
 		
+		Subsystems.driveTrain.putDash();
+		
 	}
 	
 	public void setPos(int p) {
