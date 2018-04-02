@@ -11,10 +11,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DriveDistance implements ILoopable {
 	
-	private double distanceNative = 0;
+	private double distanceNative;
+	private double distanceInches;
 	private DriveTrain _drive;
-	private double targetNativeLeft;
-	private double targetNativeRight;
 	private double acceptableError = 1000;
 	
 	private Value	gear			=	Subsystems.driveTrain.lowGear;
@@ -26,7 +25,8 @@ public class DriveDistance implements ILoopable {
 		
 		System.out.println("Drive Distance task has been created.");
 		
-		distanceNative = ( ( (2048*75) * inches ) / 92 );
+		gear = Subsystems.driveTrain.lowGear;
+		distanceInches = inches;
 		_drive = driveTrain;
 		
 	}
@@ -36,7 +36,6 @@ public class DriveDistance implements ILoopable {
 		System.out.println("Drive Distance task has been created.");
 		
 		_drive = Subsystems.driveTrain;
-		distanceNative = _drive.distanceToRotations(inches);
 		gear = inches > (12*3) ? Subsystems.driveTrain.highGear : Subsystems.driveTrain.lowGear;
 		
 	}
@@ -47,7 +46,6 @@ public class DriveDistance implements ILoopable {
 		
 		_drive = Subsystems.driveTrain;
 		
-		distanceNative = _drive.distanceToRotations(inches);
 		gear = gear1;
 		cruiseVelocity = cruiseVelocity1;
 		acceleration = acceleration1;
@@ -61,17 +59,19 @@ public class DriveDistance implements ILoopable {
 		
 		System.out.println("[Info] Started Driving for Distance");
 		
-		targetNativeLeft = distanceNative;
-		targetNativeRight = distanceNative;
-		
-		System.out.println(_drive.getRightPos());
-		System.out.println(distanceNative);
-		
-		_drive.setShifter(_drive.lowGear);
+		_drive.setShifter(gear);
 		_drive.setNeutralMode(NeutralMode.Brake);
+		
+		distanceNative = _drive.distanceToRotations(distanceInches);
 		
 		if (cruiseVelocity > 0 && acceleration > 0) {
 			_drive.setMagic(cruiseVelocity, acceleration);
+		}
+		else if (gear == _drive.highGear) {
+			_drive.setMagicHighDefault();
+		}
+		else {
+			_drive.setMagicLowDefault();
 		}
 		
 	}
@@ -79,22 +79,23 @@ public class DriveDistance implements ILoopable {
 	@Override
 	public void onLoop() {
 		
-		_drive.setPosLeft(targetNativeLeft);
-		_drive.setPosRight(targetNativeRight);
+		_drive.setPosLeft(distanceNative);
+		_drive.setPosRight(distanceNative);
 		
 	}
 
 	@Override
 	public boolean isDone() {
 		
-		boolean leftAtPos = Math.abs(targetNativeLeft - _drive.getLeftPos()) <= acceptableError;
-		boolean rightAtPos = Math.abs(targetNativeRight - _drive.getRightPos()) <= acceptableError;
+		boolean leftAtPos = Math.abs(distanceNative - _drive.getLeftPos()) <= acceptableError;
+		boolean rightAtPos = Math.abs(distanceNative - _drive.getRightPos()) <= acceptableError;
 		
-		SmartDashboard.putNumber("Left Error", targetNativeLeft - _drive.getLeftPos());
-		SmartDashboard.putNumber("Right Error", targetNativeRight - _drive.getRightPos());
+		SmartDashboard.putNumber("Left Error", distanceNative - _drive.getLeftPos());
+		SmartDashboard.putNumber("Right Error", distanceNative - _drive.getRightPos());
 		
 		if (leftAtPos && rightAtPos) {
 			System.out.println("[Info] Finished Driving for Distance");
+			System.out.println("[WARNING] The DriveTrain is still in the Motion Magic Control Mode");
 			return true;
 		}
 		

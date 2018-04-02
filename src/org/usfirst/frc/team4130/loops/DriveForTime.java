@@ -6,9 +6,12 @@ import org.usfirst.frc.team4130.subsystem.DriveTrain;
 import com.ctre.phoenix.ILoopable;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+
 
 public class DriveForTime implements ILoopable {
 	
+	Value gear;
 	double stopTime = 0;
 	double delay = 0;
 	double throttle = 0;
@@ -21,9 +24,11 @@ public class DriveForTime implements ILoopable {
 		drive = _drive;
 		turn = percentTurn;
 		throttle = percentThrottle;
+		gear = _drive.lowGear;
 	}
 	
-	public DriveForTime(double TimeToDriveMS, double percentThrottle, double percentTurn) {
+	public DriveForTime(double TimeToDriveMS, Value gear1, double percentThrottle, double percentTurn) {
+		gear = gear1;
 		delay = TimeToDriveMS;
 		drive = Subsystems.driveTrain;
 		turn = percentTurn;

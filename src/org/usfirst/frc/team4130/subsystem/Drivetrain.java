@@ -120,24 +120,24 @@ public class DriveTrain {
 	public void setHighRampRate(double secondsToFull) {
 		
 		highRampRate = secondsToFull;
-		updateShifter();
+		update();
 		
 	}
 	
 	public void setLowRampRate(double secondsToFull) {
 		
 		lowRampRate = secondsToFull;
-		updateShifter();
+		update();
 		
 	}
 	
 	public void setMagicLowDefault() {
 		
 		left.configMotionCruiseVelocity(8000, kTimeoutMs);
-		left.configMotionAcceleration(8000, kTimeoutMs);
+		left.configMotionAcceleration(1200, kTimeoutMs);
 		
 		right.configMotionCruiseVelocity(8000, kTimeoutMs);
-		right.configMotionAcceleration(8000, kTimeoutMs);
+		right.configMotionAcceleration(1200, kTimeoutMs);
 		
 	}
 	
@@ -192,9 +192,9 @@ public class DriveTrain {
 		
 	}
 	
-	public void updateShifter() {
+	public void update() {
 		
-		setShifter(shifter.get());
+		setShifter(gear);
 		
 	}
 	
@@ -231,7 +231,7 @@ public class DriveTrain {
 			
 		}
 		
-		System.out.print("[Info] Set ramp rate to ");
+		System.out.print("[Info] Set open loop ramp rate to ");
 		System.out.println(secondsFromNeutralToFull);
 		
 		right.configOpenloopRamp(secondsFromNeutralToFull, kTimeoutMs);
@@ -264,9 +264,26 @@ public class DriveTrain {
 		
 	}
 	
-	public double distanceToRotations(double inches) {
+	public double distanceToRotationsLow(double inches) {
 		
 		return ( ( (2048*75) * inches ) / 92 );
+		
+	}
+	
+	public double distanceToRotationsHigh(double inches) {
+		
+		return ( ( (2048*25) * inches ) / 92 );
+		
+	}
+	
+	public double distanceToRotations(double inches) {
+		
+		if (gear == lowGear) {
+			return distanceToRotationsLow(inches);
+		}
+		else {
+			return distanceToRotationsHigh(inches);
+		}
 		
 	}
 	

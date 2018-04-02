@@ -4,6 +4,7 @@ import com.ctre.phoenix.ILoopable;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
@@ -43,6 +44,7 @@ public class DriveTele implements ILoopable {
 
 	@Override
 	public void onLoop() {
+		
 		//Manage ramp rate
 		if (Subsystems.elevator.getHeight() > ElevatorPosition.MaxStable.value && !rampRateLimited) {
 			System.out.println("[Info] Ramp rate is limited");
@@ -54,6 +56,7 @@ public class DriveTele implements ILoopable {
 			_drive.setHighRampRate(0);
 			_drive.setLowRampRate(0);
 		}
+		
 		//Driver speed input
 		if (_gamepad.getRawButtonPressed(2)) {
 			_drive.setNeutralMode(NeutralMode.Brake);
@@ -72,14 +75,18 @@ public class DriveTele implements ILoopable {
 		else {
 			_drive.driveDirect(_gamepad.getRawAxis(1)*-1, _gamepad.getRawAxis(5)*-1);
 		}
+		
 		//Shifting input
 		if (_gamepad.getRawButtonPressed(6)) {
 			_drive.setShifter(_drive.lowGear);
-			gearBeforeBrake = _drive.getShifter();
+			gearBeforeBrake = _drive.lowGear;
 		}
 		else if (_gamepad.getRawButtonPressed(5)) {
 			_drive.setShifter(_drive.highGear);
-			gearBeforeBrake = _drive.getShifter();
+			gearBeforeBrake = _drive.highGear;
+		}
+		else if (DriverStation.getInstance().getMatchTime() <= 1) {
+			_drive.setShifter(_drive.highGear);
 		}
 		
 	}
