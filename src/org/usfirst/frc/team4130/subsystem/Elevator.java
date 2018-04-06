@@ -105,13 +105,13 @@ public class Elevator {
 	public boolean setHeight(double valueNativeUnits) {
 		
 		if (valueNativeUnits > targetHeightNativeUnits) {
-			elevator.configMotionAcceleration(1400, kTimeout);
-			elevator.configMotionCruiseVelocity(1400, kTimeout);
+			elevator.configMotionAcceleration(2000, kTimeout);
+			elevator.configMotionCruiseVelocity(1500, kTimeout);
 		}
 		
 		else if (valueNativeUnits < targetHeightNativeUnits) {
-			elevator.configMotionAcceleration(1400, kTimeout);
-			elevator.configMotionCruiseVelocity(1400*3, kTimeout);
+			elevator.configMotionAcceleration(2500, kTimeout);
+			elevator.configMotionCruiseVelocity(1400*6, kTimeout);
 		}
 		
 		targetHeightNativeUnits = valueNativeUnits;

@@ -8,7 +8,7 @@ import com.ctre.phoenix.ILoopable;
 public class Elevate implements ILoopable {
 	Elevator _elevator;
 	double _height;
-	double acceptableErr = 20;
+	double acceptableErr = 300;
 	
 	@Deprecated
 	public Elevate(Elevator ele, double heightInches) {
@@ -24,7 +24,7 @@ public class Elevate implements ILoopable {
 	@Override
 	public void onStart() {		
 		System.out.print("[Info] Elevating to ");
-		System.out.print(_height);
+		System.out.print(_elevator.nativeToChainHeight(_height));
 		System.out.println("\"");
 	}
 

@@ -6,7 +6,6 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.command.Subsystem;
 
 import org.usfirst.frc.team4130.robot.RobotMap;
 import org.usfirst.frc.team4130.robot.Subsystems;
@@ -26,6 +25,10 @@ public class DriveTest implements ILoopable {
 	Value gearBeforeBrake = Subsystems.driveTrain.getShifter();
 	
 	DriveDistance dd = new DriveDistance(100);
+	
+	double startTimeMs = 0;
+	
+	boolean driveDone = true;
 	
 	public DriveTest () {
 		
@@ -47,36 +50,39 @@ public class DriveTest implements ILoopable {
 	@Override
 	public void onLoop() {
 		
-		//Drive Distance Forward test code
-		if (_gamepad.getRawButtonPressed(3)) {
-			dd = new DriveDistance(100, _drive.getShifter(), 0, 0);
-			dd.onStart();
+		//Drive Calibration code
+		if (_gamepad.getRawButtonPressed(8)) {
+			_drive.resetSensors();
 		}
-		else if (_gamepad.getRawButton(3)) {
-			if (!dd.isDone()) {
-				dd.onLoop();
-			}
-		}
-		else if (_gamepad.getRawButtonReleased(3)) {
-			if (!dd.isDone()) {
-				dd.onStop();
-			}
+		else if (_gamepad.getRawButton(8)) {
+			_drive.setPosLeft(2048*75);
+			_drive.setPosRight(2048*75);
 		}
 		
-		//Drive Distance Backward test code
-		else if (_gamepad.getRawButtonPressed(4)) {
-			dd = new DriveDistance(-100, _drive.getShifter(), 0, 0);
+		//Drive Distance test code
+		else if (_gamepad.getRawButtonPressed(3)) {
+			dd = new DriveDistance(300, _drive.getShifter(), 0, 0);
 			dd.onStart();
+			startTimeMs = System.currentTimeMillis();
+			driveDone = false;
 		}
-		else if (_gamepad.getRawButton(4)) {
-			if (!dd.isDone()) {
+		else if (_gamepad.getRawButtonPressed(4)) {
+			dd = new DriveDistance(-300, _drive.getShifter(), 0, 0);
+			dd.onStart();
+			startTimeMs = System.currentTimeMillis();
+			driveDone = false;
+		}
+		else if (_gamepad.getRawButton(3) || _gamepad.getRawButton(4)) {
+			if (!dd.isDone() && !driveDone) {
 				dd.onLoop();
-				
+				driveDone = true;
+				System.out.println(System.currentTimeMillis()-startTimeMs);
 			}
 		}
-		else if (_gamepad.getRawButtonReleased(4)) {
-			if (!dd.isDone()) {
+		else if (_gamepad.getRawButtonReleased(3) || _gamepad.getRawButtonReleased(4)) {
+			if (!dd.isDone() && !driveDone) {
 				dd.onStop();
+				driveDone = true;
 			}
 		}
 		
@@ -111,12 +117,12 @@ public class DriveTest implements ILoopable {
 				_drive.setShifter(_drive.highGear);
 				gearBeforeBrake = _drive.highGear;
 			}
-			else if (DriverStation.getInstance().getMatchTime() == 1) {
+			else if (Math.round(DriverStation.getInstance().getMatchTime()) == 1) {
 				_drive.setShifter(_drive.highGear);
 			}
 		
 		}
-			
+		
 		//Brake input
 		if (_gamepad.getRawButtonPressed(2)) {
 			_drive.setNeutralMode(NeutralMode.Brake);

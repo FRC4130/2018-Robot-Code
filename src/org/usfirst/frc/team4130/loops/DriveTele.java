@@ -6,7 +6,6 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.command.Subsystem;
 
 import org.usfirst.frc.team4130.robot.RobotMap;
 import org.usfirst.frc.team4130.robot.Subsystems;
@@ -48,7 +47,7 @@ public class DriveTele implements ILoopable {
 		//Manage ramp rate
 		if (Subsystems.elevator.getHeight() > ElevatorPosition.MaxStable.value && !rampRateLimited) {
 			System.out.println("[Info] Ramp rate is limited");
-			_drive.setRampRate(1, 1);
+			_drive.setRampRate(0.75, 0.75);
 			rampRateLimited = true;
 		}
 		else if (Subsystems.elevator.getHeight() <= ElevatorPosition.MaxStable.value && rampRateLimited) {
@@ -85,7 +84,7 @@ public class DriveTele implements ILoopable {
 			_drive.setShifter(_drive.highGear);
 			gearBeforeBrake = _drive.highGear;
 		}
-		else if (DriverStation.getInstance().getMatchTime() == 1) {
+		else if (Math.floor(DriverStation.getInstance().getMatchTime()) == 1) {
 			System.out.println("[Info] Automatically shifting to high gear for post match");
 			_drive.setShifter(_drive.highGear);
 		}

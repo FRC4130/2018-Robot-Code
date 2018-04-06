@@ -1,17 +1,12 @@
 package org.usfirst.frc.team4130.robot;
 
-
-
 import org.usfirst.frc.team4130.loops.*;
 import org.usfirst.frc.team4130.subsystem.ElevatorPosition;
 
 import com.ctre.phoenix.schedulers.*;
 
-import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class Loops {
-	
-	private static double m = 1;
 	
 	//Teleop Loops
 	public static void sTeleop(ConcurrentScheduler teleop){
@@ -20,19 +15,22 @@ public class Loops {
 		
 		//Schedule all tasks for teleop
 		teleop.add(new ElevatorTele());
-		teleop.add(new DriveTest());
+		teleop.add(new DriveTest());//Tele());
 		teleop.add(new ArmsTele());
 		
 		System.out.println("Scheduled.");
+		
 		
 	}
 	
 	//Testing Loops
 	public static void sTest(SequentialScheduler auton) {
 		
-		auton.add(new DriveDistance(10));
-		auton.add(new Delay(1000));
-		auton.add(auton);
+		//auton.add(new Delay(5000));
+		auton.add(new DriveDistance(150, Subsystems.driveTrain.highGear, 30000, 30000));
+		//auton.add(new DriveDistance(10));
+		//auton.add(new Delay(1000));
+		//auton.add(auton);
 		
 	}
 	
@@ -75,47 +73,64 @@ public class Loops {
 		
 		switch (target) {
 		
-		case "Outside Switch":	sEleRelease(auton);
-								auton.add(new DriveDistance(152.3));
-								auton.add(new DriveRotate(-90*mInvert));
-								auton.add(new Elevate(ElevatorPosition.Switch.value));
-								auton.add(new DriveDistance(16.5));
-								auton.add(new Outtake());
-								auton.add(new DriveDistance(-16.5));
-								auton.add(new Elevate(ElevatorPosition.Home.value));
-								break;
+		case "Outside Switch":		sEleRelease(auton);
+									auton.add(new DriveDistance(152.3));
+									auton.add(new DriveRotate(-90*mInvert));
+									auton.add(new Elevate(ElevatorPosition.Switch.value));
+									auton.add(new DriveDistance(16.5));
+									auton.add(new Outtake());
+									auton.add(new DriveDistance(-16.5));
+									auton.add(new Elevate(ElevatorPosition.Home.value));
+									break;
 		
-		case "Front Switch":	sEleRelease(auton);
-								auton.add(new DriveDistance(8));
-								auton.add(new DriveRotate(-36.193*mInvert));
-								auton.add(new DriveDistance(103));
-								auton.add(new DriveRotate(36.193*mInvert));
-								auton.add(new Elevate(ElevatorPosition.Switch.value));
-								auton.add(new DriveDistance(8));
-								auton.add(new Outtake());
-								auton.add(new DriveDistance(-9));
-								break;
+		case "Front Switch":		sEleRelease(auton);
+									auton.add(new DriveDistance(8));
+									auton.add(new DriveRotate(-36.193*mInvert));
+									auton.add(new DriveDistance(103));
+									auton.add(new DriveRotate(36.193*mInvert));
+									auton.add(new Elevate(ElevatorPosition.Switch.value));
+									auton.add(new DriveDistance(8));
+									auton.add(new Outtake());
+									auton.add(new DriveDistance(-9));
+									auton.add(new Elevate(ElevatorPosition.Home.value));
+									break;
+								
+		case "Front Switch Second":	auton.add(new DriveRotate(-90*mInvert));
+									auton.add(new DriveDistance(39.5));
+									auton.add(new Intake());
+									auton.add(new DriveDistance(-39.5));
+									auton.add(new DriveRotate(90*mInvert));
+									auton.add(new Elevate(ElevatorPosition.Switch.value));
+									auton.add(new DriveDistance(9));
+									auton.add(new Outtake());
+									auton.add(new DriveDistance(-9));
+									auton.add(new Elevate(ElevatorPosition.Home.value));
+									break;
+									
+		case "Front Switch Double":	s1LL(auton, "Front Switch", invert);
+									s1LL(auton, "Front Switch Second", invert);
+									break;
+									
+		case "Scale":				sEleRelease(auton);
+									auton.add(new DriveDistance(258.02));
+									auton.add(new DriveRotate(-45*mInvert));
+									auton.add(new Elevate(ElevatorPosition.ScaleMax.value));
+									auton.add(new DriveDistance(35.54,Subsystems.driveTrain.lowGear, 10000, 3000));
+									auton.add(new Outtake());
+									auton.add(new DriveDistance(-35.54,Subsystems.driveTrain.lowGear, 10000, 3000));
+									auton.add(new Elevate(ElevatorPosition.Home.value));
+									break;
 		
-		case "Scale":			sEleRelease(auton);
-								auton.add(new DriveDistance(258.02));
-								auton.add(new DriveRotate(-45*mInvert));
-								auton.add(new Elevate(ElevatorPosition.ScaleMax.value));
-								auton.add(new DriveDistance(35.54));
-								auton.add(new Outtake());
-								auton.add(new DriveDistance(-35.54));
-								auton.add(new Elevate(ElevatorPosition.Home.value));
-								break;
+		case "Cross The Line":		sEleRelease(auton);
+									auton.add(new DriveDistance(10.5*12));
+									break;
 		
-		case "Cross The Line":	sEleRelease(auton);
-								auton.add(new DriveDistance(10.5*12));
-								break;
+		case "Nothing":				sEleRelease(auton);
+									break;
 		
-		case "Nothing":			sEleRelease(auton);
-								break;
-		
-		default:				System.out.println("[WARNING] Scheduling Default, recieved target: \""+target+"\" for 1LL");
-								s1LL(auton, "Outside Switch", invert);
-								break;
+		default:					System.out.println("[WARNING] Scheduling Default, recieved target: \""+target+"\" for 1LL");
+									s1LL(auton, "Outside Switch", invert);
+									break;
 		
 		}
 		
@@ -131,33 +146,36 @@ public class Loops {
 		
 		switch (target) {
 		
-		case "Outside Switch":	s1LL(auton, target, invert);
-								break;
+		case "Outside Switch":		s1LL(auton, target, invert);
+									break;
 		
-		case "Front Switch":	s1LL(auton, target, invert);
-								break;
+		case "Front Switch":		s1LL(auton, target, invert);
+									break;
+								
+		case "Front Switch Double": s1LL(auton, target, invert);
+									break;
 		
-		case "Scale":			sEleRelease(auton);
-								auton.add(new DriveDistance(217));
-								auton.add(new DriveRotate(-90*mInvert));
-								auton.add(new DriveDistance(200.5));
-								auton.add(new DriveRotate(90*mInvert));
-								auton.add(new Elevate(ElevatorPosition.ScaleMax.value));
-								auton.add(new DriveDistance(63));
-								auton.add(new Outtake());
-								auton.add(new DriveDistance(-32));
-								auton.add(new Elevate(ElevatorPosition.Home.value));
-								break;
+		case "Scale":				sEleRelease(auton);
+									auton.add(new DriveDistance(217));
+									auton.add(new DriveRotate(-90*mInvert));
+									auton.add(new DriveDistance(200.5));
+									auton.add(new DriveRotate(90*mInvert));
+									auton.add(new Elevate(ElevatorPosition.ScaleMax.value));
+									auton.add(new DriveDistance(63,Subsystems.driveTrain.lowGear, 10000, 3000));
+									auton.add(new Outtake());
+									auton.add(new DriveDistance(-32,Subsystems.driveTrain.lowGear, 10000, 3000));
+									auton.add(new Elevate(ElevatorPosition.Switch.value));
+									break;
 		
-		case "Cross The Line":	s1LL(auton, target, invert);
-								break;
+		case "Cross The Line":		s1LL(auton, target, invert);
+									break;
 		
-		case "Nothing":			sEleRelease(auton);
-								break;
+		case "Nothing":				sEleRelease(auton);
+									break;
 		
-		default:				System.out.println("[WARNING] Scheduling Default, recieved target: \""+target+"\" for 1LR");
-								s1LR(auton, "Outside Switch", invert);
-								break;
+		default:					System.out.println("[WARNING] Scheduling Default, recieved target: \""+target+"\" for 1LR");
+									s1LR(auton, "Outside Switch", invert);
+									break;
 		
 		}
 		
@@ -173,44 +191,48 @@ public class Loops {
 		
 		switch (target) {
 		
-		case "Outside Switch":	sEleRelease(auton);
-								auton.add(new DriveDistance(217));
-								auton.add(new DriveRotate(-90*mInvert));
-								auton.add(new DriveDistance(227));
-								auton.add(new DriveRotate(-90*mInvert));
-								auton.add(new DriveDistance(64));
-								auton.add(new DriveRotate(-90*mInvert));
-								auton.add(new Elevate(ElevatorPosition.Switch.value));
-								auton.add(new DriveDistance(11.5));
-								auton.add(new Outtake());
-								auton.add(new DriveDistance(-11.5));
-								auton.add(new Elevate(ElevatorPosition.Home.value));
-								break;
+		case "Outside Switch":		sEleRelease(auton);
+									auton.add(new DriveDistance(217));
+									auton.add(new DriveRotate(-90*mInvert));
+									auton.add(new DriveDistance(227));
+									auton.add(new DriveRotate(-90*mInvert));
+									auton.add(new DriveDistance(64));
+									auton.add(new DriveRotate(-90*mInvert));
+									auton.add(new Elevate(ElevatorPosition.Switch.value));
+									auton.add(new DriveDistance(11.5));
+									auton.add(new Outtake());
+									auton.add(new DriveDistance(-11.5));
+									auton.add(new Elevate(ElevatorPosition.Home.value));
+									break;
 		
-		case "Front Switch":	sEleRelease(auton);
-								auton.add(new DriveDistance(60.5));
-								auton.add(new DriveRotate(-90*mInvert));
-								auton.add(new DriveDistance(168));
-								auton.add(new DriveRotate(90*mInvert));
-								auton.add(new Elevate(ElevatorPosition.Switch.value));
-								auton.add(new DriveDistance(39));
-								auton.add(new Outtake());
-								auton.add(new DriveDistance(-9));
-								auton.add(new Elevate(ElevatorPosition.Home.value));
-								break;
+		case "Front Switch":		sEleRelease(auton);
+									auton.add(new DriveDistance(60.5));
+									auton.add(new DriveRotate(-90*mInvert));
+									auton.add(new DriveDistance(168));
+									auton.add(new DriveRotate(90*mInvert));
+									auton.add(new Elevate(ElevatorPosition.Switch.value));
+									auton.add(new DriveDistance(39));
+									auton.add(new Outtake());
+									auton.add(new DriveDistance(-9));
+									auton.add(new Elevate(ElevatorPosition.Home.value));
+									break;
+								
+		case "Front Switch Double": s1RL(auton, "Front Switch", invert);
+									s1LL(auton, "Front Switch Second", !invert);
+									break;
 		
-		case "Scale":			s1LL(auton, target, invert);
-								break;
+		case "Scale":				s1LL(auton, target, invert);
+									break;
 		
-		case "Cross The Line":	s1LL(auton, target, invert);
-								break;
+		case "Cross The Line":		s1LL(auton, target, invert);
+									break;
 		
-		case "Nothing":			sEleRelease(auton);
-								break;
+		case "Nothing":				sEleRelease(auton);
+									break;
 		
-		default:				System.out.println("[WARNING] Scheduling Default, recieved target: \""+target+"\" for 1RL");
-								s1RL(auton, "Cross The Line", invert);
-								break;
+		default:					System.out.println("[WARNING] Scheduling Default, recieved target: \""+target+"\" for 1RL");
+									s1RL(auton, "Cross The Line", invert);
+									break;
 		
 		}
 		
@@ -226,23 +248,27 @@ public class Loops {
 		
 		switch (target) {
 		
-		case "Outside Switch":	s1RL(auton, target, invert);
+		case "Outside Switch":		s1RL(auton, target, invert);
+									break;
 		
-		case "Front Switch":	s1RL(auton, target, invert);
-								break;
+		case "Front Switch":		s1RL(auton, target, invert);
+									break;
 		
-		case "Scale":			s1LR(auton, target, invert);
-								break;
+		case "Front Switch Double":	s1RL(auton, target, invert);
+									break;
 		
-		case "Cross The Line":	s1LL(auton, target, invert);
-								break;
+		case "Scale":				s1LR(auton, target, invert);
+									break;
 		
-		case "Nothing":			sEleRelease(auton);
-								break;
+		case "Cross The Line":		s1LL(auton, target, invert);
+									break;
 		
-		default:				System.out.println("[WARNING] Scheduling Default, recieved target: \""+target+"\" for 1RR");
-								s1RR(auton, "Outside Switch", invert);
-								break;
+		case "Nothing":				sEleRelease(auton);
+									break;
+		
+		default:					System.out.println("[WARNING] Scheduling Default, recieved target: \""+target+"\" for 1RR");
+									s1RR(auton, "Outside Switch", invert);
+									break;
 		
 		}
 		
@@ -258,31 +284,35 @@ public class Loops {
 		
 		switch (target) {
 		
-		case "Front Switch":	sEleRelease(auton);
-								auton.add(new DriveDistance(29.3));
-								auton.add(new DriveRotate(40*mInvert));
-								auton.add(new DriveDistance(81));
-								auton.add(new DriveRotate(-40*mInvert));
-								auton.add(new Elevate(ElevatorPosition.Switch.value));
-								auton.add(new DriveDistance(8));
-								auton.add(new Outtake());
-								auton.add(new DriveDistance(-9));
-								auton.add(new Elevate(ElevatorPosition.Home.value));
-								break;
+		case "Front Switch":		sEleRelease(auton);
+									auton.add(new DriveDistance(29.3));
+									auton.add(new DriveRotate(40*mInvert));
+									auton.add(new DriveDistance(81));
+									auton.add(new DriveRotate(-40*mInvert));
+									auton.add(new Elevate(ElevatorPosition.Switch.value));
+									auton.add(new DriveDistance(8));
+									auton.add(new Outtake());
+									auton.add(new DriveDistance(-9));
+									auton.add(new Elevate(ElevatorPosition.Home.value));
+									break;
+								
+		case "Front Switch Double":	s2LL(auton, "Front Switch", invert);
+									s1LL(auton, "Front Switch Second", invert);
+									break;
 		
-		case "Cross The Line":	sEleRelease(auton);
-								auton.add(new DriveDistance(46.5));
-								auton.add(new DriveRotate(-40*mInvert));
-								auton.add(new DriveDistance(59));
-								auton.add(new DriveRotate(170*mInvert));
-								break;
+		case "Cross The Line":		sEleRelease(auton);
+									auton.add(new DriveDistance(46.5));
+									auton.add(new DriveRotate(-40*mInvert));
+									auton.add(new DriveDistance(59));
+									auton.add(new DriveRotate(170*mInvert));
+									break;
 		
-		case "Nothing":			sEleRelease(auton);
-								break;
+		case "Nothing":				sEleRelease(auton);
+									break;
 		
-		default:				System.out.println("[WARNING] Scheduling Default, recieved target: \""+target+"\" for 2LL");
-								s2LL(auton, "Front Switch", invert);
-								break;
+		default:					System.out.println("[WARNING] Scheduling Default, recieved target: \""+target+"\" for 2LL");
+									s2LL(auton, "Front Switch", invert);
+									break;
 		
 		}
 		
@@ -325,31 +355,35 @@ public class Loops {
 		
 		switch (target) {
 		
-		case "Front Switch":	sEleRelease(auton);
-								auton.add(new DriveDistance(46.5));
-								auton.add(new DriveRotate(-40*mInvert));
-								auton.add(new DriveDistance(59));
-								auton.add(new DriveRotate(40*mInvert));
-								auton.add(new Elevate(ElevatorPosition.Switch.value));
-								auton.add(new DriveDistance(8));
-								auton.add(new Outtake());
-								auton.add(new DriveDistance(-9));
-								auton.add(new Elevate(ElevatorPosition.Home.value));
-								break;
+		case "Front Switch":		sEleRelease(auton);
+									auton.add(new DriveDistance(46.5));
+									auton.add(new DriveRotate(-40*mInvert));
+									auton.add(new DriveDistance(59));
+									auton.add(new DriveRotate(40*mInvert));
+									auton.add(new Elevate(ElevatorPosition.Switch.value));
+									auton.add(new DriveDistance(8));
+									auton.add(new Outtake());
+									auton.add(new DriveDistance(-9));
+									auton.add(new Elevate(ElevatorPosition.Home.value));
+									break;
+									
+		case "Front Switch Double":	s2RL(auton, "Front Switch", invert);
+									s1LL(auton, "Front Switch Second", !invert);
+									break;
 		
-		case "Cross The Line":	sEleRelease(auton);
-								auton.add(new DriveDistance(29.3));
-								auton.add(new DriveRotate(40*mInvert));
-								auton.add(new DriveDistance(81));
-								auton.add(new DriveRotate(-170*mInvert));
-								break;
+		case "Cross The Line":		sEleRelease(auton);
+									auton.add(new DriveDistance(29.3));
+									auton.add(new DriveRotate(40*mInvert));
+									auton.add(new DriveDistance(81));
+									auton.add(new DriveRotate(-170*mInvert));
+									break;
 		
-		case "Nothing":			sEleRelease(auton);
-								break;
+		case "Nothing":				sEleRelease(auton);
+									break;
 		
-		default:				System.out.println("[WARNING] Scheduling Default, recieved target: \""+target+"\" for 2RL");
-								s2RL(auton, "Front Switch", invert);
-								break;
+		default:					System.out.println("[WARNING] Scheduling Default, recieved target: \""+target+"\" for 2RL");
+									s2RL(auton, "Front Switch", invert);
+									break;
 		
 		}
 		
@@ -365,18 +399,21 @@ public class Loops {
 		
 		switch (target) {
 		
-		case "Front Switch":	s2RL(auton, target, invert);
-								break;
+		case "Front Switch":		s2RL(auton, target, invert);
+									break;
+								
+		case "Front Switch Double": s2RL(auton, target, invert);
+									break;
 		
-		case "Cross The Line":	s2LR(auton, target, invert);
-								break;
+		case "Cross The Line":		s2LR(auton, target, invert);
+									break;
 		
-		case "Nothing":			sEleRelease(auton);
-								break;
+		case "Nothing":				sEleRelease(auton);
+									break;
 		
-		default:				System.out.println("[WARNING] Scheduling Default, recieved target: \""+target+"\" for 2RR");
-								s2RR(auton, "Front Switch", invert);
-								break;
+		default:					System.out.println("[WARNING] Scheduling Default, recieved target: \""+target+"\" for 2RR");
+									s2RR(auton, "Front Switch", invert);
+									break;
 		
 		}
 		

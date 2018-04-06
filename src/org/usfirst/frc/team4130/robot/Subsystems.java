@@ -10,9 +10,9 @@ public class Subsystems {
 	
 	public static void init(){
 		
-		elevator = new ElevatorEmulator();
+		elevator = new Elevator();//Emulator();
 		driveTrain = new DriveTrain();
-		arms = new ArmsEmulator();
+		arms = new Arms();//Emulator();
 		
 	}
 	

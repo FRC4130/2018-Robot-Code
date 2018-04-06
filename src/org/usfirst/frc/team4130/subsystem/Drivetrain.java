@@ -96,17 +96,17 @@ public class DriveTrain {
 		//Slot 1 High
 		left.selectProfileSlot(1, 0);
 		left.config_kF(1, 0, kTimeoutMs);
-		left.config_kP(1, 0, kTimeoutMs);
-		left.config_kI(2, 0, kTimeoutMs);
-		left.config_kD(2, 0, kTimeoutMs);
-		left.config_IntegralZone(0, 0, kTimeoutMs);
+		left.config_kP(1, 0.25, kTimeoutMs);
+		left.config_kI(1, 0, kTimeoutMs);
+		left.config_kD(1, 0.5, kTimeoutMs);
+		left.config_IntegralZone(1, 0, kTimeoutMs);
 		
-		right.selectProfileSlot(0, 0);
-		right.config_kF(2, 0, kTimeoutMs);
-		right.config_kP(2, 0, kTimeoutMs);
-		right.config_kI(2, 0, kTimeoutMs);
-		right.config_kD(2, 0, kTimeoutMs);
-		right.config_IntegralZone(2, 0, kTimeoutMs);
+		right.selectProfileSlot(1, 0);
+		right.config_kF(1, 0, kTimeoutMs);
+		right.config_kP(1, 0.8, kTimeoutMs);
+		right.config_kI(1, 0, kTimeoutMs);
+		right.config_kD(1, 0.5, kTimeoutMs);
+		right.config_IntegralZone(1, 0, kTimeoutMs);
 		
 		left.set(ControlMode.PercentOutput, 0);
 		right.set(ControlMode.PercentOutput, 0);
@@ -127,21 +127,21 @@ public class DriveTrain {
 	
 	public void setMagicLowDefault() {
 		
-		left.configMotionCruiseVelocity(11000, kTimeoutMs);
-		left.configMotionAcceleration(20000, kTimeoutMs);
+		left.configMotionCruiseVelocity(10000, kTimeoutMs);
+		left.configMotionAcceleration(9500, kTimeoutMs);
 		
-		right.configMotionCruiseVelocity(11000, kTimeoutMs);
-		right.configMotionAcceleration(20000, kTimeoutMs);
+		right.configMotionCruiseVelocity(10000, kTimeoutMs);
+		right.configMotionAcceleration(9500, kTimeoutMs);
 		
 	}
 	
 	public void setMagicHighDefault() {
 		
 		left.configMotionCruiseVelocity(30000, kTimeoutMs);
-		left.configMotionAcceleration(15000, kTimeoutMs);
+		left.configMotionAcceleration(30000, kTimeoutMs);
 		
 		right.configMotionCruiseVelocity(30000, kTimeoutMs);
-		right.configMotionAcceleration(15000, kTimeoutMs);
+		right.configMotionAcceleration(30000, kTimeoutMs);
 		
 	}
 	
@@ -170,12 +170,6 @@ public class DriveTrain {
 		SmartDashboard.putNumber("Right Target Pos", right.getClosedLoopTarget(0));
 		SmartDashboard.putNumber("Right Pos", right.getSelectedSensorPosition(0));
 		SmartDashboard.putNumber("Right Closed loop error", right.getClosedLoopError(0));
-		
-	}
-	
-	public double inchesToNative(double inches) {
-		
-		return ( ( 286899 * inches ) / 169.5 );
 		
 	}
 	
@@ -266,7 +260,7 @@ public class DriveTrain {
 	
 	public double distanceToRotationsHigh(double inches) {
 		
-		return ( ( (2048*25) * inches ) / 92 );
+		return ( ( (2048*25) * inches ) / 92 )*(51.25/17);
 		
 	}
 	

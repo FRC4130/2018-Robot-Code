@@ -43,7 +43,7 @@ public enum ElevatorPosition {
 	/**
 	 * Height where the lift does not need to go any further down
 	 */
-	ReverseSoftLimit(0),
+	ReverseSoftLimit(1/3),
 	/**
 	 * Height where it is not safe to go up any further
 	 */

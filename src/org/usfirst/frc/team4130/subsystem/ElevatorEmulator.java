@@ -1,16 +1,5 @@
 package org.usfirst.frc.team4130.subsystem;
 
-import org.usfirst.frc.team4130.robot.RobotMap;
-
-import com.ctre.phoenix.ParamEnum;
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
-import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-
-import edu.wpi.first.wpilibj.Servo;
-
 /**
  * Class for the robot Elevator.
  * @author JCapp, West
@@ -26,8 +15,6 @@ public class ElevatorEmulator extends Elevator {
 	 * Constructor.  Sets all of the configuration parameters for the elevator.
 	 */
 	public ElevatorEmulator(){
-		
-		
 		
 	}
 	/**

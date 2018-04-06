@@ -24,7 +24,7 @@ public class DriveRotate implements ILoopable {
 	double iZone = 10;
 	double iAccum = 0;
 	
-	double acceptableErr = 3.5;
+	double acceptableErr = 3;
 	
 	int debounced = 0;
 	
@@ -120,18 +120,20 @@ public class DriveRotate implements ILoopable {
 		
 		debounced = debounced > debouncedTarget  ? debouncedTarget : debounced < 0 ? 0 : debounced;
 		
-		if (debounced > debouncedTarget) {
+		if (debounced == debouncedTarget) {
 			
 			System.out.print("[Info] Finished Turning in ");
 			System.out.print(System.currentTimeMillis()-startMS);
 			System.out.print(" milliseconds with an error of ");
-			System.out.print(error);
+			System.out.print(Math.floor(error*100)/100);
 			System.out.println(" degrees.");
 			drive.driveDirect(0, 0);
 			
+			return true;
+			
 		}
 		
-		return debounced >= debouncedTarget;
+		return false;
 		
 	}
 

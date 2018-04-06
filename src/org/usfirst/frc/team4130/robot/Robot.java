@@ -9,14 +9,6 @@ package org.usfirst.frc.team4130.robot;
 
 import java.util.ArrayList;
 
-import org.usfirst.frc.team4130.loops.Delay;
-import org.usfirst.frc.team4130.loops.DriveDistance;
-import org.usfirst.frc.team4130.loops.DriveForTime;
-import org.usfirst.frc.team4130.loops.DriveRotate;
-import org.usfirst.frc.team4130.loops.Elevate;
-import org.usfirst.frc.team4130.loops.ElevatorRelease;
-import org.usfirst.frc.team4130.loops.Outtake;
-
 import com.ctre.phoenix.schedulers.ConcurrentScheduler;
 import com.ctre.phoenix.schedulers.SequentialScheduler;
 
@@ -35,7 +27,7 @@ public class Robot extends IterativeRobot {
 	SequentialScheduler autonLR;
 	SequentialScheduler autonLL;
 	
-	SequentialScheduler test = new SequentialScheduler(0);
+	SequentialScheduler autonTest;
 	
 	int target1i = 0;
 	int target2i = 0;
@@ -67,6 +59,8 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousInit() {
 		
+		autonTest = new SequentialScheduler(0);
+		
 		autonRR = new SequentialScheduler(0);
 		autonRL = new SequentialScheduler(0);
 		autonLR = new SequentialScheduler(0);
@@ -74,7 +68,7 @@ public class Robot extends IterativeRobot {
 		
 		switch (posi) {
 		
-		case 0:		Loops.sTest(test);
+		case 0:		Loops.sTest(autonTest);
 			
 		case 1:		Loops.s1RR(autonRR, target1.get(target1i), false);
 					Loops.s1RL(autonRL, target2.get(target2i), false);
@@ -102,6 +96,8 @@ public class Robot extends IterativeRobot {
 		
 		}
 		
+		autonTest.start();
+		
 		autonRR.start();
 		autonRL.start();
 		autonLR.start();
@@ -114,8 +110,10 @@ public class Robot extends IterativeRobot {
 		
 		gameData = DriverStation.getInstance().getGameSpecificMessage().toLowerCase();
 		
-		if(gameData.length() > 0)
-        {
+		if (posi == 0) {
+			autonTest.process();
+		}
+		else if (gameData.length() > 0) {
 			if (gameData.charAt(0) == 'r') {
 				if (gameData.charAt(1) == 'r') {
 					autonRR.process();
@@ -160,21 +158,21 @@ public class Robot extends IterativeRobot {
 	
 	@Override
 	public void disabledPeriodic(){
-		if (RobotMap.driverJoystick.getRawButtonPressed(1)) {
+		if (RobotMap.driverJoystick.getRawButtonPressed(4)) {
 			target1i++;
-			target1i = target1i >= target1.size()-1 ? 0 : target1i;
-		}
-		if (RobotMap.driverJoystick.getRawButtonPressed(3)) {
-			target2i++;
-			target2i = target2i >= target2.size()-1 ? 0 : target2i;
+			target1i = target1i >= target1.size() ? 0 : target1i;
 		}
 		if (RobotMap.driverJoystick.getRawButtonPressed(2)) {
-			target3i++;
-			target3i = target3i >= target3.size()-1 ? 0 : target3i;
+			target2i++;
+			target2i = target2i >= target2.size() ? 0 : target2i;
 		}
-		if (RobotMap.driverJoystick.getRawButtonPressed(4)) {
+		if (RobotMap.driverJoystick.getRawButtonPressed(3)) {
+			target3i++;
+			target3i = target3i >= target3.size() ? 0 : target3i;
+		}
+		if (RobotMap.driverJoystick.getRawButtonPressed(1)) {
 			target4i++;
-			target4i = target4i >= target4.size()-1 ? 0 : target4i;
+			target4i = target4i >= target4.size() ? 0 : target4i;
 		}
 		
 		if (RobotMap.driverJoystick.getRawButtonPressed(8)) {
@@ -188,12 +186,12 @@ public class Robot extends IterativeRobot {
 		
 		SmartDashboard.putString("Position", pos[posi]);
 		SmartDashboard.putString("Shifter", Subsystems.driveTrain.getShifter() == Subsystems.driveTrain.highGear ? "High Gear" : "Low Gear");
-		SmartDashboard.putString("Left Left", target1.get(target1i));
-		SmartDashboard.putString("Left Right", target1.get(target2i));
-		SmartDashboard.putString("Right Left", target1.get(target3i));
-		SmartDashboard.putString("Right Right", target1.get(target4i));
+		SmartDashboard.putString("Left Left", target1.get(target4i));
+		SmartDashboard.putString("Left Right", target1.get(target3i));
+		SmartDashboard.putString("Right Left", target1.get(target2i));
+		SmartDashboard.putString("Right Right", target1.get(target1i));
 		
-		Subsystems.driveTrain.putDash();
+		//Subsystems.driveTrain.putDash();
 		
 	}
 	
@@ -215,16 +213,13 @@ public class Robot extends IterativeRobot {
 		
 		posi = posi >= pos.length ? 0 : posi;
 		
-		System.out.println(posi);
-		
 		for (ArrayList<String> target : targets) {
 			
 			target.clear();
-			target.add("Default");
+			target.add("Nothing");
+			target.add("Cross The Line");
 			target.add("Front Switch");
 			target.add("Front Switch Double");
-			target.add("Cross The Line");
-			target.add("Nothing");
 			
 		}
 		
@@ -232,6 +227,7 @@ public class Robot extends IterativeRobot {
 		
 		case 0:		for (ArrayList<String> target : targets) {
 						
+						target.clear();
 						target.add("Test");
 						
 					}
@@ -241,13 +237,14 @@ public class Robot extends IterativeRobot {
 						
 						target.add("Outside Switch");
 						target.add("Scale");
-						target.add("Scale Double");
 						
 					}
 					break;
 		
 		case 2:		for (ArrayList<String> target : targets) {
 						
+						
+					
 					}
 					break;
 				
@@ -255,7 +252,6 @@ public class Robot extends IterativeRobot {
 						
 						target.add("Outside Switch");
 						target.add("Scale");
-						target.add("Scale Double");
 						
 					}
 					break;

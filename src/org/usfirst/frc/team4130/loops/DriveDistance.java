@@ -37,8 +37,20 @@ public class DriveDistance implements ILoopable {
 		
 		distanceInches = inches;
 		_drive = Subsystems.driveTrain;
-		gear = inches > (12*3) ? Subsystems.driveTrain.highGear : Subsystems.driveTrain.lowGear;
+		gear = Math.floor(inches) > 150 ? Subsystems.driveTrain.highGear : Subsystems.driveTrain.lowGear;
+		//Force low gear
+		gear = _drive.lowGear;
+		//Force high gear
+		//gear = _drive.highGear;
+	}
+	
+	public DriveDistance(double inches, Value gear1) {
 		
+		System.out.println("Drive Distance task has been created.");
+		
+		distanceInches = inches;
+		_drive = Subsystems.driveTrain;
+		gear = gear1;
 	}
 	
 	public DriveDistance(double inches, Value gear1, int cruiseVelocity1, int acceleration1) {
@@ -59,8 +71,8 @@ public class DriveDistance implements ILoopable {
 		
 		_drive.resetSensors();
 		
-		System.out.println("[Info] Started Driving for Distance");
-		
+		System.out.print("[Info] Driving ");
+		System.out.println(distanceInches);
 		_drive.setShifter(gear);
 		_drive.setNeutralMode(NeutralMode.Brake);
 		
@@ -73,6 +85,7 @@ public class DriveDistance implements ILoopable {
 			_drive.setMagicHighDefault();
 		}
 		else {
+			System.out.println("SET TO LOW DEFAUTLS");
 			_drive.setMagicLowDefault();
 		}
 		
@@ -83,6 +96,7 @@ public class DriveDistance implements ILoopable {
 		
 		_drive.setPosLeft(distanceNative);
 		_drive.setPosRight(distanceNative);
+		_drive.putDash();
 		
 	}
 
