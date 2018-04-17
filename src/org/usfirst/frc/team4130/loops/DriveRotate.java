@@ -28,7 +28,7 @@ public class DriveRotate implements ILoopable {
 	
 	int debounced = 0;
 	
-	int debouncedTarget = 15;
+	int debouncedTarget = 5;
 	
 	double maxThrottle = 1;
 	

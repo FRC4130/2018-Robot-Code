@@ -61,18 +61,19 @@ public class DriveTest implements ILoopable {
 		
 		//Drive Distance test code
 		else if (_gamepad.getRawButtonPressed(3)) {
-			dd = new DriveDistance(300, _drive.getShifter(), 0, 0);
+			dd = new DriveDistance(200, _drive.getShifter(), 0, 0);
 			dd.onStart();
 			startTimeMs = System.currentTimeMillis();
 			driveDone = false;
 		}
 		else if (_gamepad.getRawButtonPressed(4)) {
-			dd = new DriveDistance(-300, _drive.getShifter(), 0, 0);
+			dd = new DriveDistance(200, _drive.getShifter(), 0, 0);
 			dd.onStart();
 			startTimeMs = System.currentTimeMillis();
 			driveDone = false;
 		}
 		else if (_gamepad.getRawButton(3) || _gamepad.getRawButton(4)) {
+			_drive.putDash();
 			if (!dd.isDone() && !driveDone) {
 				dd.onLoop();
 				driveDone = true;
@@ -80,6 +81,7 @@ public class DriveTest implements ILoopable {
 			}
 		}
 		else if (_gamepad.getRawButtonReleased(3) || _gamepad.getRawButtonReleased(4)) {
+			_drive.putDash();
 			if (!dd.isDone() && !driveDone) {
 				dd.onStop();
 				driveDone = true;

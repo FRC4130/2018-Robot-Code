@@ -36,8 +36,9 @@ public class DriveTele implements ILoopable {
 		
 		System.out.println("[Info] Starting Driving Teleop Controls");
 
-		_drive.setShifter(_drive.highGear);
+		_drive.setShifter(_drive.lowGear);
 		_drive.setNeutralMode(NeutralMode.Coast);
+		_drive.setRampRate(0, 0);
 		
 	}
 
@@ -47,7 +48,7 @@ public class DriveTele implements ILoopable {
 		//Manage ramp rate
 		if (Subsystems.elevator.getHeight() > ElevatorPosition.MaxStable.value && !rampRateLimited) {
 			System.out.println("[Info] Ramp rate is limited");
-			_drive.setRampRate(0.75, 0.75);
+			_drive.setRampRate(0.5, 0.5);
 			rampRateLimited = true;
 		}
 		else if (Subsystems.elevator.getHeight() <= ElevatorPosition.MaxStable.value && rampRateLimited) {
@@ -65,11 +66,14 @@ public class DriveTele implements ILoopable {
 			_drive.driveDirect(0, 0);
 		}
 		else if (_gamepad.getRawButtonReleased(2)) {
-			_drive.setNeutralMode(NeutralMode.Coast);
+			_drive.setNeutralMode(NeutralMode.Brake);
 			_drive.setShifter(gearBeforeBrake);
 		}
 		else if (_gamepad.getRawButton(1)) {
 			_drive.driveDirect(_gamepad.getRawAxis(1)*-1,_gamepad.getRawAxis(1)*-1);
+		}
+		else if (_gamepad.getRawButton(3)) {
+			_drive.arcade(_gamepad.getRawAxis(1)*-1, _gamepad.getRawAxis(0));
 		}
 		else {
 			_drive.driveDirect(_gamepad.getRawAxis(1)*-1, _gamepad.getRawAxis(5)*-1);
@@ -79,10 +83,12 @@ public class DriveTele implements ILoopable {
 		if (_gamepad.getRawButtonPressed(6)) {
 			_drive.setShifter(_drive.lowGear);
 			gearBeforeBrake = _drive.lowGear;
+			_drive.setNeutralMode(NeutralMode.Coast);
 		}
 		else if (_gamepad.getRawButtonPressed(5)) {
 			_drive.setShifter(_drive.highGear);
 			gearBeforeBrake = _drive.highGear;
+			_drive.setNeutralMode(NeutralMode.Brake);
 		}
 		else if (Math.floor(DriverStation.getInstance().getMatchTime()) == 1) {
 			System.out.println("[Info] Automatically shifting to high gear for post match");

@@ -96,16 +96,16 @@ public class DriveTrain {
 		//Slot 1 High
 		left.selectProfileSlot(1, 0);
 		left.config_kF(1, 0, kTimeoutMs);
-		left.config_kP(1, 0.25, kTimeoutMs);
+		left.config_kP(1, 0.2, kTimeoutMs);
 		left.config_kI(1, 0, kTimeoutMs);
-		left.config_kD(1, 0.5, kTimeoutMs);
+		left.config_kD(1, 0, kTimeoutMs);
 		left.config_IntegralZone(1, 0, kTimeoutMs);
 		
 		right.selectProfileSlot(1, 0);
 		right.config_kF(1, 0, kTimeoutMs);
-		right.config_kP(1, 0.8, kTimeoutMs);
+		right.config_kP(1, 0.2, kTimeoutMs);
 		right.config_kI(1, 0, kTimeoutMs);
-		right.config_kD(1, 0.5, kTimeoutMs);
+		right.config_kD(1, 0, kTimeoutMs);
 		right.config_IntegralZone(1, 0, kTimeoutMs);
 		
 		left.set(ControlMode.PercentOutput, 0);
@@ -127,21 +127,21 @@ public class DriveTrain {
 	
 	public void setMagicLowDefault() {
 		
-		left.configMotionCruiseVelocity(10000, kTimeoutMs);
-		left.configMotionAcceleration(9500, kTimeoutMs);
+		left.configMotionCruiseVelocity(11000, kTimeoutMs);
+		left.configMotionAcceleration(10000, kTimeoutMs);
 		
-		right.configMotionCruiseVelocity(10000, kTimeoutMs);
-		right.configMotionAcceleration(9500, kTimeoutMs);
+		right.configMotionCruiseVelocity(11000, kTimeoutMs);
+		right.configMotionAcceleration(10000, kTimeoutMs);
 		
 	}
 	
 	public void setMagicHighDefault() {
 		
-		left.configMotionCruiseVelocity(30000, kTimeoutMs);
-		left.configMotionAcceleration(30000, kTimeoutMs);
+		left.configMotionCruiseVelocity(27000, kTimeoutMs);
+		left.configMotionAcceleration(17000, kTimeoutMs);
 		
-		right.configMotionCruiseVelocity(30000, kTimeoutMs);
-		right.configMotionAcceleration(30000, kTimeoutMs);
+		right.configMotionCruiseVelocity(27000, kTimeoutMs);
+		right.configMotionAcceleration(17000, kTimeoutMs);
 		
 	}
 	
@@ -176,7 +176,11 @@ public class DriveTrain {
 	public void setNeutralMode(NeutralMode nm) {
 		
 		left.setNeutralMode(nm);
+		leftf.setNeutralMode(nm);
+		leftf2.setNeutralMode(nm);
 		right.setNeutralMode(nm);
+		rightf.setNeutralMode(nm);
+		rightf2.setNeutralMode(nm);
 		
 	}
 	

@@ -35,7 +35,7 @@ public enum ElevatorPosition {
 	/**
 	 * Height to place a cube on a scale that's not owned (so we need to go higher).
 	 */
-	ScaleMax(73),
+	ScaleMax(74),
 	/**
 	 * Height where we should change the ramp rate
 	 */
@@ -47,7 +47,7 @@ public enum ElevatorPosition {
 	/**
 	 * Height where it is not safe to go up any further
 	 */
-	ForwardSoftLimit(80);
+	ForwardSoftLimit(78);
 	
 	public final double value;
 	

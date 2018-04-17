@@ -219,7 +219,9 @@ public class Robot extends IterativeRobot {
 			target.add("Nothing");
 			target.add("Cross The Line");
 			target.add("Front Switch");
+			target.add("Front Switch Late");
 			target.add("Front Switch Double");
+			target.add("FS Double High");
 			
 		}
 		
@@ -243,7 +245,7 @@ public class Robot extends IterativeRobot {
 		
 		case 2:		for (ArrayList<String> target : targets) {
 						
-						
+						target.add("ALT FS Double");
 					
 					}
 					break;

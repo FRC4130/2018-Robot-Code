@@ -110,7 +110,7 @@ public class Elevator {
 		}
 		
 		else if (valueNativeUnits < targetHeightNativeUnits) {
-			elevator.configMotionAcceleration(2500, kTimeout);
+			elevator.configMotionAcceleration(6000, kTimeout);
 			elevator.configMotionCruiseVelocity(1400*6, kTimeout);
 		}
 		

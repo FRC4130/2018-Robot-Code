@@ -26,6 +26,7 @@ public class ElevatorRelease implements ILoopable {
 	
 	public ElevatorRelease(double durrationMS1) {
 		
+		
 		durrationMS = durrationMS1;
 		
 	}
@@ -44,6 +45,12 @@ public class ElevatorRelease implements ILoopable {
 	public void onLoop() {
 		
 		_elevator.setServo(false);
+		
+		if (System.currentTimeMillis() > stopTime - 1) {
+			
+			_elevator.setServo(true);
+			
+		}
 		
 	}
 

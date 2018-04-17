@@ -16,7 +16,7 @@ public class Print implements ILoopable {
 	public void onStart() {
 		String toPrint = "[Print] "+x;
 		System.out.println(toPrint);
-		SmartDashboard.putString("[Print]", toPrint);
+		SmartDashboard.putString("[Print]", SmartDashboard.getString("[Print]", "")+"\n"+toPrint);
 	}
 
 	@Override

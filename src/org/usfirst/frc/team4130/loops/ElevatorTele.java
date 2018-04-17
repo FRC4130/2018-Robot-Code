@@ -66,7 +66,7 @@ public class ElevatorTele implements ILoopable{
 		}
 			
 		else if (_gamepad.getRawButton(4)){
-			pos = _elevator.chainHeightToNative(ElevatorPosition.ScaleMax.value);
+			pos = _elevator.chainHeightToNative(ElevatorPosition.ForwardSoftLimit.value);
 		}
 			
 		if(_gamepad.getRawButton(1)) {
@@ -75,6 +75,10 @@ public class ElevatorTele implements ILoopable{
 		}
 			
 		_elevator.setHeight(pos);
+		
+		SmartDashboard.putNumber("Elevator Speed", _elevator.nativeToChainHeight(RobotMap.elevatorMaster.getSelectedSensorVelocity(0))/12);
+		
+		SmartDashboard.putNumber("Elevator Error", _elevator.chainHeightToNative(RobotMap.elevatorMaster.getClosedLoopError(0)));
 		
 	}
 	
