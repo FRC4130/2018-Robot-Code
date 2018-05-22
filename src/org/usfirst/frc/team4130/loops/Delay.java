@@ -26,6 +26,7 @@ public class Delay implements ILoopable {
 
 	@Override
 	public void onLoop() {
+
 		done = System.currentTimeMillis() >= stopTime;
 		
 	}
