@@ -65,8 +65,12 @@ public class ElevatorTele implements ILoopable{
 			pos = _elevator.chainHeightToNative(ElevatorPosition.Switch.value);
 		}
 			
-		else if (_gamepad.getRawButton(4)){
+		if (_gamepad.getRawButton(4)){
 			pos = _elevator.chainHeightToNative(ElevatorPosition.ForwardSoftLimit.value);
+		}
+		
+		if (_gamepad.getRawButton(8)) {
+			pos = _elevator.chainHeightToNative(ElevatorPosition.Scale.value);
 		}
 			
 		if(_gamepad.getRawButton(1)) {

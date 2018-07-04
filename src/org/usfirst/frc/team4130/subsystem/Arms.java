@@ -19,6 +19,8 @@ public class Arms {
 	
 	DoubleSolenoid clamp = RobotMap.armsClamp;
 	
+	private Value state = clamp.get();
+	
 	public final Value closed = Value.kForward;
 	public final Value opened = Value.kReverse;
 	
@@ -45,6 +47,8 @@ public class Arms {
 	public void setSolenoid(Value vl) {
 		
 		clamp.set(vl);
+		
+		state = vl;
 		
 	}
 	
@@ -102,6 +106,12 @@ public class Arms {
 	public void disableMotors() {
 		
 		driveDirect(0,0);
+		
+	}
+
+	public Value getSolenoid() {
+		
+		return state;
 		
 	}
 	

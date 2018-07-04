@@ -175,4 +175,10 @@ public class Elevator {
 	public double getHeight() {
 		return nativeToChainHeight(getPos());
 	}
+	public double getTarget() {
+		return elevator.getClosedLoopTarget(0);
+	}
+	public double getTargetHeight() {
+		return nativeToChainHeight(getTarget());
+	}
 }

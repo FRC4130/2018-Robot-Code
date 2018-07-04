@@ -14,7 +14,7 @@ public class DriveDistance implements ILoopable {
 	private double distanceNative;
 	private double distanceInches;
 	private DriveTrain _drive;
-	private double acceptableError = 1000;
+	private double acceptableError = 4000; //1000;
 	
 	private Value	gear			=	Subsystems.driveTrain.lowGear;
 	private int 	cruiseVelocity	=	0;
@@ -37,9 +37,9 @@ public class DriveDistance implements ILoopable {
 		
 		distanceInches = inches;
 		_drive = Subsystems.driveTrain;
-		gear = Math.floor(inches) > 150 ? Subsystems.driveTrain.highGear : Subsystems.driveTrain.lowGear;
+		gear = Math.floor(inches) > SmartDashboard.getNumber("High Gear Distance", 200) ? Subsystems.driveTrain.highGear : Subsystems.driveTrain.lowGear;
 		//Force low gear
-		gear = _drive.lowGear;
+		//gear = _drive.lowGear;
 		//Force high gear
 		//gear = _drive.highGear;
 	}
@@ -51,6 +51,7 @@ public class DriveDistance implements ILoopable {
 		distanceInches = inches;
 		_drive = Subsystems.driveTrain;
 		gear = gear1;
+		
 	}
 	
 	public DriveDistance(double inches, Value gear1, int cruiseVelocity1, int acceleration1) {
@@ -82,6 +83,7 @@ public class DriveDistance implements ILoopable {
 			_drive.setMagic(cruiseVelocity, acceleration);
 		}
 		else if (gear == _drive.highGear) {
+			System.out.println("SET TO HIGH DEFAUTLS");
 			_drive.setMagicHighDefault();
 		}
 		else {

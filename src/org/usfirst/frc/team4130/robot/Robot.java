@@ -7,6 +7,7 @@
 
 package org.usfirst.frc.team4130.robot;
 
+import edu.wpi.first.wpilibj.CameraServer;
 import java.util.ArrayList;
 
 import com.ctre.phoenix.schedulers.ConcurrentScheduler;
@@ -53,6 +54,8 @@ public class Robot extends IterativeRobot {
 		
 		RobotMap.init();
 		Subsystems.init();
+		
+		CameraServer.getInstance().startAutomaticCapture();
 		
 	}
 
@@ -148,7 +151,6 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		teleop.process();
-		
 	}
 	
 	@Override
@@ -190,8 +192,13 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putString("Left Right", target1.get(target3i));
 		SmartDashboard.putString("Right Left", target1.get(target2i));
 		SmartDashboard.putString("Right Right", target1.get(target1i));
+		SmartDashboard.putBoolean("Arms Closed?", Subsystems.arms.getSolenoid() == Subsystems.arms.closed);
+		SmartDashboard.putNumber("Current Height", Subsystems.elevator.getHeight());
+		SmartDashboard.putNumber("Target Height", Subsystems.elevator.getTargetHeight());
+		SmartDashboard.putNumber("Match Number", DriverStation.getInstance().getMatchNumber());
+		SmartDashboard.putNumber("Match Time", DriverStation.getInstance().getMatchTime());
 		
-		//Subsystems.driveTrain.putDash();
+		Subsystems.driveTrain.putDash();
 		
 	}
 	

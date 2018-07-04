@@ -26,7 +26,7 @@ public class Loops {
 	}
 	
 	//Testing Loops
-	public static void sTest(SequentialScheduler auton) {
+	public static void sTest1(SequentialScheduler auton) {
 		
 		//s2RL(auton, "ALT FS Double", false);
 		
@@ -42,15 +42,25 @@ public class Loops {
 		sst1.add(new Elevate(ElevatorPosition.Home.value));
 		sst1.add(new Elevate(ElevatorPosition.Switch.value));
 		
+		cst2.add(new Outtake());
 		cst2.add(new DriveRotate(-180));
 		cst2.add(sst1);
 		
+		cst2.add(new Intake());
 		cst3.add(new DriveRotate(90));
 		cst3.add(new Elevate(ElevatorPosition.Home.value));
 		
 		auton.add(cst1);
 		auton.add(cst2);
 		auton.add(cst3);
+		
+	}
+	
+	//Drive Testing
+	public static void sTest(SequentialScheduler auton) {
+		auton.add(new Delay(1000));
+		auton.add(new DriveDistance(300));
+		auton.add(new Print("Done"));
 		
 	}
 	
@@ -175,12 +185,12 @@ public class Loops {
 									break;
 									
 		case "Scale":				sEleRelease(auton);
-									auton.add(new DriveDistance(258.02));
+									auton.add(new DriveDistance(258.02,Subsystems.driveTrain.lowGear));
 									auton.add(new DriveRotate(-45*mInvert));
 									auton.add(new Elevate(ElevatorPosition.ScaleMax.value));
-									auton.add(new DriveDistance(35.54,Subsystems.driveTrain.lowGear, 10000, 3000));
+									auton.add(new DriveDistance(35.54, Subsystems.driveTrain.lowGear, 10000, 3000));
 									auton.add(new Outtake());
-									auton.add(new DriveDistance(-35.54,Subsystems.driveTrain.lowGear, 10000, 3000));
+									auton.add(new DriveDistance(-35.54, Subsystems.driveTrain.lowGear, 10000, 3000));
 									auton.add(new Elevate(ElevatorPosition.Home.value));
 									break;
 		
@@ -422,6 +432,7 @@ public class Loops {
 									cAFD2.add(new DriveDistance(-55));
 									auton.add(cAFD2);
 									auton.add(new DriveRotate(-45*mInvert));
+									
 									auton.add(new DriveDistance(15));
 									auton.add(new Intake());
 									ConcurrentSchedulerDone cAFD3 = new ConcurrentSchedulerDone();

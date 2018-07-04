@@ -95,17 +95,17 @@ public class DriveTrain {
 		
 		//Slot 1 High
 		left.selectProfileSlot(1, 0);
-		left.config_kF(1, 0, kTimeoutMs);
-		left.config_kP(1, 0.2, kTimeoutMs);
-		left.config_kI(1, 0, kTimeoutMs);
+		left.config_kF(1, 0, kTimeoutMs);		//0.034669
+		left.config_kP(1, 0.025, kTimeoutMs);	//0.0045
+		left.config_kI(1, 0, kTimeoutMs);		//0.000001
 		left.config_kD(1, 0, kTimeoutMs);
 		left.config_IntegralZone(1, 0, kTimeoutMs);
 		
 		right.selectProfileSlot(1, 0);
-		right.config_kF(1, 0, kTimeoutMs);
-		right.config_kP(1, 0.2, kTimeoutMs);
-		right.config_kI(1, 0, kTimeoutMs);
-		right.config_kD(1, 0, kTimeoutMs);
+		right.config_kF(1, 0, kTimeoutMs);		//0.033683
+		right.config_kP(1, 0.0366, kTimeoutMs);	//0.006
+		right.config_kI(1, 0, kTimeoutMs);		//0.000001
+		right.config_kD(1, 0, kTimeoutMs);		
 		right.config_IntegralZone(1, 0, kTimeoutMs);
 		
 		left.set(ControlMode.PercentOutput, 0);
@@ -128,20 +128,20 @@ public class DriveTrain {
 	public void setMagicLowDefault() {
 		
 		left.configMotionCruiseVelocity(11000, kTimeoutMs);
-		left.configMotionAcceleration(10000, kTimeoutMs);
+		left.configMotionAcceleration(11000, kTimeoutMs);
 		
 		right.configMotionCruiseVelocity(11000, kTimeoutMs);
-		right.configMotionAcceleration(10000, kTimeoutMs);
+		right.configMotionAcceleration(11000, kTimeoutMs);
 		
 	}
 	
 	public void setMagicHighDefault() {
 		
-		left.configMotionCruiseVelocity(27000, kTimeoutMs);
-		left.configMotionAcceleration(17000, kTimeoutMs);
+		left.configMotionCruiseVelocity(26000, kTimeoutMs);
+		left.configMotionAcceleration(16000, kTimeoutMs);
 		
-		right.configMotionCruiseVelocity(27000, kTimeoutMs);
-		right.configMotionAcceleration(17000, kTimeoutMs);
+		right.configMotionCruiseVelocity(26000, kTimeoutMs);
+		right.configMotionAcceleration(16000, kTimeoutMs);
 		
 	}
 	
@@ -158,18 +158,18 @@ public class DriveTrain {
 	public void putDash() {
 		
 		SmartDashboard.putNumber("Left Vel", left.getSelectedSensorVelocity(0));
-		SmartDashboard.putNumber("Left Tarjectory Vel", left.getActiveTrajectoryVelocity());
-		SmartDashboard.putNumber("Left Tarjectory Pos",left.getActiveTrajectoryPosition());
-		SmartDashboard.putNumber("Left Target Pos", left.getClosedLoopTarget(0));
+		//SmartDashboard.putNumber("Left Tarjectory Vel", left.getActiveTrajectoryVelocity());
+		//SmartDashboard.putNumber("Left Tarjectory Pos",left.getActiveTrajectoryPosition());
+		//SmartDashboard.putNumber("Left Target Pos", left.getClosedLoopTarget(0));
 		SmartDashboard.putNumber("Left Pos", left.getSelectedSensorPosition(0));
-		SmartDashboard.putNumber("Left Closed loop error", left.getClosedLoopError(0));
+		//SmartDashboard.putNumber("Left Closed loop error", left.getClosedLoopError(0));
 		
 		SmartDashboard.putNumber("Right Vel", right.getSelectedSensorVelocity(0));
-		SmartDashboard.putNumber("Right Tarjectory Vel", right.getActiveTrajectoryVelocity());
-		SmartDashboard.putNumber("Right Tarjectory Pos",right.getActiveTrajectoryPosition());
-		SmartDashboard.putNumber("Right Target Pos", right.getClosedLoopTarget(0));
+		//SmartDashboard.putNumber("Right Tarjectory Vel", right.getActiveTrajectoryVelocity());
+		//SmartDashboard.putNumber("Right Tarjectory Pos",right.getActiveTrajectoryPosition());
+		//SmartDashboard.putNumber("Right Target Pos", right.getClosedLoopTarget(0));
 		SmartDashboard.putNumber("Right Pos", right.getSelectedSensorPosition(0));
-		SmartDashboard.putNumber("Right Closed loop error", right.getClosedLoopError(0));
+		//SmartDashboard.putNumber("Right Closed loop error", right.getClosedLoopError(0));
 		
 	}
 	
@@ -258,7 +258,7 @@ public class DriveTrain {
 	
 	public double distanceToRotationsLow(double inches) {
 		
-		return ( ( (2048*75) * inches ) / 92 );
+		return ( ( (2048*75) * inches ) / 92);
 		
 	}
 	

@@ -9,17 +9,17 @@ import com.ctre.phoenix.ILoopable;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 
-public class ArmsTele implements ILoopable {
+public class ArmsTeleClayt implements ILoopable {
 	private Arms _arms;
 	private Joystick _operator;
 	
 	@Deprecated
-	public ArmsTele (Arms arms, Joystick operator) {
+	public ArmsTeleClayt (Arms arms, Joystick operator) {
 		_arms = arms;
 		_operator = operator;
 	}
 	
-	public ArmsTele() {
+	public ArmsTeleClayt() {
 		_arms = Subsystems.arms;
 		_operator = RobotMap.operatorJoystick;
 	}
@@ -35,18 +35,20 @@ public class ArmsTele implements ILoopable {
 	public void onLoop() {
 		
 		//clamp toggling logic
-		if (_operator.getRawButtonPressed(5)) {
-			_arms.setSolenoid(_arms.getSolenoid() == _arms.opened ? _arms.closed : _arms.opened);
+		if (_operator.getRawButton(5)) {
+			_arms.setSolenoid(Value.kReverse);
+			
 		}
 		
-		if (_operator.getRawButton(6)) {
-			_arms.setSolenoid(_arms.getSolenoid() == _arms.opened ? _arms.closed : _arms.opened);
+		else if (_operator.getRawButton(6)) {
+			_arms.setSolenoid(Value.kForward);
 		}
 		
 		//Motor control
 		//Manual control
-		if (Math.abs(_operator.getRawAxis(5))>0.075) {
-			_arms.driveDirect(_operator.getRawAxis(5),_operator.getRawAxis(5));
+		if (Math.abs(_operator.getRawAxis(2)*-1+_operator.getRawAxis(3)) > 0.1) {
+			_arms.driveDirect(_operator.getRawAxis(2)*-1+_operator.getRawAxis(3),
+							  _operator.getRawAxis(2)*-1+_operator.getRawAxis(3));
 		}
 		
 		else {
